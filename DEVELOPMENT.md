@@ -153,12 +153,20 @@ bash tools/bin/ai-teams-package.sh formal \
 
 ## 9. 提交与评审
 
+- 完整分支、提交、版本、正式包记录、标签、发布和回滚规则见 `security/version-control-policy.md`。
+- 用户可感知变化先写入 `CHANGELOG.md` 的 `Unreleased`；正式发布时再转为明确版本。
 - 一个提交只解决一个清晰问题，避免混入无关重构和生成状态。
 - 提交信息说明行为变化，不只写“更新文件”。
 - PR 必须包含问题、方案、影响范围、验证结果、风险和回滚方式。
 - 不提交 `.env`、凭据、证书、本地数据库、缓存、运行日志、会话材料或生成安装包。
 - 不在自动化中提交 Git、发布 Release 或删除用户文件。
 - 结构性修改由 Doc 检查索引和关系图，由 Security-Reviewer 检查边界，由 QA 验证行为。
+
+正式发布必须保留 `dev-vX.Y.Z` 源标签、dev 源提交、main 运行提交、`vX.Y.Z` 公开标签、`RELEASE_RECORD.md`、manifest 和 checksum 的完整映射。可用以下命令预览版本记录：
+
+```bash
+node tools/release/ai-teams-version-report.mjs --version "$(tr -d '[:space:]' < VERSION)"
+```
 
 ## 10. 问题定位
 

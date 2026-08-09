@@ -1,0 +1,16 @@
+<type>(<scope>): <summary>
+
+Why:
+- <problem or requirement>
+
+What:
+- <behavioral change>
+
+Validation:
+- <command and result>
+
+Risk-Rollback:
+- <risk and rollback point>
+
+Refs:
+- <task, ADR, issue, or release>

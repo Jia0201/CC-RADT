@@ -277,7 +277,7 @@ See [`DEVELOPMENT.en.md`](DEVELOPMENT.en.md) for source setup, directory ownersh
 
 `v1.0.0` includes the main harness, 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, and verified package generation.
 
-The roadmap includes long-running real-project regression, GitHub project governance, a simplified package, and Codex / OpenCode adapters. See [`index/STATUS.md`](index/STATUS.md) for the current engineering status.
+The roadmap includes long-running real-project regression, GitHub project governance, a simplified package, and Codex / OpenCode adapters. See [`index/STATUS.md`](index/STATUS.md) for engineering status and [`CHANGELOG.md`](CHANGELOG.md) for user-visible changes.
 
 ## Documentation Basis
 

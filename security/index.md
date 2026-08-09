@@ -20,6 +20,7 @@ status: active
 | [task-policy](./task-policy.md) | 任务单与执行方案规则 |
 | [project-policy](./project-policy.md) | 目标项目初始化、运行期项目画像和项目管理更新规则 |
 | [runtime-maintenance-policy](./runtime-maintenance-policy.md) | Doc / Memory / Role 在运行期维护索引、图谱、记忆、项目文档和 Agent 指引的规则 |
+| [version-control-policy](./version-control-policy.md) | CC-RADT 分支、提交、版本、正式包记录、发布和回滚规则 |
 | [development-policy](./development-policy.md) | 四个开发 Agent 的通用开发底线和专属规则入口 |
 | [development-frontend-web-policy](./development-frontend-web-policy.md) | Dev-Frontend-Web 的 Web 前端开发规则 |
 | [development-frontend-miniapp-policy](./development-frontend-miniapp-policy.md) | Dev-Frontend-Miniapp 的小程序开发规则 |
@@ -58,6 +59,7 @@ status: active
 - 每个 Agent 的 playbook 规则本体位于 `security/agent-playbooks/<agent>.md`；Agent 目录下的 `playbook.md` 只作为指针。
 - ADR 规范位于 `security/adr.md`；长期结构性决策记录在 `project/adr/`，由 Doc 维护、Lead 决策。
 - 提示词源码位于 `prompts/`，运行期失败事实位于 `shared/prompt-evolution/`；Hook 不得编辑 prompt，Agent 不得修改自己的活动 system prompt。
+- 修改 CC-RADT Harness 本体、准备正式包或操作远程仓库时必须读取 [version-control-policy](./version-control-policy.md)；`dev` 是源主线，`main` 只保存验证后的可安装运行内容。
 
 ## 工作流安全分档
 

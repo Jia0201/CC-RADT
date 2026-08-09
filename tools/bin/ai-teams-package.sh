@@ -7,15 +7,18 @@ ai_teams_ensure_runtime_dirs
 
 edition="${1:-}"
 version=""
+version_explicit=0
 output=""
 verify=0
 install_layout=""
+release_mode=0
+release_base=""
 
 if [[ "$edition" == "formal" || "$edition" == "simplify" ]]; then
   shift
 else
   cat <<'EOF'
-用法：tools/bin/ai-teams-package.sh formal|simplify [--version 版本] [--output 目录] [--install-layout root|claude-subdir] [--verify]
+用法：tools/bin/ai-teams-package.sh formal|simplify [--version 版本] [--output 目录] [--install-layout root|claude-subdir] [--verify] [--release] [--release-base Git引用]
 EOF
   exit 2
 fi
@@ -24,6 +27,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --version)
       version="${2:-}"
+      version_explicit=1
       shift 2
       ;;
     --output)
@@ -34,19 +38,29 @@ while [[ $# -gt 0 ]]; do
       verify=1
       shift
       ;;
+    --release)
+      release_mode=1
+      shift
+      ;;
+    --release-base)
+      release_base="${2:-}"
+      shift 2
+      ;;
     --install-layout)
       install_layout="${2:-}"
       shift 2
       ;;
     -h|--help)
       cat <<'EOF'
-用法：tools/bin/ai-teams-package.sh formal|simplify [--version 版本] [--output 目录] [--install-layout root|claude-subdir] [--verify]
+用法：tools/bin/ai-teams-package.sh formal|simplify [--version 版本] [--output 目录] [--install-layout root|claude-subdir] [--verify] [--release] [--release-base Git引用]
 
 说明：
 - formal 生成正式版，排除主工程研发日志、实验草稿、会话、缓存、本地配置和敏感文件。
 - simplify 生成精简版，保留核心 Agent、初始化、基础记忆、知识库、安全、日志、回滚和模板。
 - formal 默认使用 --install-layout claude-subdir：输出可直接合并到目标项目根目录，AI-Teams 位于 .claude/ai-teams/。
 - --install-layout root：输出目录本身就是 AI-Teams 根目录，仅用于调试或兼容场景。
+- --release：启用正式发布门禁，要求 dev 分支、干净工作区、显式版本、Changelog 版本条目和 --verify。
+- --release-base：指定上一 dev 源标签或提交；未指定时优先使用最近的 dev-v* 标签。
 EOF
       exit 0
       ;;
@@ -98,6 +112,37 @@ PY
     version="1.0.0"
   fi
 fi
+
+if [[ "$release_mode" -eq 1 ]]; then
+  if [[ "$edition" != "formal" || "$verify" -ne 1 ]]; then
+    echo "--release 只适用于 formal，并且必须同时使用 --verify。" >&2
+    exit 2
+  fi
+  if [[ ! -f tools/release/ai-teams-version-report.mjs ]]; then
+    echo "缺少版本报告工具：tools/release/ai-teams-version-report.mjs" >&2
+    exit 1
+  fi
+  if [[ "$version_explicit" -ne 1 ]]; then
+    echo "--release 必须显式提供 --version。" >&2
+    exit 2
+  fi
+  release_check_args=(--version "$version" --strict)
+  if [[ -n "$release_base" ]]; then
+    release_check_args+=(--base-ref "$release_base")
+  fi
+  node tools/release/ai-teams-version-report.mjs "${release_check_args[@]}" >/dev/null
+  source_tag="dev-v${version}"
+  source_tag_commit="$(git rev-list -n 1 "$source_tag" 2>/dev/null || true)"
+  source_head_commit="$(git rev-parse HEAD)"
+  if [[ -z "$source_tag_commit" || "$source_tag_commit" != "$source_head_commit" ]]; then
+    echo "--release 要求注释源标签 ${source_tag} 已存在并准确指向当前 HEAD。" >&2
+    exit 1
+  fi
+  if git rev-parse -q --verify "refs/tags/v${version}" >/dev/null 2>&1; then
+    echo "公开标签 v${version} 已存在；不得移动或复用已发布版本。" >&2
+    exit 1
+  fi
+fi
 stamp="$(ai_teams_stamp)"
 if [[ -z "$output" ]]; then
   default_output_root="${AI_TEAMS_PACKAGE_OUTPUT_ROOT:-${HOME}/CC-RADT-dist}"
@@ -132,6 +177,9 @@ copy_formal() {
   rsync -a \
     --exclude "CLAUDE.md" \
     --exclude ".git/" \
+    --exclude ".github/" \
+    --exclude ".gitmessage" \
+    --exclude "CONTRIBUTING.md" \
     --exclude ".DS_Store" \
     --exclude ".env" \
     --exclude ".env.*" \
@@ -153,6 +201,8 @@ copy_formal() {
     --exclude ".codegraph/" \
     --exclude "lab/" \
     --exclude "templates/package/" \
+    --exclude "templates/version-control/" \
+    --exclude "tools/release/" \
     --exclude ".claude/settings.local.json" \
     --exclude "logs/*" \
     --exclude "memory/conversations/sessions/*" \
@@ -2424,8 +2474,19 @@ PY
 }
 
 copy_public_runtime_readmes() {
-  cp "README.md" "$output/README.md"
-  cp "README.en.md" "$output/README.en.md"
+  cp "templates/package/formal/README.md" "$output/README.md"
+  cp "templates/package/formal/README.en.md" "$output/README.en.md"
+  python3 - "$output/README.md" "$output/README.en.md" <<'PY'
+import sys
+from pathlib import Path
+
+for name in sys.argv[1:]:
+    path = Path(name)
+    text = path.read_text(encoding="utf-8")
+    text = text.replace(".claude/ai-teams/", "")
+    text = text.replace("](INSTALL.md)", "](../../INSTALL.md)")
+    path.write_text(text, encoding="utf-8")
+PY
 }
 
 rewrite_formal_self_learn_command() {
@@ -2622,6 +2683,7 @@ assert_formal_portable_paths() {
 
 prepare_formal_runtime_package() {
   rm -f "$output/CLAUDE.md"
+  rm -f "$output/CHANGELOG.md" "$output/security/version-control-policy.md"
   rm -f "$output/tools/bin/ai-teams-package.sh" "$output/tools/bin/ai-teams-package.ps1"
   rm -f "$output/tools/commands/ai/package-formal.md"
   rm -f "$output/tools/commands/ai/package-simplify.md"
@@ -2784,6 +2846,7 @@ if [[ "$edition" == "formal" && "$install_layout" == "claude-subdir" ]]; then
   cp "templates/package/formal/README.md" "$artifact_root/README.md"
   cp "templates/package/formal/README.en.md" "$artifact_root/README.en.md"
   cp "templates/package/formal/INSTALL.md" "$artifact_root/INSTALL.md"
+  cp "CHANGELOG.md" "$artifact_root/CHANGELOG.md"
 fi
 
 mkdir -p "$output/logs/agent" "$output/logs/task" "$output/logs/command" "$output/logs/hook" "$output/logs/package" "$output/logs/upgrade" "$output/logs/audit" "$output/logs/security" "$output/logs/compressed/archive"
@@ -2850,6 +2913,9 @@ if [[ "$edition" == "formal" ]]; then
     "tools/commands/ai/package-formal.md"
     "tools/commands/ai/package-simplify.md"
     "tools/package"
+    "tools/release"
+    "templates/version-control"
+    "security/version-control-policy.md"
     "lab"
     "shared/prompt-evolution/history.json"
   )
@@ -2931,6 +2997,8 @@ cat > "$package_manifest" <<EOF
     "root_entries": [
       "README.md",
       "README.en.md",
+      "CHANGELOG.md",
+      "RELEASE_RECORD.md",
       "THIRD_PARTY_NOTICES.md",
       "VERSION",
       "MANIFEST.json",
@@ -2997,6 +3065,19 @@ sanitize_formal_runtime_references
 refresh_formal_runtime_catalogs
 sanitize_formal_user_text
 assert_formal_portable_paths
+
+release_record="$artifact_root/RELEASE_RECORD.md"
+if [[ "$edition" == "formal" && -f tools/release/ai-teams-version-report.mjs ]]; then
+  release_record_args=(--version "$version" --package-dir "$artifact_root" --output "$release_record")
+  if [[ -n "$release_base" ]]; then
+    release_record_args+=(--base-ref "$release_base")
+  fi
+  node tools/release/ai-teams-version-report.mjs "${release_record_args[@]}"
+fi
+
+sanitize_formal_user_text
+assert_formal_portable_paths
+
 file_count="$(find "$artifact_root" -type f | wc -l | tr -d ' ')"
 if command -v python3 >/dev/null 2>&1; then
   python3 - "$package_manifest" "$file_count" <<'PY'
@@ -3041,6 +3122,7 @@ cat > "$report" <<EOF
 - 文件数量：$file_count
 - 敏感命名扫描：通过
 - 安装验证：$verify_result
+- 发布模式：$([[ "$release_mode" -eq 1 ]] && echo "严格发布" || echo "普通验证打包")
 
 ## 排除规则
 
@@ -3050,6 +3132,11 @@ cat > "$report" <<EOF
 - 包含 logs 体系结构和索引，不包含主工程运行日志正文和会话记录。
 - 不在主工程根目录创建 releases/，正式包 manifest/checksum 写入输出目录。
 EOF
+
+if [[ -f "$release_record" ]]; then
+  printf '\n## 发布来源摘要\n\n' >> "$report"
+  sed '1{/^# /d;}' "$release_record" >> "$report"
+fi
 
 ai_teams_write_status_event "${edition} 发布包已生成：$display_artifact_root"
 cat "$report"

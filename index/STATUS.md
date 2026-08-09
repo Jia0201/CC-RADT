@@ -75,7 +75,9 @@ status: active
 - 知识图谱：已补充 Agent 图谱、记忆图谱、项目图谱、工作空间图谱、Skills 图谱和 标准 Markdown / Claude Code 文件引用规则
 - 开发 Agent 知识库：已为四个开发 Agent 建立 `kb/agents/<agent>/index.md` 与 `00-index.md` 到 `05-do-not.md`
 - 根 `AGENTS.md`：已删除，入口链统一为 `CLAUDE.md`、`agents/index.md`、`index/INDEX.md` 和 `tools/commands/index.md`
-- README：已重写为 CC-RADT 中文 GitHub 项目介绍，并新增独立 `README.en.md`；包含快速开始、团队、工作流、记忆、安全治理、提示词、Skills、MCP 和 Mermaid 架构图
+- README：已重写为 CC-RADT 中英文 GitHub 项目介绍；包含快速开始、团队、工作流、记忆、安全治理、提示词、Skills、MCP，并以四张生成图片替换 README Mermaid 流程图
+- Git 与版本治理：已新增 `CHANGELOG.md`、贡献指南、提交/PR 模板、`security/version-control-policy.md`、版本报告工具和正式发布记录模板
+- 正式包来源记录：打包生成 `RELEASE_RECORD.md`，严格发布模式要求干净 dev 分支、显式版本、Changelog 版本条目、源基线和完整自检
 - 安装包打包：已启用 `.claude/ai-teams` 低侵入布局，默认输出根更新为 `$HOME/CC-RADT-dist`
 - 安装包验收：已通过包内自检、SHA-256、路径、配置、提示词状态、指令、MCP 和干净运行态复验
 - 正式版初始化链路：已改为目标项目根目录执行 `bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write`
@@ -196,10 +198,12 @@ status: active
 
 
 
+
+
 <!-- AI-TEAMS:auto-status-event:BEGIN -->
 ## 最近自动状态
 
-- 时间：2026-08-09 20:38:26
-- 事件：formal 发布包已生成：$HOME/project/AI/CC-RADT-v1.0/formal
+- 时间：2026-08-09 22:54:38
+- 事件：formal 发布包已生成：/tmp/cc-radt-formal-20260809225307
 
 <!-- AI-TEAMS:auto-status-event:END -->

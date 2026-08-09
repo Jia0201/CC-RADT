@@ -25,6 +25,7 @@ status: active
 - `security/agent-playbooks/`：Agent playbook 规则本体。
 - `tools/commands/`：工程指令说明。
 - `tools/bin/`：可执行工程脚本。
+- `tools/release/`：只用于 CC-RADT 源工程的版本来源报告和正式发布证据工具；不进入安装包。
 - `index/`：轻量导航、需求验收、标准 Markdown 和 CodeGraph 索引。
 - `project/`：项目管理文档。
 - `project/context.md`：目标项目运行期上下文。
@@ -44,6 +45,7 @@ status: active
 - `shared/contracts/`：接口契约模板、Owner、版本、兼容策略和 QA 证据。
 - `logs/`：执行追溯日志和压缩摘要。
 - `templates/`：可复用创建模板。
+- `templates/version-control/`：提交、dev 变更、正式发布记录和发布检查单模板；不进入安装包。
 - `skills/`：Skills registry 和文件。
 - `mcp/`：MCP registry、Agent MCP 和 CodeGraph 配置。
 - `tools/`：工程工具体系。
@@ -53,6 +55,8 @@ status: active
 
 - `README.md`
 - `README.en.md`
+- `CHANGELOG.md`
+- `CONTRIBUTING.md`
 - `DEVELOPMENT.md`
 - `DEVELOPMENT.en.md`
 - `CLAUDE.md`
@@ -90,6 +94,7 @@ status: active
 - `shared/tasks/EXECUTION_PLAN_TEMPLATE.md`
 - `shared/locks/LOCK_TEMPLATE.md`
 - `security/runtime-maintenance-policy.md`
+- `security/version-control-policy.md`
 - `index/NAVIGATION.md`
 - `shared/supervision/index.md`
 - `shared/supervision/current.md`
@@ -148,6 +153,8 @@ status: active
 - `tools/bin/ai-teams-run.ps1`
 - `tools/bin/ai-teams-check.ps1`
 - `tools/bin/ai-teams-init-project.ps1`
+- `tools/release/README.md`
+- `tools/release/ai-teams-version-report.mjs`
 - `tools/bin/ai-teams-rule-refresh.mjs`
 - `tools/bin/ai-teams-rule-create.mjs`
 - `tools/bin/ai-teams-rule-refresh.ps1`

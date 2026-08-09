@@ -51,6 +51,18 @@ formal/
 bash tools/bin/ai-teams-package.sh formal --install-layout claude-subdir --output <输出目录> --verify
 ```
 
+正式公开发布必须启用严格门禁，并显式提供版本和上一 dev 源标签：
+
+```bash
+bash tools/bin/ai-teams-package.sh formal \
+  --version <MAJOR.MINOR.PATCH> \
+  --release \
+  --release-base <dev-v上一版本> \
+  --install-layout claude-subdir \
+  --output <空目录> \
+  --verify
+```
+
 如果要输出为普通 AI-Teams 根目录布局：
 
 ```bash
@@ -67,6 +79,8 @@ bash tools/bin/ai-teams-package.sh formal --install-layout root --output <输出
 - 不在主工程根目录创建 `releases/`，旧 `releases/` 链路已取消。
 - 输出目录必须为空，避免覆盖用户已有文件。
 - 如果目标项目已有 `.claude/settings.json`，安装时必须人工合并 `ai_teams` 配置，不能直接覆盖用户配置。
+- `--release` 要求当前位于干净的 `dev` 分支，`VERSION`、`MANIFEST.json`、`CHANGELOG.md` 与目标版本一致，并禁止复用已存在的公开标签。
+- 分支、提交、版本、标签、发布与回滚规则见 `security/version-control-policy.md`。
 
 ## 安装后初始化
 
@@ -83,4 +97,6 @@ bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
 - formal 安装包目录。
 - `.claude/manifest.json`。
 - `checksums.txt`。
+- `CHANGELOG.md`。
+- `RELEASE_RECORD.md`，包含 dev 源提交、变更基线、提交清单、规则/Agent/工具变更分类和版本门禁结果。
 - `logs/package/package-formal-*.md` 打包报告。

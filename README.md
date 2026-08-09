@@ -281,7 +281,7 @@ bash tools/bin/ai-teams-check.sh
 
 `v1.0.0` 已具备主工程、12 Agent、12 套工作流、四层记忆、项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、升级、回滚和正式安装包验证链路。
 
-后续计划包括真实项目长期回归、GitHub 开源工程治理、精简版，以及 Codex / OpenCode 适配。当前状态详见 [`index/STATUS.md`](index/STATUS.md)。
+后续计划包括真实项目长期回归、GitHub 开源工程治理、精简版，以及 Codex / OpenCode 适配。当前状态详见 [`index/STATUS.md`](index/STATUS.md)，用户可感知变化见 [`CHANGELOG.md`](CHANGELOG.md)。
 
 ## 文档依据
 

@@ -100,6 +100,8 @@ Verify that the package contains `.claude/ai-teams/`, `.claude/agents/`, `.claud
 
 ## 8. Pull Requests and Issues
 
+The authoritative branch, commit, version, package provenance, tag, release, and rollback rules are in `security/version-control-policy.md`. User-visible changes belong under `Unreleased` in `CHANGELOG.md` before release.
+
 Keep each commit focused. A pull request must explain the problem, solution, affected boundaries, verification, risk, and rollback path. Structural changes require index/graph review by Doc, boundary review by Security-Reviewer, and behavior verification by QA.
 
 Issue reports should include operating system, Claude Code and Node.js versions, branch and commit, command, expected and actual behavior, relevant Hook event, and a redacted minimal reproduction. Never attach credentials or sensitive business code.

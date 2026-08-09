@@ -296,7 +296,7 @@ Start from [`.claude/ai-teams/index/ENTRY.md`](.claude/ai-teams/index/ENTRY.md) 
 
 `v1.0.0` includes 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, and runtime self-checks.
 
-The roadmap includes long-running real-project regression, a simplified deployment profile, and Codex / OpenCode adapters. See [`.claude/ai-teams/index/STATUS.md`](.claude/ai-teams/index/STATUS.md) for current status. To extend the harness itself, switch to the [`dev` branch](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/dev) and read the [development guide](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/dev/DEVELOPMENT.en.md).
+The roadmap includes long-running real-project regression, a simplified deployment profile, and Codex / OpenCode adapters. See [`.claude/ai-teams/index/STATUS.md`](.claude/ai-teams/index/STATUS.md) for current status and the public [Changelog](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/main/CHANGELOG.md) for user-visible changes. To extend the harness itself, switch to the [`dev` branch](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/dev) and read the [development guide](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/dev/DEVELOPMENT.en.md).
 
 ## Foundations and Acknowledgements
 
