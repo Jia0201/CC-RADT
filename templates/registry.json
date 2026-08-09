@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0",
+  "templates": [
+    {
+      "id": "agent-create",
+      "name": "智能体创建模板",
+      "path": "templates/agent-create/template.md",
+      "owner": "role"
+    },
+    {
+      "id": "kb-file",
+      "name": "知识库文件存储模板",
+      "path": "templates/kb-file/template.md",
+      "owner": "doc"
+    },
+    {
+      "id": "project-write",
+      "name": "项目内容写入模板",
+      "path": "templates/project-write/template.md",
+      "owner": "doc"
+    },
+    {
+      "id": "project-graph",
+      "name": "项目知识图谱模板",
+      "path": "templates/project-graph/template.md",
+      "owner": "doc"
+    },
+    {
+      "id": "cron-create",
+      "name": "定时任务创建模板",
+      "path": "templates/cron-create/template.md",
+      "owner": "lead"
+    },
+    {
+      "id": "skill-create",
+      "name": "Skills 创建和写入模板",
+      "path": "templates/skill-create/SKILL.template.md",
+      "owner": "doc"
+    },
+    {
+      "id": "memory-store",
+      "name": "记忆存储模板",
+      "path": "templates/memory-store/template.md",
+      "owner": "memory"
+    },
+    {
+      "id": "security-rule-create",
+      "name": "安全规则创建模板",
+      "path": "templates/security-rule-create/template.md",
+      "owner": "security-reviewer"
+    },
+    {
+      "id": "rule-create",
+      "name": "新建 rule 模板",
+      "path": "templates/rule-create/template.md",
+      "owner": "lead"
+    },
+    {
+      "id": "communication",
+      "name": "通信模板",
+      "path": "templates/communication/template.md",
+      "owner": "lead"
+    },
+    {
+      "id": "tool-create",
+      "name": "tools 模板",
+      "path": "templates/tool-create/template.md",
+      "owner": "lead"
+    },
+    {
+      "id": "hook-create",
+      "name": "hooks 钩子新建模板",
+      "path": "templates/hook-create/template.md",
+      "owner": "security-reviewer"
+    }
+  ]
+}

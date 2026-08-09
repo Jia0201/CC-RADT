@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-teams.local/schemas/result.schema.json",
+  "title": "AI-Teams Agent Result",
+  "type": "object",
+  "required": [
+    "task_id",
+    "agent_id",
+    "status",
+    "summary",
+    "artifacts",
+    "verification",
+    "risks",
+    "handoff",
+    "scope_compliance"
+  ],
+  "properties": {
+    "task_id": {"type": "string", "minLength": 1},
+    "agent_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["completed", "blocked", "needs-review", "failed"]},
+    "summary": {"type": "string"},
+    "artifacts": {"type": "array", "items": {"type": "string"}},
+    "verification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check", "result"],
+        "properties": {
+          "check": {"type": "string"},
+          "result": {"enum": ["passed", "failed", "not-run"]},
+          "evidence": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "risks": {"type": "array", "items": {"type": "string"}},
+    "handoff": {
+      "type": "object",
+      "required": ["target", "message"],
+      "properties": {
+        "target": {"type": "string"},
+        "message": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "scope_compliance": {
+      "type": "object",
+      "required": ["within_scope", "forbidden_scope_touched"],
+      "properties": {
+        "within_scope": {"type": "boolean"},
+        "forbidden_scope_touched": {"type": "boolean"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "memory_candidate": {"type": ["string", "null"]},
+    "knowledge_candidate": {"type": ["string", "null"]},
+    "project_fact_candidate": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}
+

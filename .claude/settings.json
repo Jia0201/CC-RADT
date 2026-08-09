@@ -1,0 +1,845 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "agent": "lead",
+  "minimumVersion": "2.1.140",
+  "autoMemoryEnabled": false,
+  "includeGitInstructions": false,
+  "ai_teams": {
+    "version": "1.0.0",
+    "stage": "main-engineering",
+    "hooks_enabled": true,
+    "content_language": "zh-CN-first",
+    "brain_root": ".",
+    "default_agent_mode": "multi-agent",
+    "lead_agent": "lead",
+    "subagent_runtime": {
+      "official_project_dir": ".claude/agents/",
+      "component_agent_dir": "agents/",
+      "policy": "Claude Code 官方 subagent 从 .claude/agents/*.md 加载 AI-Teams 的 12 个 Agent、颜色和 Lead 调度白名单；Agent 组件文档、记忆、知识库、规则、共享工作区、Hooks、MCP、Skills 和项目画像由 AI-Teams 工程目录管理。"
+    },
+    "entrypoints": [
+      "index/ENTRY.md",
+      "rule/index.md",
+      "rule/routing.md",
+      "rule/agents/index.md",
+      "rule/tasks/index.md",
+      "rule/custom/index.md",
+      "rule/custom/agents/index.md",
+      "rule/custom/project/index.md",
+      "rule/custom/security/index.md",
+      "rule/project/index.md",
+      "rule/catalog/index.md",
+      "index/INDEX.md",
+      "agents/index.md",
+      "tools/commands/index.md",
+      "memory/index.md",
+      "memory/native-claude-memory-audit.md",
+      "shared/index.md",
+      "shared/events/index.md",
+      "shared/transactions/index.md",
+      "shared/supervision/current.md",
+      "shared/supervision/heartbeat.md",
+      "shared/supervision/heartbeat-current.md",
+      "security/index.md",
+      "playbook.md",
+      "security/runtime-maintenance-policy.md",
+      "project/index.md",
+      "project/context.md",
+      "project/change-log.md",
+      "project/ui-style.md",
+      "project/api-contracts.md",
+      "project/PROJECT.md",
+      "security/project-policy.md",
+      "security/runtime-maintenance-policy.md",
+      "security/interface-contract-policy.md",
+      "project/rules/index.md",
+      "project/graph.md",
+      "security/file-ownership.md",
+      "security/sensitive-files.md",
+      "security/delete-policy.md",
+      "security/task-policy.md",
+      "security/lock-policy.md",
+      "security/state-policy.md",
+      "security/state-transaction-policy.md",
+      "security/escalation-policy.md",
+      "security/workspace-policy.md",
+      "security/context-compression-policy.md",
+      "security/supervision-policy.md",
+      "security/rule-policy.md",
+      "index/NAVIGATION.md",
+      "security/development-policy.md",
+      "security/agent-playbooks/index.md",
+      "memory/context-compression.md",
+      "memory/refresh-rules.md",
+      "tools/bin/ai-teams-memory-audit.mjs",
+      "agents/memory/memorys/index.md",
+      "mcp/index.md",
+      "mcp/shared/index.md",
+      "mcp/agents/index.md",
+      "mcp/registry.json",
+      "security/mcp-policy.md"
+      ,"prompts/index.md"
+      ,"prompts/registry.json"
+      ,"prompts/graph.md"
+      ,"shared/prompt-evolution/index.md"
+      ,"security/prompt-policy.md"
+      ,"security/prompt-injection-policy.md"
+      ,"security/prompt-evolution-policy.md"
+    ],
+    "agents": [
+      {
+        "id": "lead",
+        "name": "Lead 主 Agent",
+        "entry": "agents/lead/lead.md",
+        "playbook": "agents/lead/playbook.md",
+        "security_playbook": "security/agent-playbooks/lead.md",
+        "memory": "memory/agents/lead/MEMORY.md",
+        "kb": "kb/agents/lead/index.md",
+        "skills": "skills/agents/lead/index.md",
+        "mcp": "mcp/agents/lead/",
+        "color": "red",
+        "style": "commander"
+      },
+      {
+        "id": "pd",
+        "name": "PD 需求解析 Agent",
+        "entry": "agents/pd/pd.md",
+        "playbook": "agents/pd/playbook.md",
+        "security_playbook": "security/agent-playbooks/pd.md",
+        "memory": "memory/agents/pd/MEMORY.md",
+        "kb": "kb/agents/pd/index.md",
+        "skills": "skills/agents/pd/index.md",
+        "mcp": "mcp/agents/pd/",
+        "color": "pink",
+        "style": "product-discovery"
+      },
+      {
+        "id": "plan-pm",
+        "name": "Plan-PM 计划管理 Agent",
+        "entry": "agents/plan-pm/plan-pm.md",
+        "playbook": "agents/plan-pm/playbook.md",
+        "security_playbook": "security/agent-playbooks/plan-pm.md",
+        "memory": "memory/agents/plan-pm/MEMORY.md",
+        "kb": "kb/agents/plan-pm/index.md",
+        "skills": "skills/agents/plan-pm/index.md",
+        "mcp": "mcp/agents/plan-pm/",
+        "color": "orange",
+        "style": "planning-manager"
+      },
+      {
+        "id": "dev-frontend-web",
+        "name": "Dev-Frontend-Web 前端 Web Agent",
+        "entry": "agents/dev-frontend-web/dev-frontend-web.md",
+        "playbook": "agents/dev-frontend-web/playbook.md",
+        "security_playbook": "security/agent-playbooks/dev-frontend-web.md",
+        "memory": "memory/agents/dev-frontend-web/MEMORY.md",
+        "kb": "kb/agents/dev-frontend-web/00-index.md",
+        "skills": "skills/agents/dev-frontend-web/index.md",
+        "mcp": "mcp/agents/dev-frontend-web/",
+        "color": "cyan",
+        "style": "web-frontend"
+      },
+      {
+        "id": "dev-frontend-miniapp",
+        "name": "Dev-Frontend-Miniapp 小程序 Agent",
+        "entry": "agents/dev-frontend-miniapp/dev-frontend-miniapp.md",
+        "playbook": "agents/dev-frontend-miniapp/playbook.md",
+        "security_playbook": "security/agent-playbooks/dev-frontend-miniapp.md",
+        "memory": "memory/agents/dev-frontend-miniapp/MEMORY.md",
+        "kb": "kb/agents/dev-frontend-miniapp/00-index.md",
+        "skills": "skills/agents/dev-frontend-miniapp/index.md",
+        "mcp": "mcp/agents/dev-frontend-miniapp/",
+        "color": "purple",
+        "style": "miniapp-frontend"
+      },
+      {
+        "id": "dev-backend-systems",
+        "name": "Dev-Backend-Systems 系统后端 Agent",
+        "entry": "agents/dev-backend-systems/dev-backend-systems.md",
+        "playbook": "agents/dev-backend-systems/playbook.md",
+        "security_playbook": "security/agent-playbooks/dev-backend-systems.md",
+        "memory": "memory/agents/dev-backend-systems/MEMORY.md",
+        "kb": "kb/agents/dev-backend-systems/00-index.md",
+        "skills": "skills/agents/dev-backend-systems/index.md",
+        "mcp": "mcp/agents/dev-backend-systems/",
+        "color": "blue",
+        "style": "systems-backend"
+      },
+      {
+        "id": "dev-backend-service",
+        "name": "Dev-Backend-Service 服务端 Agent",
+        "entry": "agents/dev-backend-service/dev-backend-service.md",
+        "playbook": "agents/dev-backend-service/playbook.md",
+        "security_playbook": "security/agent-playbooks/dev-backend-service.md",
+        "memory": "memory/agents/dev-backend-service/MEMORY.md",
+        "kb": "kb/agents/dev-backend-service/00-index.md",
+        "skills": "skills/agents/dev-backend-service/index.md",
+        "mcp": "mcp/agents/dev-backend-service/",
+        "color": "green",
+        "style": "service-backend"
+      },
+      {
+        "id": "qa",
+        "name": "QA 测试与代码评审 Agent",
+        "entry": "agents/qa/qa.md",
+        "playbook": "agents/qa/playbook.md",
+        "security_playbook": "security/agent-playbooks/qa.md",
+        "memory": "memory/agents/qa/MEMORY.md",
+        "kb": "kb/agents/qa/index.md",
+        "skills": "skills/agents/qa/index.md",
+        "mcp": "mcp/agents/qa/",
+        "color": "yellow",
+        "style": "quality-gate"
+      },
+      {
+        "id": "memory",
+        "name": "Memory 记忆管理 Agent",
+        "entry": "agents/memory/memory.md",
+        "playbook": "agents/memory/playbook.md",
+        "security_playbook": "security/agent-playbooks/memory.md",
+        "memory": "memory/agents/memory/MEMORY.md",
+        "kb": "kb/agents/memory/index.md",
+        "skills": "skills/agents/memory/index.md",
+        "mcp": "mcp/agents/memory/",
+        "color": "green",
+        "style": "memory-keeper"
+      },
+      {
+        "id": "doc",
+        "name": "Doc 文档管理 Agent",
+        "entry": "agents/doc/doc.md",
+        "playbook": "agents/doc/playbook.md",
+        "security_playbook": "security/agent-playbooks/doc.md",
+        "memory": "memory/agents/doc/MEMORY.md",
+        "kb": "kb/agents/doc/index.md",
+        "skills": "skills/agents/doc/index.md",
+        "mcp": "mcp/agents/doc/",
+        "color": "cyan",
+        "style": "documentation"
+      },
+      {
+        "id": "role",
+        "name": "Role 角色管理 Agent",
+        "entry": "agents/role/role.md",
+        "playbook": "agents/role/playbook.md",
+        "security_playbook": "security/agent-playbooks/role.md",
+        "memory": "memory/agents/role/MEMORY.md",
+        "kb": "kb/agents/role/index.md",
+        "skills": "skills/agents/role/index.md",
+        "mcp": "mcp/agents/role/",
+        "color": "orange",
+        "style": "role-governance"
+      },
+      {
+        "id": "security-reviewer",
+        "name": "Security-Reviewer 安全审查 Agent",
+        "entry": "agents/security-reviewer/security-reviewer.md",
+        "playbook": "agents/security-reviewer/playbook.md",
+        "security_playbook": "security/agent-playbooks/security-reviewer.md",
+        "memory": "memory/agents/security-reviewer/MEMORY.md",
+        "kb": "kb/agents/security-reviewer/index.md",
+        "skills": "skills/agents/security-reviewer/index.md",
+        "mcp": "mcp/agents/security-reviewer/",
+        "color": "red",
+        "style": "security-gate"
+      }
+    ],
+    "paths": {
+      "harness_root": ".",
+      "target_project_root": null,
+      "target_project_source": "项目初始化时由用户显式提供 --target；安装在目标项目时通常为 Claude Code 当前打开的项目根目录。"
+    },
+    "runtime_policy": {
+      "must_follow_ai_teams": true,
+      "multi_agent_default": "required",
+      "lead_agent_required": true,
+      "require_project_initialization_check": true,
+      "require_harness_root_and_target_project_root": true,
+      "per_query_policy": "每次用户请求进入时，先确认 AI-Teams harness 工程根目录与目标项目根目录；未初始化目标项目时，主动询问并引导执行初始化；除非用户明确要求单 Agent、不要多 Agent 或只回答，否则必须按 AI-Teams 多 Agent 流程执行。",
+      "single_agent_override_phrases": [
+        "单 Agent",
+        "单Agent",
+        "不需要多Agent",
+        "不要多 Agent",
+        "只回答",
+        "不要启动多Agent",
+        "不要启动多 Agent"
+      ]
+    },
+    "initialization": {
+      "required_before_project_work": true,
+      "command": "bash tools/bin/ai-teams-init-project.sh --target <目标项目路径> --write",
+      "windows_command": "pwsh -NoProfile -ExecutionPolicy Bypass -File tools/bin/ai-teams-init-project.ps1 -Target <目标项目路径> -Write",
+      "ask_user_when_missing": "未发现已初始化目标项目画像时，必须先询问目标项目路径和是否立即初始化。",
+      "writes_to": [
+        "project/",
+        "index/",
+        "memory/"
+      ],
+      "never_reads_sensitive_content": true,
+      "agent_review_required_after_script": true,
+      "review_agents": [
+        "doc",
+        "pd",
+        "plan-pm",
+        "dev-frontend-web",
+        "dev-frontend-miniapp",
+        "dev-backend-systems",
+        "dev-backend-service",
+        "qa",
+        "security-reviewer",
+        "memory",
+        "role"
+      ]
+    },
+    "project_management": {
+      "directory": "project/",
+      "owner": "doc",
+      "purpose": "记录目标项目画像、规则、架构、命令、验证、风险、需求、计划和执行中沉淀的项目上下文。Agent 先通过 rule/ 路由按需读取 project，不默认加载全部项目文档。",
+      "policy": "security/project-policy.md",
+      "runtime_maintenance_policy": "security/runtime-maintenance-policy.md",
+      "frequent_read_required_for_all_agents": true,
+      "frequent_read_files": [
+        "rule/index.md",
+        "rule/agents/<agent>.md",
+        "rule/project/index.md",
+        "project/context.md",
+        "project/change-log.md",
+        "shared/tasks/<current-task>.md"
+      ],
+      "parallel_supervisors_for_non_trivial_tasks": [
+        "doc",
+        "memory",
+        "role",
+        "security-reviewer"
+      ]
+    },
+    "rule_routing": {
+      "canonical_root": "rule/",
+      "claude_native_root": ".claude/rules/",
+      "default_read": [
+        "rule/index.md",
+        "rule/agents/<agent>.md",
+        "rule/tasks/index.md"
+      ],
+      "custom_route": "rule/custom/index.md",
+      "custom_rule_create_command": "node tools/bin/ai-teams-rule-create.mjs --id <规则id> --title <标题> --scope <agents|project|security> --owner <agent> --trigger <触发条件> --write",
+      "project_route": "rule/project/index.md",
+      "full_file_catalog": "rule/catalog/files.md",
+      "project_file_catalog": "rule/project/files.md",
+      "refresh_command": "node tools/bin/ai-teams-rule-refresh.mjs --target <目标项目路径> --write",
+      "policy": "索引优先、正文按需；只有索引缺失、过期或与代码冲突时才扩大搜索。"
+    },
+    "prompt_management": {
+      "registry": "prompts/registry.json",
+      "index": "prompts/index.md",
+      "graph": "prompts/graph.md",
+      "agent_pattern": "prompts/agents/<agent>/index.md",
+      "policy": "security/prompt-policy.md",
+      "injection_policy": "security/prompt-injection-policy.md",
+      "evolution_policy": "security/prompt-evolution-policy.md",
+      "workspace": "shared/prompt-evolution/",
+      "renderer": "node tools/bin/ai-teams-prompt-render.mjs",
+      "compiler": "node tools/bin/ai-teams-prompt-compile.mjs",
+      "runtime_hot_swap": false,
+      "agent_can_edit_own_active_system": false,
+      "task_prompt_contract_required": true,
+      "activation_effect": "next-agent-invocation-or-new-session"
+    },
+    "security": {
+      "policy_index": "security/index.md",
+      "mandatory_read_before_project_work": [
+        "security/index.md",
+        "security/project-policy.md",
+        "security/runtime-maintenance-policy.md",
+        "security/interface-contract-policy.md",
+        "security/file-ownership.md",
+        "security/sensitive-files.md",
+        "security/task-policy.md",
+        "security/lock-policy.md",
+        "security/state-policy.md",
+        "security/state-transaction-policy.md",
+        "security/supervision-policy.md",
+        "security/rule-policy.md",
+        "security/delete-policy.md",
+        "security/mcp-policy.md"
+        ,"security/prompt-policy.md"
+        ,"security/prompt-injection-policy.md"
+        ,"security/prompt-evolution-policy.md"
+      ],
+      "rule_entrypoints": [
+        "security/index.md",
+        "security/file-ownership.md",
+        "security/sensitive-files.md",
+        "security/delete-policy.md",
+        "security/task-policy.md",
+        "security/lock-policy.md",
+        "security/state-policy.md",
+        "security/state-transaction-policy.md",
+        "security/escalation-policy.md",
+        "security/workspace-policy.md",
+        "security/context-compression-policy.md",
+        "security/supervision-policy.md",
+        "security/rule-policy.md",
+        "index/NAVIGATION.md",
+        "security/project-policy.md",
+        "security/runtime-maintenance-policy.md",
+        "security/development-policy.md",
+        "security/development-frontend-web-policy.md",
+        "security/development-frontend-miniapp-policy.md",
+        "security/development-backend-systems-policy.md",
+        "security/development-backend-service-policy.md",
+        "security/interface-contract-policy.md",
+        "security/adr.md",
+        "security/agent-playbooks/index.md",
+        "security/mcp-policy.md"
+        ,"security/prompt-policy.md"
+        ,"security/prompt-injection-policy.md"
+        ,"security/prompt-evolution-policy.md"
+      ],
+      "agent_playbooks": "security/agent-playbooks/<agent>.md",
+      "permissions_deny_source": ".claude/settings.json permissions.deny",
+      "rule_body_location": "AI-Teams security/ directory; Claude Code 通过 .claude/rules/ 加载规则路由，Agent 从 index/ENTRY.md 与实际本体路径按需读取。"
+    },
+    "memory_governance": {
+      "auto_memory_enabled": false,
+      "formal_memory_root": "memory/",
+      "native_claude_memory_policy": "audit-and-ignore",
+      "native_claude_memory_audit": "memory/native-claude-memory-audit.md",
+      "audit_command": "node tools/bin/ai-teams-memory-audit.mjs --write",
+      "compact_candidate_policy": "PreCompact/PostCompact/Stop 只生成恢复候选；正式记忆由 Memory Agent 筛选写入。"
+    },
+    "mcp": {
+      "registry": "mcp/registry.json",
+      "index": "mcp/index.md",
+      "shared_index": "mcp/shared/index.md",
+      "agent_index": "mcp/agents/index.md",
+      "agent_binding_pattern": "mcp/agents/<agent>/index.md",
+      "agent_pointer_pattern": "agents/<agent>/mcp.md",
+      "security_policy": "security/mcp-policy.md",
+      "secrets_policy": "never store MCP secret values in AI-Teams files or Claude Code settings",
+      "qa_browser_automation": "Chrome MCP，本地 streamableHttp 地址 http://127.0.0.1:12306/mcp；使用前引导用户安装 hangwin/mcp-chrome Chrome 扩展与 mcp-chrome-bridge。",
+      "project_config": ".mcp.json",
+      "canonical_project_config": "mcp/claude-project.mcp.json",
+      "optional_servers_template": "mcp/optional-servers.mcp.example.json",
+      "config_rule": "Claude Code 项目级 MCP 配置使用目标项目根目录 .mcp.json；AI-Teams settings 只登记入口、权限、Agent 和规则指针。",
+      "portable_default_servers": [
+        "ai-teams-chrome",
+        "ai-teams-context7",
+        "ai-teams-shadcn",
+        "ai-teams-filesystem",
+        "ai-teams-figma",
+        "ai-teams-mysql",
+        "ai-teams-github",
+        "ai-teams-codegraph",
+        "ai-teams-puppeteer-fallback",
+        "ai-teams-canva-remote"
+      ],
+      "runtime_authorization_required_servers": [
+        "ai-teams-figma",
+        "ai-teams-mysql",
+        "ai-teams-github",
+        "ai-teams-canva-remote"
+      ]
+    }
+  },
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
+      "Read(./**/*credentials*)",
+      "Read(./**/*credential*)",
+      "Read(./**/*token*)",
+      "Read(./**/*secret*)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/*.p12)",
+      "Read(./**/*.pfx)",
+      "Read(./**/id_rsa)",
+      "Read(./**/id_ed25519)",
+      "Read(./**/service-account*.json)",
+      "Bash(rm -rf *)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -fd*)",
+      "Bash(git push --force*)"
+    ]
+  },
+  "disableAllHooks": false,
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "ai-teams-session-start"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "native-claude-memory-audit"
+            ]
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "ai-teams-user-prompt-submit.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "git-activity-watch"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "reconcile"
+            ]
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-contract-check.mjs"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "sensitive-file-check.sh"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "sensitive-file-check.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "protected-file-check.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "protected-file-lock-check.sh"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "delete-check.sh"
+            ]
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "activity"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "index-stale-mark.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "external-change-check.sh"
+            ]
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "failure"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
+              "post-tool-failure"
+            ]
+          }
+        ]
+      }
+    ],
+    "PermissionDenied": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "failure"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
+              "permission-denied"
+            ]
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "start"
+            ]
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "stop"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
+              "subagent-stop"
+            ]
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "stop"
+            ]
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "stop"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
+              "task-completed"
+            ]
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "context-compression-check.sh"
+            ]
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "context-compression-check.sh"
+            ]
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "failure"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
+              "stop-failure"
+            ]
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "context-compression-check.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "lock-timeout-check.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
+              "git-activity-watch"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
+              "reconcile"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

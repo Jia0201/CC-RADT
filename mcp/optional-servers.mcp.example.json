@@ -1,0 +1,73 @@
+{
+  "mcpServers": {
+    "ai-teams-filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${AI_TEAMS_TARGET_PROJECT_ROOT:-.}",
+        "${AI_TEAMS_HARNESS_ROOT:-.claude/ai-teams}"
+      ]
+    },
+    "ai-teams-figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--figma-api-key",
+        "${FIGMA_API_KEY}",
+        "--stdio"
+      ]
+    },
+    "ai-teams-mysql": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@benborla29/mcp-server-mysql"
+      ],
+      "env": {
+        "MYSQL_HOST": "${MYSQL_HOST}",
+        "MYSQL_PORT": "${MYSQL_PORT:-3306}",
+        "MYSQL_USER": "${MYSQL_USER}",
+        "MYSQL_PASS": "${MYSQL_PASS}",
+        "MYSQL_DB": "${MYSQL_DB}",
+        "ALLOW_INSERT_OPERATION": "${ALLOW_INSERT_OPERATION:-false}",
+        "ALLOW_UPDATE_OPERATION": "${ALLOW_UPDATE_OPERATION:-false}",
+        "ALLOW_DELETE_OPERATION": "${ALLOW_DELETE_OPERATION:-false}"
+      }
+    },
+    "ai-teams-github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "ai-teams-codegraph": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@colbymchenry/codegraph",
+        "serve",
+        "--mcp"
+      ]
+    },
+    "ai-teams-puppeteer-fallback": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ]
+    },
+    "ai-teams-canva-remote": {
+      "type": "http",
+      "url": "${CANVA_MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer ${CANVA_MCP_TOKEN}"
+      }
+    }
+  }
+}

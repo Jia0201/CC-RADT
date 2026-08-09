@@ -1,0 +1,679 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-06-05 00:00:00",
+  "mode": "portable-project-mcp",
+  "official_claude_code_config": {
+    "project_scope_file": ".mcp.json",
+    "note": "Claude Code 项目级 MCP 使用目标项目根目录 .mcp.json。AI-Teams 的 .claude/settings.json 只保存工程入口、Agent 注册、权限和规则指针。"
+  },
+  "package_contract": {
+    "canonical_project_config": "mcp/claude-project.mcp.json",
+    "optional_servers_template": "mcp/optional-servers.mcp.example.json",
+    "do_not_store_secret_values": true,
+    "install_root_config": ".mcp.json",
+    "claude_subdir_layout": "安装包根目录同时包含 .mcp.json 与 .claude/；AI-Teams payload 位于 .claude/ai-teams/。"
+  },
+  "default_mcp_servers": [
+    "chrome",
+    "context7",
+    "shadcn",
+    "filesystem",
+    "figma",
+    "mysql",
+    "github",
+    "codegraph",
+    "puppeteer",
+    "canva"
+  ],
+  "runtime_authorization_required_servers": [
+    "figma",
+    "mysql",
+    "github",
+    "canva"
+  ],
+  "optional_mcp_servers": [],
+  "servers": {
+    "context7": {
+      "id": "context7",
+      "name": "Context7 MCP",
+      "config_name": "ai-teams-context7",
+      "package": "@context7/mcp",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@context7/mcp"
+      ],
+      "transport": "stdio",
+      "enabled_by_default": true,
+      "credential_required": false,
+      "config_file": ".mcp.json",
+      "purpose": "框架、库、API 和版本文档辅助查询。",
+      "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+    },
+    "shadcn": {
+      "id": "shadcn",
+      "name": "shadcn MCP",
+      "config_name": "ai-teams-shadcn",
+      "package": "shadcn-mcp",
+      "command": "npx",
+      "args": [
+        "-y",
+        "shadcn-mcp"
+      ],
+      "transport": "stdio",
+      "enabled_by_default": true,
+      "credential_required": false,
+      "config_file": ".mcp.json",
+      "purpose": "Web 前端组件参考和 UI 实现辅助。",
+      "security_boundary": "只用于组件参考；不得覆盖目标项目既有设计系统和样式规范。"
+    },
+    "filesystem": {
+      "id": "filesystem",
+      "name": "Filesystem MCP",
+      "config_name": "ai-teams-filesystem",
+      "package": "@modelcontextprotocol/server-filesystem",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ],
+      "transport": "stdio",
+      "enabled_by_default": false,
+      "credential_required": false,
+      "config_file": "mcp/optional-servers.mcp.example.json",
+      "purpose": "受限路径文件访问。",
+      "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+    },
+    "figma": {
+      "id": "figma",
+      "name": "Figma Developer MCP",
+      "config_name": "ai-teams-figma",
+      "package": "figma-developer-mcp",
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--figma-api-key",
+        "${FIGMA_API_KEY}",
+        "--stdio"
+      ],
+      "transport": "stdio",
+      "enabled_by_default": false,
+      "credential_required": true,
+      "env_keys": [
+        "FIGMA_API_KEY"
+      ],
+      "config_file": "mcp/optional-servers.mcp.example.json",
+      "purpose": "设计稿结构读取、图片导出和 UI 对齐。",
+      "security_boundary": "Figma API Key 只允许保存在用户本机私有配置或环境变量中，工程只保存占位符。"
+    },
+    "mysql": {
+      "id": "mysql",
+      "name": "MySQL MCP",
+      "config_name": "ai-teams-mysql",
+      "package": "@benborla29/mcp-server-mysql",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@benborla29/mcp-server-mysql"
+      ],
+      "transport": "stdio",
+      "enabled_by_default": false,
+      "credential_required": true,
+      "env_keys": [
+        "MYSQL_HOST",
+        "MYSQL_PORT",
+        "MYSQL_USER",
+        "MYSQL_PASS",
+        "MYSQL_DB",
+        "ALLOW_INSERT_OPERATION",
+        "ALLOW_UPDATE_OPERATION",
+        "ALLOW_DELETE_OPERATION"
+      ],
+      "config_file": "mcp/optional-servers.mcp.example.json",
+      "purpose": "数据库结构、迁移校验、服务端数据访问问题定位或 QA 数据验证。",
+      "security_boundary": "默认只读；任何写入、更新、删除、DDL、数据导出或生产库连接都需要用户明确授权。"
+    },
+    "github": {
+      "id": "github",
+      "name": "GitHub MCP Server",
+      "config_name": "ai-teams-github",
+      "package": "@modelcontextprotocol/server-github",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "transport": "stdio",
+      "enabled_by_default": false,
+      "credential_required": true,
+      "env_keys": [
+        "GITHUB_PERSONAL_ACCESS_TOKEN"
+      ],
+      "config_file": "mcp/optional-servers.mcp.example.json",
+      "purpose": "仓库元信息、Issue/PR 协作和代码评审上下文。",
+      "security_boundary": "需要用户授权和仓库范围确认；不得自动提交、推送、合并或暴露 token。"
+    },
+    "codegraph": {
+      "id": "codegraph",
+      "name": "CodeGraph MCP",
+      "config_name": "ai-teams-codegraph",
+      "package": "@colbymchenry/codegraph",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@colbymchenry/codegraph",
+        "serve",
+        "--mcp"
+      ],
+      "transport": "stdio",
+      "enabled_by_default": false,
+      "credential_required": false,
+      "config_file": "mcp/optional-servers.mcp.example.json",
+      "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+      "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+    },
+    "puppeteer": {
+      "id": "puppeteer",
+      "name": "Puppeteer MCP",
+      "config_name": "ai-teams-puppeteer-fallback",
+      "package": "@modelcontextprotocol/server-puppeteer",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ],
+      "transport": "stdio",
+      "enabled_by_default": false,
+      "credential_required": false,
+      "config_file": "mcp/optional-servers.mcp.example.json",
+      "purpose": "Chrome MCP 不可用时的历史浏览器自动化 fallback。",
+      "security_boundary": "浏览器自动化优先使用 Chrome MCP；Puppeteer 只作为兼容或用户明确要求时使用。"
+    },
+    "canva": {
+      "id": "canva",
+      "name": "Canva Remote MCP",
+      "config_name": "ai-teams-canva-remote",
+      "transport": "http",
+      "enabled_by_default": false,
+      "credential_required": true,
+      "env_keys": [
+        "CANVA_MCP_URL",
+        "CANVA_MCP_TOKEN"
+      ],
+      "config_file": "mcp/optional-servers.mcp.example.json",
+      "purpose": "Canva 设计资产协作。",
+      "security_boundary": "远程 MCP 默认禁用，必须由用户明确确认 URL、账号、授权范围和是否允许外部网络调用。"
+    },
+    "chrome": {
+      "id": "chrome",
+      "name": "Chrome MCP Server",
+      "config_name": "ai-teams-chrome",
+      "package": "mcp-chrome-bridge",
+      "transport": "streamableHttp",
+      "type": "streamableHttp",
+      "url": "http://127.0.0.1:12306/mcp",
+      "enabled_by_default": true,
+      "credential_required": false,
+      "config_file": ".mcp.json",
+      "source": "https://github.com/hangwin/mcp-chrome",
+      "purpose": "Chrome MCP 浏览器自动化、页面检查、回归验证、截图、网络观察和当前 Chrome 会话辅助。",
+      "security_boundary": "使用前引导用户按 https://github.com/hangwin/mcp-chrome 安装 Chrome 扩展与 mcp-chrome-bridge；只测试授权页面、localhost、测试环境或用户明确指定页面；不得读取浏览器密码、Cookie 明文、个人历史记录或绕过登录/审核。"
+    }
+  },
+  "agents": {
+    "lead": [
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "github",
+        "config_name": "ai-teams-github",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "仓库元信息、Issue/PR 协作和代码评审上下文。",
+        "security_boundary": "需要用户授权和仓库范围确认；不得自动提交、推送、合并或暴露 token。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ],
+    "pd": [
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "figma",
+        "config_name": "ai-teams-figma",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "设计稿结构读取、图片导出和 UI 对齐。",
+        "security_boundary": "Figma API Key 只允许保存在用户本机私有配置或环境变量中，工程只保存占位符。"
+      },
+      {
+        "id": "canva",
+        "config_name": "ai-teams-canva-remote",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "Canva 设计资产协作。",
+        "security_boundary": "远程 MCP 默认禁用，必须由用户明确确认 URL、账号、授权范围和是否允许外部网络调用。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      }
+    ],
+    "plan-pm": [
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "github",
+        "config_name": "ai-teams-github",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "仓库元信息、Issue/PR 协作和代码评审上下文。",
+        "security_boundary": "需要用户授权和仓库范围确认；不得自动提交、推送、合并或暴露 token。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ],
+    "dev-frontend-web": [
+      {
+        "id": "chrome",
+        "config_name": "ai-teams-chrome",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "Chrome MCP 浏览器自动化、页面检查、回归验证、截图、网络观察和当前 Chrome 会话辅助。",
+        "security_boundary": "使用前引导用户按 https://github.com/hangwin/mcp-chrome 安装 Chrome 扩展与 mcp-chrome-bridge；只测试授权页面、localhost、测试环境或用户明确指定页面；不得读取浏览器密码、Cookie 明文、个人历史记录或绕过登录/审核。"
+      },
+      {
+        "id": "figma",
+        "config_name": "ai-teams-figma",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "设计稿结构读取、图片导出和 UI 对齐。",
+        "security_boundary": "Figma API Key 只允许保存在用户本机私有配置或环境变量中，工程只保存占位符。"
+      },
+      {
+        "id": "shadcn",
+        "config_name": "ai-teams-shadcn",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "Web 前端组件参考和 UI 实现辅助。",
+        "security_boundary": "只用于组件参考；不得覆盖目标项目既有设计系统和样式规范。"
+      },
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "github",
+        "config_name": "ai-teams-github",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "仓库元信息、Issue/PR 协作和代码评审上下文。",
+        "security_boundary": "需要用户授权和仓库范围确认；不得自动提交、推送、合并或暴露 token。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ],
+    "dev-frontend-miniapp": [
+      {
+        "id": "chrome",
+        "config_name": "ai-teams-chrome",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "Chrome MCP 浏览器自动化、页面检查、回归验证、截图、网络观察和当前 Chrome 会话辅助。",
+        "security_boundary": "使用前引导用户按 https://github.com/hangwin/mcp-chrome 安装 Chrome 扩展与 mcp-chrome-bridge；只测试授权页面、localhost、测试环境或用户明确指定页面；不得读取浏览器密码、Cookie 明文、个人历史记录或绕过登录/审核。"
+      },
+      {
+        "id": "figma",
+        "config_name": "ai-teams-figma",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "设计稿结构读取、图片导出和 UI 对齐。",
+        "security_boundary": "Figma API Key 只允许保存在用户本机私有配置或环境变量中，工程只保存占位符。"
+      },
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ],
+    "dev-backend-systems": [
+      {
+        "id": "mysql",
+        "config_name": "ai-teams-mysql",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "数据库结构、迁移校验、服务端数据访问问题定位或 QA 数据验证。",
+        "security_boundary": "默认只读；任何写入、更新、删除、DDL、数据导出或生产库连接都需要用户明确授权。"
+      },
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "github",
+        "config_name": "ai-teams-github",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "仓库元信息、Issue/PR 协作和代码评审上下文。",
+        "security_boundary": "需要用户授权和仓库范围确认；不得自动提交、推送、合并或暴露 token。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ],
+    "dev-backend-service": [
+      {
+        "id": "mysql",
+        "config_name": "ai-teams-mysql",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "数据库结构、迁移校验、服务端数据访问问题定位或 QA 数据验证。",
+        "security_boundary": "默认只读；任何写入、更新、删除、DDL、数据导出或生产库连接都需要用户明确授权。"
+      },
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "github",
+        "config_name": "ai-teams-github",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "仓库元信息、Issue/PR 协作和代码评审上下文。",
+        "security_boundary": "需要用户授权和仓库范围确认；不得自动提交、推送、合并或暴露 token。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ],
+    "qa": [
+      {
+        "id": "chrome",
+        "config_name": "ai-teams-chrome",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "Chrome MCP 浏览器自动化、页面检查、回归验证、截图、网络观察和当前 Chrome 会话辅助。",
+        "security_boundary": "使用前引导用户按 https://github.com/hangwin/mcp-chrome 安装 Chrome 扩展与 mcp-chrome-bridge；只测试授权页面、localhost、测试环境或用户明确指定页面；不得读取浏览器密码、Cookie 明文、个人历史记录或绕过登录/审核。"
+      },
+      {
+        "id": "puppeteer",
+        "config_name": "ai-teams-puppeteer-fallback",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "Chrome MCP 不可用时的历史浏览器自动化 fallback。",
+        "security_boundary": "浏览器自动化优先使用 Chrome MCP；Puppeteer 只作为兼容或明确要求时使用。"
+      },
+      {
+        "id": "mysql",
+        "config_name": "ai-teams-mysql",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "数据库结构、迁移校验、服务端数据访问问题定位或 QA 数据验证。",
+        "security_boundary": "默认只读；任何写入、更新、删除、DDL、数据导出或生产库连接都需要用户明确授权。"
+      },
+      {
+        "id": "github",
+        "config_name": "ai-teams-github",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "仓库元信息、Issue/PR 协作和代码评审上下文。",
+        "security_boundary": "需要用户授权和仓库范围确认；不得自动提交、推送、合并或暴露 token。"
+      },
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ],
+    "memory": [
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      }
+    ],
+    "doc": [
+      {
+        "id": "context7",
+        "config_name": "ai-teams-context7",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "框架、库、API 和版本文档辅助查询。",
+        "security_boundary": "只作为文档和库参考查询；不得替代目标项目本地规则和官方文档验证。"
+      },
+      {
+        "id": "figma",
+        "config_name": "ai-teams-figma",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "设计稿结构读取、图片导出和 UI 对齐。",
+        "security_boundary": "Figma API Key 只允许保存在用户本机私有配置或环境变量中，工程只保存占位符。"
+      },
+      {
+        "id": "canva",
+        "config_name": "ai-teams-canva-remote",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "Canva 设计资产协作。",
+        "security_boundary": "远程 MCP 默认禁用，必须由用户明确确认 URL、账号、授权范围和是否允许外部网络调用。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ],
+    "role": [
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      }
+    ],
+    "security-reviewer": [
+      {
+        "id": "chrome",
+        "config_name": "ai-teams-chrome",
+        "enabled_by_default": true,
+        "config_file": ".mcp.json",
+        "purpose": "Chrome MCP 浏览器自动化、页面检查、回归验证、截图、网络观察和当前 Chrome 会话辅助。",
+        "security_boundary": "使用前引导用户按 https://github.com/hangwin/mcp-chrome 安装 Chrome 扩展与 mcp-chrome-bridge；只测试授权页面、localhost、测试环境或用户明确指定页面；不得读取浏览器密码、Cookie 明文、个人历史记录或绕过登录/审核。"
+      },
+      {
+        "id": "mysql",
+        "config_name": "ai-teams-mysql",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "数据库结构、迁移校验、服务端数据访问问题定位或 QA 数据验证。",
+        "security_boundary": "默认只读；任何写入、更新、删除、DDL、数据导出或生产库连接都需要用户明确授权。"
+      },
+      {
+        "id": "github",
+        "config_name": "ai-teams-github",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "仓库元信息、Issue/PR 协作和代码评审上下文。",
+        "security_boundary": "需要用户授权和仓库范围确认；不得自动提交、推送、合并或暴露 token。"
+      },
+      {
+        "id": "filesystem",
+        "config_name": "ai-teams-filesystem",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "受限路径文件访问。",
+        "security_boundary": "必须限制 allowed paths；敏感文件仍按 security/sensitive-files.md 只检测存在，不读取内容。"
+      },
+      {
+        "id": "codegraph",
+        "config_name": "ai-teams-codegraph",
+        "enabled_by_default": false,
+        "config_file": "mcp/optional-servers.mcp.example.json",
+        "purpose": "代码图谱、调用关系、影响分析和大范围代码理解。",
+        "security_boundary": "只索引授权目标项目；敏感文件仍按 security/sensitive-files.md 处理。"
+      }
+    ]
+  },
+  "local_discovery": {
+    "status": "diagnostic-only-not-packaged",
+    "note": "本地 MCP 发现结果只用于诊断，不作为可迁移配置来源；不得在 portable registry 主体写入本机绝对路径。"
+  }
+}

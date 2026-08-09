@@ -1,0 +1,1020 @@
+{
+  "$schema": "./schemas/prompt.schema.json",
+  "schemaVersion": "1.0.0",
+  "registryVersion": "1.0.0",
+  "status": "active",
+  "sourceRoot": "prompts",
+  "common": {
+    "systemCore": "common/system-core.prompt.md",
+    "taskContract": "common/task-contract.prompt.md",
+    "retryGuard": "common/retry-guard.prompt.md"
+  },
+  "schemas": {
+    "prompt": "schemas/prompt.schema.json",
+    "variables": "schemas/variables.schema.json",
+    "result": "schemas/result.schema.json",
+    "evalCase": "schemas/eval-case.schema.json"
+  },
+  "compiler": {
+    "activeSelection": "registry.agents.{agent}.active.system",
+    "targetPattern": ".claude/agents/{agent}.md",
+    "mode": "official-frontmatter-plus-active-system-body",
+    "activationEffect": "next-agent-call-or-new-session",
+    "runtimeHotSwap": false
+  },
+  "agents": {
+    "lead": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/lead.md",
+        "agents/lead/lead.md",
+        "agents/lead/role.md",
+        "agents/lead/workflow.md"
+      ],
+      "active": {
+        "system": "agents/lead/system/v1.0.0.prompt.md",
+        "task": "agents/lead/task/default.v1.0.0.prompt.md",
+        "retry": "agents/lead/retry/v1.0.0.prompt.md",
+        "evals": "agents/lead/evals/cases.json"
+      }
+    },
+    "pd": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/pd.md",
+        "agents/pd/pd.md",
+        "agents/pd/role.md",
+        "agents/pd/workflow.md"
+      ],
+      "active": {
+        "system": "agents/pd/system/v1.0.0.prompt.md",
+        "task": "agents/pd/task/default.v1.0.0.prompt.md",
+        "retry": "agents/pd/retry/v1.0.0.prompt.md",
+        "evals": "agents/pd/evals/cases.json"
+      }
+    },
+    "plan-pm": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/plan-pm.md",
+        "agents/plan-pm/plan-pm.md",
+        "agents/plan-pm/role.md",
+        "agents/plan-pm/workflow.md"
+      ],
+      "active": {
+        "system": "agents/plan-pm/system/v1.0.0.prompt.md",
+        "task": "agents/plan-pm/task/default.v1.0.0.prompt.md",
+        "retry": "agents/plan-pm/retry/v1.0.0.prompt.md",
+        "evals": "agents/plan-pm/evals/cases.json"
+      }
+    },
+    "dev-frontend-web": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/dev-frontend-web.md",
+        "agents/dev-frontend-web/dev-frontend-web.md",
+        "agents/dev-frontend-web/role.md",
+        "agents/dev-frontend-web/workflow.md"
+      ],
+      "active": {
+        "system": "agents/dev-frontend-web/system/v1.0.0.prompt.md",
+        "task": "agents/dev-frontend-web/task/default.v1.0.0.prompt.md",
+        "retry": "agents/dev-frontend-web/retry/v1.0.0.prompt.md",
+        "evals": "agents/dev-frontend-web/evals/cases.json"
+      }
+    },
+    "dev-frontend-miniapp": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/dev-frontend-miniapp.md",
+        "agents/dev-frontend-miniapp/dev-frontend-miniapp.md",
+        "agents/dev-frontend-miniapp/role.md",
+        "agents/dev-frontend-miniapp/workflow.md"
+      ],
+      "active": {
+        "system": "agents/dev-frontend-miniapp/system/v1.0.0.prompt.md",
+        "task": "agents/dev-frontend-miniapp/task/default.v1.0.0.prompt.md",
+        "retry": "agents/dev-frontend-miniapp/retry/v1.0.0.prompt.md",
+        "evals": "agents/dev-frontend-miniapp/evals/cases.json"
+      }
+    },
+    "dev-backend-systems": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/dev-backend-systems.md",
+        "agents/dev-backend-systems/dev-backend-systems.md",
+        "agents/dev-backend-systems/role.md",
+        "agents/dev-backend-systems/workflow.md"
+      ],
+      "active": {
+        "system": "agents/dev-backend-systems/system/v1.0.0.prompt.md",
+        "task": "agents/dev-backend-systems/task/default.v1.0.0.prompt.md",
+        "retry": "agents/dev-backend-systems/retry/v1.0.0.prompt.md",
+        "evals": "agents/dev-backend-systems/evals/cases.json"
+      }
+    },
+    "dev-backend-service": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/dev-backend-service.md",
+        "agents/dev-backend-service/dev-backend-service.md",
+        "agents/dev-backend-service/role.md",
+        "agents/dev-backend-service/workflow.md"
+      ],
+      "active": {
+        "system": "agents/dev-backend-service/system/v1.0.0.prompt.md",
+        "task": "agents/dev-backend-service/task/default.v1.0.0.prompt.md",
+        "retry": "agents/dev-backend-service/retry/v1.0.0.prompt.md",
+        "evals": "agents/dev-backend-service/evals/cases.json"
+      }
+    },
+    "qa": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/qa.md",
+        "agents/qa/qa.md",
+        "agents/qa/role.md",
+        "agents/qa/workflow.md"
+      ],
+      "active": {
+        "system": "agents/qa/system/v1.0.0.prompt.md",
+        "task": "agents/qa/task/default.v1.0.0.prompt.md",
+        "retry": "agents/qa/retry/v1.0.0.prompt.md",
+        "evals": "agents/qa/evals/cases.json"
+      }
+    },
+    "memory": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/memory.md",
+        "agents/memory/memory.md",
+        "agents/memory/role.md",
+        "agents/memory/workflow.md"
+      ],
+      "active": {
+        "system": "agents/memory/system/v1.0.0.prompt.md",
+        "task": "agents/memory/task/default.v1.0.0.prompt.md",
+        "retry": "agents/memory/retry/v1.0.0.prompt.md",
+        "evals": "agents/memory/evals/cases.json"
+      }
+    },
+    "doc": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/doc.md",
+        "agents/doc/doc.md",
+        "agents/doc/role.md",
+        "agents/doc/workflow.md"
+      ],
+      "active": {
+        "system": "agents/doc/system/v1.0.0.prompt.md",
+        "task": "agents/doc/task/default.v1.0.0.prompt.md",
+        "retry": "agents/doc/retry/v1.0.0.prompt.md",
+        "evals": "agents/doc/evals/cases.json"
+      }
+    },
+    "role": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/role.md",
+        "agents/role/role.md",
+        "agents/role/workflow.md"
+      ],
+      "active": {
+        "system": "agents/role/system/v1.0.0.prompt.md",
+        "task": "agents/role/task/default.v1.0.0.prompt.md",
+        "retry": "agents/role/retry/v1.0.0.prompt.md",
+        "evals": "agents/role/evals/cases.json"
+      }
+    },
+    "security-reviewer": {
+      "owner": "role",
+      "sourceDefinitions": [
+        ".claude/agents/security-reviewer.md",
+        "agents/security-reviewer/security-reviewer.md",
+        "agents/security-reviewer/role.md",
+        "agents/security-reviewer/workflow.md"
+      ],
+      "active": {
+        "system": "agents/security-reviewer/system/v1.0.0.prompt.md",
+        "task": "agents/security-reviewer/task/default.v1.0.0.prompt.md",
+        "retry": "agents/security-reviewer/retry/v1.0.0.prompt.md",
+        "evals": "agents/security-reviewer/evals/cases.json"
+      }
+    }
+  },
+  "lifecycle": {
+    "states": [
+      "draft",
+      "candidate",
+      "active",
+      "retired"
+    ],
+    "activationRequires": [
+      "schema-validation",
+      "positive-eval",
+      "negative-eval",
+      "security-eval",
+      "output-contract-eval"
+    ],
+    "runtimeHotSwap": false,
+    "failureDirectlyEditsActive": false
+  },
+  "promptTools": {
+    "schemaVersion": 1,
+    "updatedAt": "2026-07-18T18:15:28.093Z",
+    "activeMeta": {
+      "lead": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/lead/system/v1.0.0.prompt.md",
+          "sha256": "50d81cdbdb08d34cd526fd156427889a665469fd0463a7eadb46ca00fa07f1fa",
+          "activatedAt": "2026-07-18T18:04:03.783Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/lead/task/default.v1.0.0.prompt.md",
+          "sha256": "30ac3f530ffc8313d9e9b86f6d7a4ae811629eb6dd4148a482eaafe323869850",
+          "activatedAt": "2026-07-18T17:45:15.538Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/lead/retry/v1.0.0.prompt.md",
+          "sha256": "21778dfcf21f4d61b35abb7b1de9a93c30e6b5a5906c882107ba62a945de6cac",
+          "activatedAt": "2026-07-18T17:47:19.752Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "pd": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/pd/system/v1.0.0.prompt.md",
+          "sha256": "28cb8926f793bcbb46e98a79801687fe539d33dbdfe3e61ffa68239f4946498a",
+          "activatedAt": "2026-07-18T18:04:03.784Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/pd/task/default.v1.0.0.prompt.md",
+          "sha256": "1f34fde165be0395619986ceb99cfb165cfd99a9960d92eb9b5a74fba0e30a27",
+          "activatedAt": "2026-07-18T17:45:15.539Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/pd/retry/v1.0.0.prompt.md",
+          "sha256": "6b4909857dfb1f749a34613eedbe14886f77fb59285d840b687707e41c7ce85e",
+          "activatedAt": "2026-07-18T17:47:19.752Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "plan-pm": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/plan-pm/system/v1.0.0.prompt.md",
+          "sha256": "8c1c31d5da54098b4596535007eb79ff11a47cc778f13deb53032ae700aa0296",
+          "activatedAt": "2026-07-18T18:04:03.784Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/plan-pm/task/default.v1.0.0.prompt.md",
+          "sha256": "96488f5677837952ba295c6e0a2532f98f49e90b786200205196dd8e2c7e7647",
+          "activatedAt": "2026-07-18T17:45:15.540Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/plan-pm/retry/v1.0.0.prompt.md",
+          "sha256": "ca5f18c21cefc8932053ba9f0b868b21511c3a77a91858f25befcb381f6f9d16",
+          "activatedAt": "2026-07-18T17:47:19.753Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "dev-frontend-web": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-frontend-web/system/v1.0.0.prompt.md",
+          "sha256": "533751eb7086de07a38f7b9931c957a59b91c4bd72ff97f71668e8cfa9995a3e",
+          "activatedAt": "2026-07-18T18:04:03.785Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-frontend-web/task/default.v1.0.0.prompt.md",
+          "sha256": "ccb4eddb4f22fc62248816e91ae59d52b10cab820636ffdca82dbfc23edff3a2",
+          "activatedAt": "2026-07-18T17:45:15.541Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-frontend-web/retry/v1.0.0.prompt.md",
+          "sha256": "67783db0d61f620a2f04b456fd37d1bf834ffe6964dec4783b0441ffc196e454",
+          "activatedAt": "2026-07-18T17:47:19.754Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "dev-frontend-miniapp": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-frontend-miniapp/system/v1.0.0.prompt.md",
+          "sha256": "dc2b387efa4a26f01c5b371085ed0a399a633af4868dea1222b35c6d3aa80fd5",
+          "activatedAt": "2026-07-18T18:04:03.785Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-frontend-miniapp/task/default.v1.0.0.prompt.md",
+          "sha256": "1775f9bd4724d3f9cbb80a0fefc8b1c638e57390b9098cd28ca6fdd2257e89dc",
+          "activatedAt": "2026-07-18T17:45:15.541Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-frontend-miniapp/retry/v1.0.0.prompt.md",
+          "sha256": "3880f2f7154f35e2036cb44fd7fb9127677c2998ac3e36e97359289a76620940",
+          "activatedAt": "2026-07-18T17:47:19.754Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "dev-backend-systems": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-backend-systems/system/v1.0.0.prompt.md",
+          "sha256": "0098af3513cda84c841e30540c8a25832cd2436612364e27ce5d6346b509b9a1",
+          "activatedAt": "2026-07-18T18:04:03.786Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-backend-systems/task/default.v1.0.0.prompt.md",
+          "sha256": "6f995d124af186a9e0de702bf01881861435a072416022306af12aae217348bc",
+          "activatedAt": "2026-07-18T17:45:15.542Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-backend-systems/retry/v1.0.0.prompt.md",
+          "sha256": "cc01731a44326bb2c151fe2ad49d7d8d04b769164026b7f11e908d38a441e733",
+          "activatedAt": "2026-07-18T17:47:19.755Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "dev-backend-service": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-backend-service/system/v1.0.0.prompt.md",
+          "sha256": "23c814c3c13c8e10050b1f40e0bb5402518493b3f1ad6d4924ed8ffdaf7becd9",
+          "activatedAt": "2026-07-18T18:04:03.786Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-backend-service/task/default.v1.0.0.prompt.md",
+          "sha256": "5852fac43c1b2c9c5fab5d0262b90db3695d33d3534114bb7505c0456db05745",
+          "activatedAt": "2026-07-18T17:46:26.240Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/dev-backend-service/retry/v1.0.0.prompt.md",
+          "sha256": "1c0125910c8ddc0e726c2fdad8c0cf09466bab07c5bfc8e745be694f18334bba",
+          "activatedAt": "2026-07-18T17:48:07.085Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "qa": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/qa/system/v1.0.0.prompt.md",
+          "sha256": "d91f101b5f0f17b36ae2e10e23bcf5b80b7fc714876ee6e5a878989bfb90e7d9",
+          "activatedAt": "2026-07-18T18:15:28.086Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": {
+            "version": "1.0.1",
+            "path": "prompts/agents/qa/system/1.0.1.prompt.md",
+            "sha256": "d91f101b5f0f17b36ae2e10e23bcf5b80b7fc714876ee6e5a878989bfb90e7d9",
+            "activatedAt": "2026-07-18T18:15:27.369Z",
+            "candidateId": "smoke-qa-system-101",
+            "risk": "low",
+            "variables": {
+              "required": [],
+              "optional": []
+            }
+          }
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/qa/task/default.v1.0.0.prompt.md",
+          "sha256": "01c57d33ed3507708df71279dfb9895094df1ce3ab16a00ccd39b5205507ddb2",
+          "activatedAt": "2026-07-18T17:46:26.241Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/qa/retry/v1.0.0.prompt.md",
+          "sha256": "3cab59d2463d42e1fe51f9cce7406bd4aa68c9f787907f329f99b4758e6193ee",
+          "activatedAt": "2026-07-18T17:48:07.085Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "memory": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/memory/system/v1.0.0.prompt.md",
+          "sha256": "006b396919d1fafdd387a73b887f923600964b788a32ff426b6c18e294cfdc42",
+          "activatedAt": "2026-07-18T18:04:03.787Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/memory/task/default.v1.0.0.prompt.md",
+          "sha256": "ea4641a6fb07c13ee267a47d92754a2721c616f359ac1beddac70c328511da02",
+          "activatedAt": "2026-07-18T17:46:26.242Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/memory/retry/v1.0.0.prompt.md",
+          "sha256": "e658468277ba20190408018c6e4688f009f78393d291f2ee6d403b115af3c67a",
+          "activatedAt": "2026-07-18T17:48:07.086Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "doc": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/doc/system/v1.0.0.prompt.md",
+          "sha256": "7c2070985a1567190542588435e1c73c2617a3640335ef068470177c038809ce",
+          "activatedAt": "2026-07-18T18:04:03.788Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/doc/task/default.v1.0.0.prompt.md",
+          "sha256": "8d9224a6acdfd141d1bac0c303d7ed8cf724fd590cce3c37674f5116fda58f68",
+          "activatedAt": "2026-07-18T17:46:26.243Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/doc/retry/v1.0.0.prompt.md",
+          "sha256": "8972e59c92aa627b8714e465f15712cbc6efa29900fc52899255edec8eed56d8",
+          "activatedAt": "2026-07-18T17:48:07.087Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "role": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/role/system/v1.0.0.prompt.md",
+          "sha256": "c3b9bc825542dca6a7cb7306f0d13882c6b9cba8ac385af36b0c5b7de0aee974",
+          "activatedAt": "2026-07-18T18:04:03.788Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/role/task/default.v1.0.0.prompt.md",
+          "sha256": "a5276b4b3f792a1c105ed2feafd3afe899ffff34ee1aae35bc6cee3f5661f085",
+          "activatedAt": "2026-07-18T17:46:26.243Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/role/retry/v1.0.0.prompt.md",
+          "sha256": "78a49d6daabbc8b681c77267ce2b5c1131063e6e15ae68e9ae5fb86d9eb46cc2",
+          "activatedAt": "2026-07-18T17:48:07.087Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      },
+      "security-reviewer": {
+        "system": {
+          "version": "1.0.0",
+          "path": "prompts/agents/security-reviewer/system/v1.0.0.prompt.md",
+          "sha256": "730e78d279e97696a07c60724f5a94fda4bace4e855238a3f643485b1cbfaf8f",
+          "activatedAt": "2026-07-18T18:04:03.789Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [],
+            "optional": []
+          },
+          "previous": null
+        },
+        "task": {
+          "version": "1.0.0",
+          "path": "prompts/agents/security-reviewer/task/default.v1.0.0.prompt.md",
+          "sha256": "f5dcfd042cb15206cfc1e68c7252f5a731d0a9871c652c224b6de35a6a22b721",
+          "activatedAt": "2026-07-18T17:46:26.244Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "workflow_id",
+              "objective",
+              "scope",
+              "forbidden_scope",
+              "context_refs",
+              "instructions",
+              "acceptance_criteria",
+              "verification",
+              "risk_level",
+              "lock_refs",
+              "handoff_target",
+              "output_contract"
+            ],
+            "optional": []
+          },
+          "previous": null
+        },
+        "retry": {
+          "version": "1.0.0",
+          "path": "prompts/agents/security-reviewer/retry/v1.0.0.prompt.md",
+          "sha256": "d364153106246e48c27259585fa79c988e43448d5def8facfe53d8b71df8e807",
+          "activatedAt": "2026-07-18T17:48:07.088Z",
+          "candidateId": null,
+          "risk": "high",
+          "variables": {
+            "required": [
+              "task_id",
+              "failed_attempt",
+              "error_evidence",
+              "root_cause",
+              "corrective_instruction",
+              "reduced_scope",
+              "forbidden_actions",
+              "verification",
+              "handoff_target"
+            ],
+            "optional": []
+          },
+          "previous": null
+        }
+      }
+    }
+  }
+}

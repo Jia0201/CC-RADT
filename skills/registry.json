@@ -1,0 +1,644 @@
+{
+  "version": "1.0.0",
+  "mode": "vendored-local-copy",
+  "canonical_root": "skills/agents",
+  "install_mode": "vendored-local-copy",
+  "updated_by": "role",
+  "note": "本 registry 只登记已复制到 CC-RADT 工程内且允许再分发的 Agent Skills。运行时只依赖工程内相对路径，不自动执行未知脚本。第三方来源与许可证见 THIRD_PARTY_NOTICES.md。",
+  "third_party_sources": {
+    "mattpocock/skills": {
+      "url": "https://github.com/mattpocock/skills",
+      "license": "MIT"
+    },
+    "bytedance/deer-flow": {
+      "url": "https://github.com/bytedance/deer-flow",
+      "license": "MIT"
+    },
+    "anthropics/claude-plugins-official": {
+      "url": "https://github.com/anthropics/claude-plugins-official",
+      "license": "Apache-2.0"
+    },
+    "anthropics/skills": {
+      "url": "https://github.com/anthropics/skills",
+      "license": "per-skill"
+    },
+    "vercel-labs/agent-skills": {
+      "url": "https://github.com/vercel-labs/agent-skills",
+      "license": "MIT (declared in included Skill metadata)"
+    },
+    "szkocot/andrej-karpathy-skills": {
+      "url": "https://github.com/szkocot/andrej-karpathy-skills",
+      "license": "MIT (declared in included Skill metadata)"
+    }
+  },
+  "shared": [],
+  "agents": {
+    "lead": [
+      {
+        "slug": "triage",
+        "name": "triage",
+        "description": "Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow.",
+        "path": "skills/agents/lead/triage",
+        "skill_file": "skills/agents/lead/triage/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "任务分诊、优先级判断和路由决策",
+        "source": "triage",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "diagnose",
+        "name": "diagnose",
+        "description": "Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when user says \"diagnose this\" / \"debug this\", reports a bug, says something is broken/throwing/failing, or describes a performance regression.",
+        "path": "skills/agents/lead/diagnose",
+        "skill_file": "skills/agents/lead/diagnose/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "复杂失败的复盘、定位和恢复路径设计",
+        "source": "diagnose",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "zoom-out",
+        "name": "zoom-out",
+        "description": "Tell the agent to zoom out and give broader context or a higher-level perspective. Use when you're unfamiliar with a section of code or need to understand how it fits into the bigger picture.",
+        "path": "skills/agents/lead/zoom-out",
+        "skill_file": "skills/agents/lead/zoom-out/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "跨模块任务时进行高层上下文检查",
+        "source": "zoom-out",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "handoff",
+        "name": "handoff",
+        "description": "Compact the current conversation into a handoff document for another agent to pick up.",
+        "path": "skills/agents/lead/handoff",
+        "skill_file": "skills/agents/lead/handoff/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "长任务或交接前生成可恢复摘要",
+        "source": "handoff",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-claude-code-setup-claude-automation-recommender",
+        "name": "claude-automation-recommender",
+        "description": "Analyze a codebase and recommend Claude Code automations (hooks, subagents, skills, plugins, MCP servers). Use when user asks for automation recommendations, wants to optimize their Claude Code setup, mentions improving Claude Code workflows, asks how to first set up Claude Code for a project, or wants to know what Claude Code features they should use.",
+        "path": "skills/agents/lead/claude-claude-code-setup-claude-automation-recommender",
+        "skill_file": "skills/agents/lead/claude-claude-code-setup-claude-automation-recommender/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "评估 hooks、subagents、skills、MCP 的自动化建议",
+        "source": "claude-claude-code-setup-claude-automation-recommender",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "pd": [
+      {
+        "slug": "to-prd",
+        "name": "to-prd",
+        "description": "Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context.",
+        "path": "skills/agents/pd/to-prd",
+        "skill_file": "skills/agents/pd/to-prd/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "把用户需求整理为 PRD 或需求文档",
+        "source": "to-prd",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "grill-me",
+        "name": "grill-me",
+        "description": "Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to stress-test a plan, get grilled on their design, or mentions \"grill me\".",
+        "path": "skills/agents/pd/grill-me",
+        "skill_file": "skills/agents/pd/grill-me/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "对模糊需求进行结构化追问",
+        "source": "grill-me",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "grill-with-docs",
+        "name": "grill-with-docs",
+        "description": "Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.",
+        "path": "skills/agents/pd/grill-with-docs",
+        "skill_file": "skills/agents/pd/grill-with-docs/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "结合现有文档挑战和澄清需求模型",
+        "source": "grill-with-docs",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "consulting-analysis",
+        "name": "consulting-analysis",
+        "description": "Use this skill when the user requests to generate, create, or write professional research reports including but not limited to market analysis, consumer insights, brand analysis, financial analysis, industry research, competitive intelligence, investment due diligence, or any consulting-grade analytical report. This skill operates in two phases — (1) generating a structured analysis framework with chapter skeleton, data query requirements, and analysis logic, and (2) after data collection by other skills, producing the final consulting-grade report with structured narratives, embedded charts, and strategic insights.",
+        "path": "skills/agents/pd/consulting-analysis",
+        "skill_file": "skills/agents/pd/consulting-analysis/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "市场、用户、业务场景和产品判断分析",
+        "source": "consulting-analysis",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "deep-research",
+        "name": "deep-research",
+        "description": "Use this skill instead of WebSearch for ANY question requiring web research. Trigger on queries like \"what is X\", \"explain X\", \"compare X and Y\", \"research X\", or before content generation tasks. Provides systematic multi-angle research methodology instead of single superficial searches. Use this proactively when the user's question needs online information.",
+        "path": "skills/agents/pd/deep-research",
+        "skill_file": "skills/agents/pd/deep-research/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "需要外部资料或竞品研究时进行深度研究",
+        "source": "deep-research",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "plan-pm": [
+      {
+        "slug": "to-issues",
+        "name": "to-issues",
+        "description": "Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.",
+        "path": "skills/agents/plan-pm/to-issues",
+        "skill_file": "skills/agents/plan-pm/to-issues/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "把 PRD 或计划拆成可执行任务",
+        "source": "to-issues",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "triage",
+        "name": "triage",
+        "description": "Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow.",
+        "path": "skills/agents/plan-pm/triage",
+        "skill_file": "skills/agents/plan-pm/triage/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "任务优先级、状态和阻塞分流",
+        "source": "triage",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "prototype",
+        "name": "prototype",
+        "description": "Build a throwaway prototype to flush out a design before committing to it. Routes between two branches — a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says \"prototype this\", \"let me play with it\", \"try a few designs\".",
+        "path": "skills/agents/plan-pm/prototype",
+        "skill_file": "skills/agents/plan-pm/prototype/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "在正式实现前做轻量验证方案",
+        "source": "prototype",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "diagnose",
+        "name": "diagnose",
+        "description": "Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when user says \"diagnose this\" / \"debug this\", reports a bug, says something is broken/throwing/failing, or describes a performance regression.",
+        "path": "skills/agents/plan-pm/diagnose",
+        "skill_file": "skills/agents/plan-pm/diagnose/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "计划失败、依赖阻塞和回流分析",
+        "source": "diagnose",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "dev-frontend-web": [
+      {
+        "slug": "frontend-design",
+        "name": "frontend-design",
+        "description": "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.",
+        "path": "skills/agents/dev-frontend-web/frontend-design",
+        "skill_file": "skills/agents/dev-frontend-web/frontend-design/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "构建高质量 Web UI、组件和页面",
+        "source": "frontend-design",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "vercel-react-best-practices",
+        "name": "vercel-react-best-practices",
+        "description": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.",
+        "path": "skills/agents/dev-frontend-web/vercel-react-best-practices",
+        "skill_file": "skills/agents/dev-frontend-web/vercel-react-best-practices/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "React / Next.js 性能和最佳实践",
+        "source": "vercel-react-best-practices",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-anthropic-webapp-testing",
+        "name": "webapp-testing",
+        "description": "Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+        "path": "skills/agents/dev-frontend-web/claude-anthropic-webapp-testing",
+        "skill_file": "skills/agents/dev-frontend-web/claude-anthropic-webapp-testing/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "使用 Playwright 验证本地 Web 应用",
+        "source": "claude-anthropic-webapp-testing",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "tdd",
+        "name": "tdd",
+        "description": "Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions \"red-green-refactor\", wants integration tests, or asks for test-first development.",
+        "path": "skills/agents/dev-frontend-web/tdd",
+        "skill_file": "skills/agents/dev-frontend-web/tdd/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "红绿重构方式实现前端功能或修复缺陷",
+        "source": "tdd",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "dev-frontend-miniapp": [
+      {
+        "slug": "frontend-design",
+        "name": "frontend-design",
+        "description": "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.",
+        "path": "skills/agents/dev-frontend-miniapp/frontend-design",
+        "skill_file": "skills/agents/dev-frontend-miniapp/frontend-design/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "小程序页面和组件的前端体验设计参考",
+        "source": "frontend-design",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-anthropic-webapp-testing",
+        "name": "webapp-testing",
+        "description": "Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+        "path": "skills/agents/dev-frontend-miniapp/claude-anthropic-webapp-testing",
+        "skill_file": "skills/agents/dev-frontend-miniapp/claude-anthropic-webapp-testing/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "可运行 Web 预览或 H5 兼容层时进行自动化验证",
+        "source": "claude-anthropic-webapp-testing",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "tdd",
+        "name": "tdd",
+        "description": "Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions \"red-green-refactor\", wants integration tests, or asks for test-first development.",
+        "path": "skills/agents/dev-frontend-miniapp/tdd",
+        "skill_file": "skills/agents/dev-frontend-miniapp/tdd/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "以测试先行方式实现小程序业务逻辑",
+        "source": "tdd",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "code-documentation",
+        "name": "code-documentation",
+        "description": "Use this skill when the user requests to generate, create, or improve documentation for code, APIs, libraries, repositories, or software projects. Supports README generation, API reference documentation, inline code comments, architecture documentation, changelog generation, and developer guides. Trigger on requests like \"document this code\", \"create a README\", \"generate API docs\", \"write developer guide\", or when analyzing codebases for documentation purposes.",
+        "path": "skills/agents/dev-frontend-miniapp/code-documentation",
+        "skill_file": "skills/agents/dev-frontend-miniapp/code-documentation/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "记录平台差异、组件接口和联调说明",
+        "source": "code-documentation",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "dev-backend-systems": [
+      {
+        "slug": "tdd",
+        "name": "tdd",
+        "description": "Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions \"red-green-refactor\", wants integration tests, or asks for test-first development.",
+        "path": "skills/agents/dev-backend-systems/tdd",
+        "skill_file": "skills/agents/dev-backend-systems/tdd/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "系统后端和 Java/C/C++ 改动的测试先行流程",
+        "source": "tdd",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "diagnose",
+        "name": "diagnose",
+        "description": "Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when user says \"diagnose this\" / \"debug this\", reports a bug, says something is broken/throwing/failing, or describes a performance regression.",
+        "path": "skills/agents/dev-backend-systems/diagnose",
+        "skill_file": "skills/agents/dev-backend-systems/diagnose/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "复杂构建、性能、并发或回归问题定位",
+        "source": "diagnose",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "improve-codebase-architecture",
+        "name": "improve-codebase-architecture",
+        "description": "Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.",
+        "path": "skills/agents/dev-backend-systems/improve-codebase-architecture",
+        "skill_file": "skills/agents/dev-backend-systems/improve-codebase-architecture/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "识别架构改进点和边界问题",
+        "source": "improve-codebase-architecture",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "karpathy-guidelines",
+        "name": "karpathy-guidelines",
+        "description": "Behavioral guidelines to reduce common LLM coding mistakes. Use when writing, reviewing, or refactoring code to avoid overcomplication, make surgical changes, surface assumptions, and define verifiable success criteria.",
+        "path": "skills/agents/dev-backend-systems/karpathy-guidelines",
+        "skill_file": "skills/agents/dev-backend-systems/karpathy-guidelines/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "降低编码、重构和评审中的常见错误",
+        "source": "karpathy-guidelines",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "code-documentation",
+        "name": "code-documentation",
+        "description": "Use this skill when the user requests to generate, create, or improve documentation for code, APIs, libraries, repositories, or software projects. Supports README generation, API reference documentation, inline code comments, architecture documentation, changelog generation, and developer guides. Trigger on requests like \"document this code\", \"create a README\", \"generate API docs\", \"write developer guide\", or when analyzing codebases for documentation purposes.",
+        "path": "skills/agents/dev-backend-systems/code-documentation",
+        "skill_file": "skills/agents/dev-backend-systems/code-documentation/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "生成或改进接口、模块和构建文档",
+        "source": "code-documentation",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "dev-backend-service": [
+      {
+        "slug": "tdd",
+        "name": "tdd",
+        "description": "Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions \"red-green-refactor\", wants integration tests, or asks for test-first development.",
+        "path": "skills/agents/dev-backend-service/tdd",
+        "skill_file": "skills/agents/dev-backend-service/tdd/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "Python / Go / Node.js / TypeScript 服务端功能和缺陷修复的测试先行流程",
+        "source": "tdd",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "diagnose",
+        "name": "diagnose",
+        "description": "Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when user says \"diagnose this\" / \"debug this\", reports a bug, says something is broken/throwing/failing, or describes a performance regression.",
+        "path": "skills/agents/dev-backend-service/diagnose",
+        "skill_file": "skills/agents/dev-backend-service/diagnose/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "服务端异常、接口回归和性能问题定位",
+        "source": "diagnose",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "improve-codebase-architecture",
+        "name": "improve-codebase-architecture",
+        "description": "Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.",
+        "path": "skills/agents/dev-backend-service/improve-codebase-architecture",
+        "skill_file": "skills/agents/dev-backend-service/improve-codebase-architecture/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "服务边界、模块耦合和演进建议",
+        "source": "improve-codebase-architecture",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "karpathy-guidelines",
+        "name": "karpathy-guidelines",
+        "description": "Behavioral guidelines to reduce common LLM coding mistakes. Use when writing, reviewing, or refactoring code to avoid overcomplication, make surgical changes, surface assumptions, and define verifiable success criteria.",
+        "path": "skills/agents/dev-backend-service/karpathy-guidelines",
+        "skill_file": "skills/agents/dev-backend-service/karpathy-guidelines/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "控制实现复杂度并减少编码常见错误",
+        "source": "karpathy-guidelines",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "code-documentation",
+        "name": "code-documentation",
+        "description": "Use this skill when the user requests to generate, create, or improve documentation for code, APIs, libraries, repositories, or software projects. Supports README generation, API reference documentation, inline code comments, architecture documentation, changelog generation, and developer guides. Trigger on requests like \"document this code\", \"create a README\", \"generate API docs\", \"write developer guide\", or when analyzing codebases for documentation purposes.",
+        "path": "skills/agents/dev-backend-service/code-documentation",
+        "skill_file": "skills/agents/dev-backend-service/code-documentation/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "记录 API、服务模块和运维命令",
+        "source": "code-documentation",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "build-mcp-server",
+        "name": "build-mcp-server",
+        "description": "Entry point for MCP server development. It helps choose deployment model, tool design pattern, and implementation path for services that expose external APIs or local capabilities to Claude.",
+        "path": "skills/agents/dev-backend-service/build-mcp-server",
+        "skill_file": "skills/agents/dev-backend-service/build-mcp-server/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "Node.js / TypeScript 与 Python MCP 服务端、API wrapper 和 Claude 集成设计",
+        "source": "build-mcp-server",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "qa": [
+      {
+        "slug": "claude-anthropic-webapp-testing",
+        "name": "webapp-testing",
+        "description": "Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+        "path": "skills/agents/qa/claude-anthropic-webapp-testing",
+        "skill_file": "skills/agents/qa/claude-anthropic-webapp-testing/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "Web 端回归、截图和交互验证",
+        "source": "claude-anthropic-webapp-testing",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "tdd",
+        "name": "tdd",
+        "description": "Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions \"red-green-refactor\", wants integration tests, or asks for test-first development.",
+        "path": "skills/agents/qa/tdd",
+        "skill_file": "skills/agents/qa/tdd/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "检查测试覆盖与红绿重构闭环",
+        "source": "tdd",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "diagnose",
+        "name": "diagnose",
+        "description": "Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when user says \"diagnose this\" / \"debug this\", reports a bug, says something is broken/throwing/failing, or describes a performance regression.",
+        "path": "skills/agents/qa/diagnose",
+        "skill_file": "skills/agents/qa/diagnose/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "复现、最小化和定位缺陷",
+        "source": "diagnose",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "triage",
+        "name": "triage",
+        "description": "Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow.",
+        "path": "skills/agents/qa/triage",
+        "skill_file": "skills/agents/qa/triage/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "缺陷分级、阻塞判断和验收状态管理",
+        "source": "triage",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "memory": [
+      {
+        "slug": "handoff",
+        "name": "handoff",
+        "description": "Compact the current conversation into a handoff document for another agent to pick up.",
+        "path": "skills/agents/memory/handoff",
+        "skill_file": "skills/agents/memory/handoff/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "将会话压缩为可恢复交接材料",
+        "source": "handoff",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-session-report-session-report",
+        "name": "session-report",
+        "description": "Generate an explorable HTML report of Claude Code session usage (tokens, cache, subagents, skills, expensive prompts) from ~/.claude/projects transcripts.",
+        "path": "skills/agents/memory/claude-session-report-session-report",
+        "skill_file": "skills/agents/memory/claude-session-report-session-report/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "生成会话使用和上下文报告",
+        "source": "claude-session-report-session-report",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "zoom-out",
+        "name": "zoom-out",
+        "description": "Tell the agent to zoom out and give broader context or a higher-level perspective. Use when you're unfamiliar with a section of code or need to understand how it fits into the bigger picture.",
+        "path": "skills/agents/memory/zoom-out",
+        "skill_file": "skills/agents/memory/zoom-out/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "从长上下文中提取高层恢复线索",
+        "source": "zoom-out",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "doc": [
+      {
+        "slug": "code-documentation",
+        "name": "code-documentation",
+        "description": "Use this skill when the user requests to generate, create, or improve documentation for code, APIs, libraries, repositories, or software projects. Supports README generation, API reference documentation, inline code comments, architecture documentation, changelog generation, and developer guides. Trigger on requests like \"document this code\", \"create a README\", \"generate API docs\", \"write developer guide\", or when analyzing codebases for documentation purposes.",
+        "path": "skills/agents/doc/code-documentation",
+        "skill_file": "skills/agents/doc/code-documentation/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "生成和改进代码、API、仓库文档",
+        "source": "code-documentation",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-claude-md-management-claude-md-improver",
+        "name": "claude-md-improver",
+        "description": "Audit and improve CLAUDE.md files in repositories. Use when user asks to check, audit, update, improve, or fix CLAUDE.md files. Scans for all CLAUDE.md files, evaluates quality against templates, outputs quality report, then makes targeted updates. Also use when the user mentions \"CLAUDE.md maintenance\" or \"project memory optimization\".",
+        "path": "skills/agents/doc/claude-claude-md-management-claude-md-improver",
+        "skill_file": "skills/agents/doc/claude-claude-md-management-claude-md-improver/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "审计和改进 CLAUDE.md",
+        "source": "claude-claude-md-management-claude-md-improver",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "academic-paper-review",
+        "name": "academic-paper-review",
+        "description": "Use this skill when the user requests to review, analyze, critique, or summarize academic papers, research articles, preprints, or scientific publications. Supports comprehensive structured reviews covering methodology assessment, contribution evaluation, literature positioning, and constructive feedback generation. Trigger on queries involving paper URLs, uploaded PDFs, arXiv links, or requests like \"review this paper\", \"analyze this research\", \"summarize this study\", or \"write a peer review\".",
+        "path": "skills/agents/doc/academic-paper-review",
+        "skill_file": "skills/agents/doc/academic-paper-review/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "处理研究资料和论文类知识沉淀",
+        "source": "academic-paper-review",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "role": [
+      {
+        "slug": "claude-plugin-dev-agent-development",
+        "name": "agent-identifier",
+        "description": "Use this agent when [triggering conditions]. Typical triggers include [scenario 1 in prose], [scenario 2 in prose], and [scenario 3 in prose]. See \"When to invoke\" in the agent body for worked scenarios.",
+        "path": "skills/agents/role/claude-plugin-dev-agent-development",
+        "skill_file": "skills/agents/role/claude-plugin-dev-agent-development/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "创建或改进 Agent 定义和 frontmatter",
+        "source": "claude-plugin-dev-agent-development",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "skill-creator",
+        "name": "skill-creator",
+        "description": "Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.",
+        "path": "skills/agents/role/skill-creator",
+        "skill_file": "skills/agents/role/skill-creator/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "创建、修改和优化 Skills",
+        "source": "skill-creator",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "write-a-skill",
+        "name": "skill-name",
+        "description": "Brief description of capability. Use when [specific triggers].",
+        "path": "skills/agents/role/write-a-skill",
+        "skill_file": "skills/agents/role/write-a-skill/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "编写新的 Agent Skill",
+        "source": "write-a-skill",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-claude-code-setup-claude-automation-recommender",
+        "name": "claude-automation-recommender",
+        "description": "Analyze a codebase and recommend Claude Code automations (hooks, subagents, skills, plugins, MCP servers). Use when user asks for automation recommendations, wants to optimize their Claude Code setup, mentions improving Claude Code workflows, asks how to first set up Claude Code for a project, or wants to know what Claude Code features they should use.",
+        "path": "skills/agents/role/claude-claude-code-setup-claude-automation-recommender",
+        "skill_file": "skills/agents/role/claude-claude-code-setup-claude-automation-recommender/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "推荐 subagents、skills、hooks、MCP 等自动化配置",
+        "source": "claude-claude-code-setup-claude-automation-recommender",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "setup-matt-pocock-skills",
+        "name": "setup-matt-pocock-skills",
+        "description": "Sets up an `## Agent skills` block in AGENTS.md/CLAUDE.md and `docs/agents/` so the engineering skills know this repo's issue tracker (GitHub or local markdown), triage label vocabulary, and domain doc layout. Run before first use of `to-issues`, `to-prd`, `triage`, `diagnose`, `tdd`, `improve-codebase-architecture`, or `zoom-out` — or if those skills appear to be missing context about the issue tracker, triage labels, or domain docs.",
+        "path": "skills/agents/role/setup-matt-pocock-skills",
+        "skill_file": "skills/agents/role/setup-matt-pocock-skills/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "设置工程中的 Agent skills 区块参考",
+        "source": "setup-matt-pocock-skills",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ],
+    "security-reviewer": [
+      {
+        "slug": "diagnose",
+        "name": "diagnose",
+        "description": "Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when user says \"diagnose this\" / \"debug this\", reports a bug, says something is broken/throwing/failing, or describes a performance regression.",
+        "path": "skills/agents/security-reviewer/diagnose",
+        "skill_file": "skills/agents/security-reviewer/diagnose/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "安全失败、命令风险和异常行为复盘",
+        "source": "diagnose",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-plugin-dev-hook-development",
+        "name": "hook-development",
+        "description": "This skill should be used when the user asks to \"create a hook\", \"add a PreToolUse/PostToolUse/Stop hook\", \"validate tool use\", \"implement prompt-based hooks\", \"use ${CLAUDE_PLUGIN_ROOT}\", \"set up event-driven automation\", \"block dangerous commands\", or mentions hook events (PreToolUse, PostToolUse, Stop, SubagentStop, SessionStart, SessionEnd, UserPromptSubmit, PreCompact, Notification). Provides comprehensive guidance for creating and implementing Claude Code plugin hooks with focus on advanced prompt-based hooks API.",
+        "path": "skills/agents/security-reviewer/claude-plugin-dev-hook-development",
+        "skill_file": "skills/agents/security-reviewer/claude-plugin-dev-hook-development/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "审查和设计 Hook 安全边界",
+        "source": "claude-plugin-dev-hook-development",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-hookify-writing-rules",
+        "name": "warn-env-file-edits",
+        "description": "This skill should be used when the user asks to \"create a hookify rule\", \"write a hook rule\", \"configure hookify\", \"add a hookify rule\", or needs guidance on hookify rule syntax and patterns.",
+        "path": "skills/agents/security-reviewer/claude-hookify-writing-rules",
+        "skill_file": "skills/agents/security-reviewer/claude-hookify-writing-rules/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "编写或审查 hookify 规则",
+        "source": "claude-hookify-writing-rules",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-plugin-dev-mcp-integration",
+        "name": "mcp-integration",
+        "description": "This skill should be used when the user asks to \"add MCP server\", \"integrate MCP\", \"configure MCP in plugin\", \"use .mcp.json\", \"set up Model Context Protocol\", \"connect external service\", mentions \"${CLAUDE_PLUGIN_ROOT} with MCP\", or discusses MCP server types (SSE, stdio, HTTP, WebSocket). Provides comprehensive guidance for integrating Model Context Protocol servers into Claude Code plugins for external tool and service integration.",
+        "path": "skills/agents/security-reviewer/claude-plugin-dev-mcp-integration",
+        "skill_file": "skills/agents/security-reviewer/claude-plugin-dev-mcp-integration/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "审查 MCP 集成和配置风险",
+        "source": "claude-plugin-dev-mcp-integration",
+        "source_kind": "vendored-from-installed-skill"
+      },
+      {
+        "slug": "claude-anthropic-mcp-builder",
+        "name": "mcp-builder",
+        "description": "Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+        "path": "skills/agents/security-reviewer/claude-anthropic-mcp-builder",
+        "skill_file": "skills/agents/security-reviewer/claude-anthropic-mcp-builder/SKILL.md",
+        "status": "installed-local-copy",
+        "purpose": "评估 MCP 服务设计安全性",
+        "source": "claude-anthropic-mcp-builder",
+        "source_kind": "vendored-from-installed-skill"
+      }
+    ]
+  }
+}

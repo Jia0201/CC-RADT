@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-teams.local/schemas/prompt.schema.json",
+  "title": "AI-Teams Prompt Registry",
+  "type": "object",
+  "required": ["schemaVersion", "registryVersion", "status", "sourceRoot", "common", "schemas", "compiler", "agents", "lifecycle"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schemaVersion": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "registryVersion": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "status": {"enum": ["draft", "candidate", "active", "retired"]},
+    "sourceRoot": {"const": "prompts"},
+    "common": {
+      "type": "object",
+      "required": ["systemCore", "taskContract", "retryGuard"],
+      "additionalProperties": {"type": "string"}
+    },
+    "schemas": {
+      "type": "object",
+      "required": ["prompt", "variables", "result", "evalCase"],
+      "additionalProperties": {"type": "string"}
+    },
+    "compiler": {
+      "type": "object",
+      "required": ["activeSelection", "targetPattern", "mode", "activationEffect", "runtimeHotSwap"],
+      "properties": {
+        "activeSelection": {"const": "registry.agents.{agent}.active.system"},
+        "targetPattern": {"const": ".claude/agents/{agent}.md"},
+        "mode": {"const": "official-frontmatter-plus-active-system-body"},
+        "activationEffect": {"const": "next-agent-call-or-new-session"},
+        "runtimeHotSwap": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "agents": {
+      "type": "object",
+      "minProperties": 12,
+      "maxProperties": 12,
+      "additionalProperties": {"$ref": "#/$defs/agentEntry"}
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": ["states", "activationRequires", "runtimeHotSwap", "failureDirectlyEditsActive"],
+      "properties": {
+        "states": {"type": "array", "const": ["draft", "candidate", "active", "retired"]},
+        "activationRequires": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+        "runtimeHotSwap": {"const": false},
+        "failureDirectlyEditsActive": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "agentEntry": {
+      "type": "object",
+      "required": ["owner", "sourceDefinitions", "active"],
+      "properties": {
+        "owner": {"const": "role"},
+        "sourceDefinitions": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {"type": "string"}
+        },
+        "active": {
+          "type": "object",
+          "required": ["system", "task", "retry", "evals"],
+          "properties": {
+            "system": {"type": "string", "pattern": "^agents/.+/system/v\\d+\\.\\d+\\.\\d+\\.prompt\\.md$"},
+            "task": {"type": "string", "pattern": "^agents/.+/task/default\\.v\\d+\\.\\d+\\.\\d+\\.prompt\\.md$"},
+            "retry": {"type": "string", "pattern": "^agents/.+/retry/v\\d+\\.\\d+\\.\\d+\\.prompt\\.md$"},
+            "evals": {"type": "string", "pattern": "^agents/.+/evals/cases\\.json$"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

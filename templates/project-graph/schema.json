@@ -1,0 +1,20 @@
+{
+  "id": "project-graph",
+  "required_sections": [
+    "基础信息",
+    "图谱",
+    "项目入口",
+    "文档入口",
+    "常用命令",
+    "维护规则"
+  ],
+  "required_frontmatter": [
+    "id",
+    "title",
+    "type",
+    "scope",
+    "owner",
+    "status"
+  ],
+  "owner": "doc"
+}
