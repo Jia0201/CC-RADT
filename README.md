@@ -103,24 +103,7 @@ Lead 会选择工作流、调用对应 Agent、检查交接并汇总结果。只
 
 ## 工作原理
 
-```mermaid
-flowchart LR
-    U["用户需求"] --> L["Lead 识别意图与风险"]
-    L --> W["选择 WF-01 至 WF-12"]
-    W --> P["PD / Plan-PM"]
-    P --> D["对应开发 Agent"]
-    D --> Q["QA 验证"]
-    L -.并行监督.-> S["Security-Reviewer"]
-    L -.持续维护.-> M["Memory"]
-    L -.持续维护.-> O["Doc"]
-    L -.角色治理.-> R["Role"]
-    Q --> L
-    S --> L
-    M --> L
-    O --> L
-    R --> L
-    L --> U
-```
+![CC-RADT 多 Agent 执行链路](assets/readme/cc-radt-workflow-zh.png)
 
 Lead 是唯一调度者。子 Agent 使用独立上下文，任务通过结构化 task prompt 下发；任务目标、范围、禁止范围、输入、输出和验收标准必须完整。协作状态、锁、交接、回流和项目事实都会落到文件，而不是只保存在临时对话里。
 
@@ -166,18 +149,7 @@ CC-RADT 不强制所有任务经过一条冗长流水线。Lead 会在 12 套工
 
 ## 工程大脑与项目边界
 
-```mermaid
-flowchart TB
-    C["Claude Code 官方入口"] --> A[".claude/agents + .claude/rules + settings"]
-    A --> E["index/ENTRY.md"]
-    E --> R["rule/ 按需路由"]
-    R --> P["project/ 项目事实"]
-    R --> M["memory/ 工程记忆"]
-    R --> K["kb/ 稳定知识"]
-    R --> S["shared/ 实时协作"]
-    R --> G["security/ 动作与安全规则"]
-    R --> T["tools + hooks + MCP + Skills"]
-```
+![CC-RADT 工程大脑与项目边界](assets/readme/cc-radt-architecture-zh.png)
 
 - `project/`：当前业务项目事实，所有 Agent 在工作前都要按需读取；由 Doc 持续维护。
 - `memory/`：需要跨会话恢复和长期记住的事实；由 Memory 管理。

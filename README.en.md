@@ -99,24 +99,7 @@ Lead selects the workflow and named agents, supervises handoffs, and returns the
 
 ## How It Works
 
-```mermaid
-flowchart LR
-    U["User request"] --> L["Lead classifies intent and risk"]
-    L --> W["Select WF-01 through WF-12"]
-    W --> P["PD / Plan-PM"]
-    P --> D["Matching development agent"]
-    D --> Q["QA verification"]
-    L -.continuous review.-> S["Security-Reviewer"]
-    L -.continuous maintenance.-> M["Memory"]
-    L -.continuous maintenance.-> O["Doc"]
-    L -.role governance.-> R["Role"]
-    Q --> L
-    S --> L
-    M --> L
-    O --> L
-    R --> L
-    L --> U
-```
+![CC-RADT multi-agent delivery flow](assets/readme/cc-radt-workflow-en.png)
 
 Lead is the only orchestrator. Subagents start with isolated contexts and receive structured task prompts with goals, inputs, scope, forbidden scope, expected outputs, and acceptance criteria. Tasks, locks, handoffs, escalations, and project facts are persisted to files instead of temporary chat memory.
 
@@ -162,18 +145,7 @@ Selection rules and completion gates are defined in [`playbook.md`](playbook.md)
 
 ## Engineering Brain and Project Boundary
 
-```mermaid
-flowchart TB
-    C["Claude Code entry points"] --> A[".claude/agents + .claude/rules + settings"]
-    A --> E["index/ENTRY.md"]
-    E --> R["rule/ on-demand routing"]
-    R --> P["project/ project facts"]
-    R --> M["memory/ engineering memory"]
-    R --> K["kb/ reusable knowledge"]
-    R --> S["shared/ live collaboration"]
-    R --> G["security/ actions and guardrails"]
-    R --> T["tools + hooks + MCP + Skills"]
-```
+![CC-RADT engineering brain and project boundary](assets/readme/cc-radt-architecture-en.png)
 
 - `project/` contains current application facts and is maintained continuously by Doc.
 - `memory/` contains facts needed for recovery and long-term continuity.
