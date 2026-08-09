@@ -1,0 +1,36 @@
+---
+id: "kb-agents-index"
+title: "Agent 知识库索引"
+type: "knowledge-index"
+scope: "agent"
+owner: "doc"
+status: active
+---
+
+# Agent 知识库索引
+
+本目录保存各 Agent 的独立知识入口。Agent 知识库只保存对该 Agent 长期有用、可复用、经验证的知识，不保存原始日志或临时交接。
+
+| Agent | 主文件 | Agent 组件 | Playbook 关联 | 知识库入口 | 记忆 |
+|---|---|---|---|---|---|
+| Lead | [lead](../../agents/lead/lead.md) | [role](../../agents/lead/role.md) · [workflow](../../agents/lead/workflow.md) · [memory](../../agents/lead/memory.md) · [kb](../../agents/lead/kb.md) · [skills](../../agents/lead/skills.md) · [mcp](../../agents/lead/mcp.md) | [playbook](../../agents/lead/playbook.md) / [lead](../../security/agent-playbooks/lead.md) | [index](./lead/index.md) / [00-index](./lead/00-index.md) | [MEMORY](../../memory/agents/lead/MEMORY.md) |
+| PD | [pd](../../agents/pd/pd.md) | [role](../../agents/pd/role.md) · [workflow](../../agents/pd/workflow.md) · [memory](../../agents/pd/memory.md) · [kb](../../agents/pd/kb.md) · [skills](../../agents/pd/skills.md) · [mcp](../../agents/pd/mcp.md) | [playbook](../../agents/pd/playbook.md) / [pd](../../security/agent-playbooks/pd.md) | [index](./pd/index.md) / [00-index](./pd/00-index.md) | [MEMORY](../../memory/agents/pd/MEMORY.md) |
+| Plan-PM | [plan-pm](../../agents/plan-pm/plan-pm.md) | [role](../../agents/plan-pm/role.md) · [workflow](../../agents/plan-pm/workflow.md) · [memory](../../agents/plan-pm/memory.md) · [kb](../../agents/plan-pm/kb.md) · [skills](../../agents/plan-pm/skills.md) · [mcp](../../agents/plan-pm/mcp.md) | [playbook](../../agents/plan-pm/playbook.md) / [plan-pm](../../security/agent-playbooks/plan-pm.md) | [index](./plan-pm/index.md) / [00-index](./plan-pm/00-index.md) | [MEMORY](../../memory/agents/plan-pm/MEMORY.md) |
+| Dev-Frontend-Web | [dev-frontend-web](../../agents/dev-frontend-web/dev-frontend-web.md) | [role](../../agents/dev-frontend-web/role.md) · [workflow](../../agents/dev-frontend-web/workflow.md) · [memory](../../agents/dev-frontend-web/memory.md) · [kb](../../agents/dev-frontend-web/kb.md) · [skills](../../agents/dev-frontend-web/skills.md) · [mcp](../../agents/dev-frontend-web/mcp.md) | [playbook](../../agents/dev-frontend-web/playbook.md) / [dev-frontend-web](../../security/agent-playbooks/dev-frontend-web.md) | [index](./dev-frontend-web/index.md) / [00-index](./dev-frontend-web/00-index.md) | [MEMORY](../../memory/agents/dev-frontend-web/MEMORY.md) |
+| Dev-Frontend-Miniapp | [dev-frontend-miniapp](../../agents/dev-frontend-miniapp/dev-frontend-miniapp.md) | [role](../../agents/dev-frontend-miniapp/role.md) · [workflow](../../agents/dev-frontend-miniapp/workflow.md) · [memory](../../agents/dev-frontend-miniapp/memory.md) · [kb](../../agents/dev-frontend-miniapp/kb.md) · [skills](../../agents/dev-frontend-miniapp/skills.md) · [mcp](../../agents/dev-frontend-miniapp/mcp.md) | [playbook](../../agents/dev-frontend-miniapp/playbook.md) / [dev-frontend-miniapp](../../security/agent-playbooks/dev-frontend-miniapp.md) | [index](./dev-frontend-miniapp/index.md) / [00-index](./dev-frontend-miniapp/00-index.md) | [MEMORY](../../memory/agents/dev-frontend-miniapp/MEMORY.md) |
+| Dev-Backend-Systems | [dev-backend-systems](../../agents/dev-backend-systems/dev-backend-systems.md) | [role](../../agents/dev-backend-systems/role.md) · [workflow](../../agents/dev-backend-systems/workflow.md) · [memory](../../agents/dev-backend-systems/memory.md) · [kb](../../agents/dev-backend-systems/kb.md) · [skills](../../agents/dev-backend-systems/skills.md) · [mcp](../../agents/dev-backend-systems/mcp.md) | [playbook](../../agents/dev-backend-systems/playbook.md) / [dev-backend-systems](../../security/agent-playbooks/dev-backend-systems.md) | [index](./dev-backend-systems/index.md) / [00-index](./dev-backend-systems/00-index.md) | [MEMORY](../../memory/agents/dev-backend-systems/MEMORY.md) |
+| Dev-Backend-Service | [dev-backend-service](../../agents/dev-backend-service/dev-backend-service.md) | [role](../../agents/dev-backend-service/role.md) · [workflow](../../agents/dev-backend-service/workflow.md) · [memory](../../agents/dev-backend-service/memory.md) · [kb](../../agents/dev-backend-service/kb.md) · [skills](../../agents/dev-backend-service/skills.md) · [mcp](../../agents/dev-backend-service/mcp.md) | [playbook](../../agents/dev-backend-service/playbook.md) / [dev-backend-service](../../security/agent-playbooks/dev-backend-service.md) | [index](./dev-backend-service/index.md) / [00-index](./dev-backend-service/00-index.md) | [MEMORY](../../memory/agents/dev-backend-service/MEMORY.md) |
+| QA | [qa](../../agents/qa/qa.md) | [role](../../agents/qa/role.md) · [workflow](../../agents/qa/workflow.md) · [memory](../../agents/qa/memory.md) · [kb](../../agents/qa/kb.md) · [skills](../../agents/qa/skills.md) · [mcp](../../agents/qa/mcp.md) | [playbook](../../agents/qa/playbook.md) / [qa](../../security/agent-playbooks/qa.md) | [index](./qa/index.md) / [00-index](./qa/00-index.md) | [MEMORY](../../memory/agents/qa/MEMORY.md) |
+| Memory | [memory](../../agents/memory/memory.md) | [role](../../agents/memory/role.md) · [workflow](../../agents/memory/workflow.md) · [memory](../../agents/memory/memory.md) · [kb](../../agents/memory/kb.md) · [skills](../../agents/memory/skills.md) · [mcp](../../agents/memory/mcp.md) | [playbook](../../agents/memory/playbook.md) / [memory](../../security/agent-playbooks/memory.md) | [index](./memory/index.md) / [00-index](./memory/00-index.md) | [MEMORY](../../memory/agents/memory/MEMORY.md) |
+| Doc | [doc](../../agents/doc/doc.md) | [role](../../agents/doc/role.md) · [workflow](../../agents/doc/workflow.md) · [memory](../../agents/doc/memory.md) · [kb](../../agents/doc/kb.md) · [skills](../../agents/doc/skills.md) · [mcp](../../agents/doc/mcp.md) | [playbook](../../agents/doc/playbook.md) / [doc](../../security/agent-playbooks/doc.md) | [index](./doc/index.md) / [00-index](./doc/00-index.md) | [MEMORY](../../memory/agents/doc/MEMORY.md) |
+| Role | [role](../../agents/role/role.md) | [role](../../agents/role/role.md) · [workflow](../../agents/role/workflow.md) · [memory](../../agents/role/memory.md) · [kb](../../agents/role/kb.md) · [skills](../../agents/role/skills.md) · [mcp](../../agents/role/mcp.md) | [playbook](../../agents/role/playbook.md) / [role](../../security/agent-playbooks/role.md) | [index](./role/index.md) / [00-index](./role/00-index.md) | [MEMORY](../../memory/agents/role/MEMORY.md) |
+| Security-Reviewer | [security-reviewer](../../agents/security-reviewer/security-reviewer.md) | [role](../../agents/security-reviewer/role.md) · [workflow](../../agents/security-reviewer/workflow.md) · [memory](../../agents/security-reviewer/memory.md) · [kb](../../agents/security-reviewer/kb.md) · [skills](../../agents/security-reviewer/skills.md) · [mcp](../../agents/security-reviewer/mcp.md) | [playbook](../../agents/security-reviewer/playbook.md) / [security-reviewer](../../security/agent-playbooks/security-reviewer.md) | [index](./security-reviewer/index.md) / [00-index](./security-reviewer/00-index.md) | [MEMORY](../../memory/agents/security-reviewer/MEMORY.md) |
+
+`agents/index.md` 是团队级 Agent 索引；单个 Agent 的 标准 Markdown 链接应落到主文件或组件文件，不再落到旧的单 Agent index 入口。
+
+## 写入规则
+
+- Agent 知识必须有来源和验证方式。
+- 未验证内容先进入 `kb/candidates/`。
+- 需要跨 Agent 复用的知识应沉淀到 [index](../shared/index.md)。
+- 敏感信息不得写入知识库。

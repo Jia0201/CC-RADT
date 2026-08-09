@@ -1,0 +1,58 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# Local Claude Code configuration
+.claude/settings.local.json
+
+# Local databases, caches, and generated runtime state
+.codegraph/*.db
+.codegraph/*.db-wal
+.codegraph/*.db-shm
+.codegraph/cache/
+.codegraph/*.log
+.codegraph/.dirty
+shared/supervision/.runtime/
+shared/events/*.md
+!shared/events/index.md
+!shared/events/EVENT_TEMPLATE.md
+shared/events/*.json
+
+# Runtime conversations and generated logs
+memory/conversations/sessions/*.md
+!memory/conversations/sessions/index.md
+logs/**/*.md
+!logs/index.md
+!logs/**/index.md
+
+# Language and package-manager caches
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Local secrets and credentials
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+credentials.json
+secrets.json
+
+# Generated packages and temporary output
+dist/
+/formal/
+releases/
+tmp/
+temp/

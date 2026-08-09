@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "agent": "lead",
+  "minimumVersion": "2.1.140",
+  "autoMemoryEnabled": false,
+  "includeGitInstructions": false,
+  "ai_teams": {
+    "version": "1.0.0",
+    "hooks_enabled": true,
+    "brain_root": ".claude/ai-teams",
+    "default_agent_mode": "multi-agent",
+    "lead_agent": "lead",
+    "subagent_runtime": {
+      "official_project_dir": ".claude/agents/",
+      "component_agent_dir": ".claude/ai-teams/agents/"
+    },
+    "entrypoints": [
+      ".claude/ai-teams/index/ENTRY.md",
+      ".claude/ai-teams/rule/index.md",
+      ".claude/ai-teams/agents/index.md",
+      ".claude/ai-teams/project/index.md",
+      ".claude/ai-teams/memory/index.md",
+      ".claude/ai-teams/security/index.md",
+      ".claude/ai-teams/prompts/index.md",
+      ".claude/ai-teams/shared/index.md",
+      ".claude/ai-teams/playbook.md"
+    ],
+    "policy": {
+      "initialization": ".claude/ai-teams/security/project-policy.md",
+      "security": ".claude/ai-teams/security/index.md",
+      "memory": ".claude/ai-teams/memory/index.md",
+      "prompts": ".claude/ai-teams/security/prompt-policy.md",
+      "multi_agent": ".claude/rules/ai-teams-router.md"
+    },
+    "memory_governance": {
+      "auto_memory_enabled": false,
+      "native_claude_memory_policy": "audit-and-ignore",
+      "native_claude_memory_audit": ".claude/ai-teams/memory/native-claude-memory-audit.md"
+    }
+  },
+  "permissions": {
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./**/.env)", "Read(./**/.env.*)", "Read(./**/*credentials*)", "Read(./**/*credential*)", "Read(./**/*token*)", "Read(./**/*secret*)", "Read(./**/*.pem)", "Read(./**/*.key)", "Read(./**/*.p12)", "Read(./**/*.pfx)", "Read(./**/id_rsa)", "Read(./**/id_ed25519)", "Read(./**/service-account*.json)", "Bash(rm -rf *)", "Bash(git reset --hard*)", "Bash(git clean -fd*)", "Bash(git push --force*)"]
+  },
+  "disableAllHooks": false,
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "ai-teams-session-start"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "native-claude-memory-audit"]
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "ai-teams-user-prompt-submit.sh"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "git-activity-watch"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "reconcile"]
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-contract-check.mjs"]
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "sensitive-file-check.sh"]
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "sensitive-file-check.sh"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "protected-file-check.sh"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "protected-file-lock-check.sh"]
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "delete-check.sh"]
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "activity"]
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "index-stale-mark.sh"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "external-change-check.sh"]
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "failure"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "post-tool-failure"]
+          }
+        ]
+      }
+    ],
+    "PermissionDenied": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "failure"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "permission-denied"]
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "start"]
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "stop"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "subagent-stop"]
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "stop"]
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "stop"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "task-completed"]
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "context-compression-check.sh"]
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "context-compression-check.sh"]
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "failure"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "stop-failure"]
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "context-compression-check.sh"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "lock-timeout-check.sh"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "git-activity-watch"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "reconcile"]
+          }
+        ]
+      }
+    ]
+  }
+}

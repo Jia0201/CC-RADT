@@ -1,0 +1,62 @@
+{
+  "name": "CC-RADT",
+  "full_name": "Claude Code Research and Development Teams",
+  "display_name_zh": "基于 Claude Code 的全流程研发团队",
+  "runtime_namespace": "ai-teams",
+  "edition": "formal",
+  "version": "1.0.0",
+  "stage": "formal-runtime",
+  "status": "runtime-remediation-ready",
+  "release_planning_status": "runtime-package-no-packaging-commands",
+  "install_layout": "claude-subdir",
+  "artifact_root": ".",
+  "ai_teams_root": ".claude/ai-teams",
+  "created_at": "2026-08-09 20:37:37",
+  "file_count": 948,
+  "sensitive_scan": "passed",
+  "file_summary": {
+    "commands": 23,
+    "root_entries": [
+      "README.md",
+      "README.en.md",
+      "THIRD_PARTY_NOTICES.md",
+      "VERSION",
+      "MANIFEST.json",
+      "index/ENTRY.md"
+    ]
+  },
+  "package_rules_summary": "运行包不包含打包指令或打包脚本；项目级 MCP 配置保留在目标项目根目录 .mcp.json，安装包元信息位于 .claude/manifest.json。",
+  "included_brain_modules": [
+    "index/ENTRY.md",
+    "agents/",
+    "prompts/",
+    "rule/",
+    "index/",
+    "project/",
+    "memory/",
+    "kb/",
+    "shared/",
+    "security/",
+    "hooks/",
+    "cron/",
+    "templates/",
+    "skills/",
+    "third_party/",
+    "mcp/",
+    "tools/",
+    "playbook.md",
+    "logs/ indexes and structure"
+  ],
+  "excluded_runtime_content": [
+    "main engineering runtime log bodies",
+    "memory/conversations/sessions/*",
+    "shared/prompt-evolution runtime events, candidates, reviews and history",
+    "lab/",
+    ".git/",
+    ".codegraph/",
+    "node_modules/",
+    "cache and tmp directories",
+    "sensitive named files"
+  ],
+  "codegraph_index_included": false
+}
