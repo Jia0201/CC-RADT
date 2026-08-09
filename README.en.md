@@ -5,6 +5,8 @@
 
 [简体中文](README.md) | [English](README.en.md) | [GitHub repository](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams)
 
+> **Development branch**: the `dev` branch contains the CC-RADT engineering source used to maintain agents, policies, hooks, Skills, MCP, prompts, and the runtime packaging pipeline. End users should install from [`main`](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/main) or [Releases](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/releases). Read [`DEVELOPMENT.en.md`](DEVELOPMENT.en.md) before extending the harness.
+
 CC-RADT is a multi-agent software development harness for Claude Code. It organizes product discovery, planning, frontend and backend implementation, testing, security review, project documentation, engineering memory, and role governance into a traceable team that can work inside a real codebase.
 
 It is not a static prompt collection and it does not replace your application repository. CC-RADT manages the team, rules, context, and collaboration state while your project code remains where it is.
@@ -294,6 +296,10 @@ Run the source self-check with:
 ```bash
 bash tools/bin/ai-teams-check.sh
 ```
+
+## Secondary Development
+
+See [`DEVELOPMENT.en.md`](DEVELOPMENT.en.md) for source setup, directory ownership, extension procedures, validation gates, and release boundaries. Development starts from `dev`; never copy the engineering source directly to `main`. The `main` branch only receives a generated and verified runtime package.
 
 ## Status and Roadmap
 

@@ -1346,7 +1346,12 @@ function check(file) {
       if (/[<>{}$*]/u.test(target)) continue;
       target = target.split('#')[0].split('?')[0];
       try { target = decodeURI(target); } catch {}
-      const resolved = path.resolve(path.dirname(file), target);
+      const relativeFile = path.relative(root, file);
+      const formalTemplatePrefix = path.join('templates', 'package', 'formal') + path.sep;
+      const formalBrainPrefix = '.claude/ai-teams/';
+      const resolved = relativeFile.startsWith(formalTemplatePrefix) && target.startsWith(formalBrainPrefix)
+        ? path.resolve(root, target.slice(formalBrainPrefix.length))
+        : path.resolve(path.dirname(file), target);
       if (!fs.existsSync(resolved)) errors.push(path.relative(root, file) + ':' + (index + 1) + ' -> ' + target);
     }
   });

@@ -31,6 +31,8 @@ status: active
 
 - `README.md`
 - `README.en.md`
+- `DEVELOPMENT.md`
+- `DEVELOPMENT.en.md`
 - `CLAUDE.md`
 - `index/ENTRY.md`
 - `VERSION`
@@ -61,6 +63,7 @@ status: active
 | 主题 | 优先入口 | 关联文件 |
 |---|---|---|
 | 项目状态 | [状态索引](./STATUS.md) | `project/PROJECT.md`, [graph](../project/graph.md), `logs/audit/creation-report-v1.0.md` |
+| 二次开发 | [二次开发指南](../DEVELOPMENT.md) | [English guide](../DEVELOPMENT.en.md), `tools/bin/ai-teams-check.sh`, `tools/bin/ai-teams-package.sh` |
 | 规则按需读取 | [规则总索引](../rule/index.md) | [index](../rule/agents/index.md), [index](../rule/tasks/index.md), [index](../rule/project/index.md), [index](../rule/catalog/index.md) |
 | 自建规则 | [自建规则索引](../rule/custom/index.md) | [rule-policy](../security/rule-policy.md), [rule-create](../tools/commands/ai/rule-create.md) |
 | 目标项目管理 | [项目管理索引](../project/index.md) | [context](../project/context.md), [change-log](../project/change-log.md), [PROJECT](../project/PROJECT.md), [project-profile](../project/project-profile.md), [index](../project/rules/index.md), [project-policy](../security/project-policy.md) |

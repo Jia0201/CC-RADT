@@ -53,6 +53,8 @@ status: active
 
 - `README.md`
 - `README.en.md`
+- `DEVELOPMENT.md`
+- `DEVELOPMENT.en.md`
 - `CLAUDE.md`
 - `VERSION`
 - `MANIFEST.json`

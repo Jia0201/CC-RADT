@@ -5,6 +5,8 @@
 
 [简体中文](README.md) | [English](README.en.md) | [GitHub 仓库](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams)
 
+> **开发分支说明**：当前 `dev` 分支保存 CC-RADT 主开发工程，用于维护 Agent、规则、Hooks、Skills、MCP、提示词和安装包构建链路。普通用户请使用 [`main`](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/main) 或 [Releases](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/releases) 中的安装版。参与二次开发前请先阅读 [`DEVELOPMENT.md`](DEVELOPMENT.md)。
+
 CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把需求分析、任务规划、前后端开发、测试、安全审查、项目文档、工程记忆和角色治理组织成一个可以放进真实项目、持续更新并可追溯的研发团队。
 
 它不是一组静态提示词，也不替代你的业务项目。CC-RADT 负责维护团队、规则、上下文与协作状态；你的项目代码仍保留在原来的目录中。
@@ -298,6 +300,10 @@ bash tools/bin/ai-teams-package.sh formal \
 ```bash
 bash tools/bin/ai-teams-check.sh
 ```
+
+## 二次开发
+
+源码开发、目录所有权、扩展方式、验证门禁和发布边界见 [`DEVELOPMENT.md`](DEVELOPMENT.md)。开发者应从 `dev` 分支开始工作，不要直接把主工程目录推送到 `main`；`main` 只接收通过打包脚本生成并验证的安装版内容。
 
 ## 当前状态与路线
 
