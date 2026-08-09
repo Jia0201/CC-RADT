@@ -180,6 +180,8 @@ copy_formal() {
     --exclude ".github/" \
     --exclude ".gitmessage" \
     --exclude "CONTRIBUTING.md" \
+    --exclude "DEVELOPMENT.md" \
+    --exclude "DEVELOPMENT.en.md" \
     --exclude ".DS_Store" \
     --exclude ".env" \
     --exclude ".env.*" \
@@ -2550,6 +2552,25 @@ link_pattern = re.compile(
     r"\[([^\]]+)\]\((?:\.\./)*project/adr/accepted/ADR-[^)]+\)"
 )
 
+source_only_tokens = {
+    "index/FILES.md": (
+        "tools/release/",
+        "templates/version-control/",
+        "`CHANGELOG.md`",
+        "`CONTRIBUTING.md`",
+        "`DEVELOPMENT.md`",
+        "`DEVELOPMENT.en.md`",
+        "ai-teams-package",
+        "security/version-control-policy.md",
+    ),
+    "index/INDEX.md": (
+        "`DEVELOPMENT.md`",
+        "`DEVELOPMENT.en.md`",
+        "| 二次开发 |",
+    ),
+    "security/index.md": ("version-control-policy",),
+}
+
 for path in root.rglob("*.md"):
     if "skills" in path.parts or "logs" in path.parts:
         continue
@@ -2560,6 +2581,10 @@ for path in root.rglob("*.md"):
         for line in text.splitlines()
         if "project/adr/accepted/ADR-" not in line
     ]
+    relative = path.relative_to(root).as_posix()
+    tokens = source_only_tokens.get(relative, ())
+    if tokens:
+        lines = [line for line in lines if not any(token in line for token in tokens)]
     path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 PY
 }
@@ -2916,6 +2941,8 @@ if [[ "$edition" == "formal" ]]; then
     "tools/release"
     "templates/version-control"
     "security/version-control-policy.md"
+    "DEVELOPMENT.md"
+    "DEVELOPMENT.en.md"
     "lab"
     "shared/prompt-evolution/history.json"
   )
@@ -3138,5 +3165,4 @@ if [[ -f "$release_record" ]]; then
   sed '1{/^# /d;}' "$release_record" >> "$report"
 fi
 
-ai_teams_write_status_event "${edition} 发布包已生成：$display_artifact_root"
 cat "$report"

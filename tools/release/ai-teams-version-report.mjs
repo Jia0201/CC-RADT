@@ -116,8 +116,7 @@ if (packageRoot) {
 }
 lines.push("", "## 门禁结论", "");
 lines.push(problems.length ? problems.map((problem) => `- 未通过：${problem}`).join("\n") : "- 通过");
-lines.push("");
-const report = `${lines.join("\n")}\n`;
+const report = `${lines.join("\n").trimEnd()}\n`;
 if (output) writeFileSync(resolve(output), report, "utf8");
 else process.stdout.write(report);
 if (strict && problems.length) process.exit(1);
