@@ -1147,7 +1147,7 @@ clean_formal_runtime_artifacts() {
     ! -name ".gitkeep" ! -name "index.md" ! -name "EVENT_TEMPLATE.md" -delete
   find "$output/shared/escalations/pending" -maxdepth 1 -type f ! -name "index.md" -delete
   find "$output/shared/escalations/resolved" -maxdepth 1 -type f ! -name "index.md" -delete
-  find "$output/shared/locks/.locks" -maxdepth 1 -type f -delete
+  find "$output/shared/locks/.locks" -maxdepth 1 -type f ! -name ".gitkeep" -delete
   find "$output/shared/transactions" -maxdepth 1 -type f \
     ! -name "index.md" ! -name "TRANSACTION_TEMPLATE.md" -delete
   find "$output/project/requirements" -maxdepth 1 -type f ! -name "index.md" -delete
@@ -1162,6 +1162,9 @@ reset_formal_runtime_state() {
   clean_formal_runtime_artifacts
   rm -rf "$output/project/adr/accepted" "$output/project/adr/rejected" "$output/shared/contracts"
   mkdir -p "$output/project/adr/accepted" "$output/project/adr/rejected" "$output/project/requirements" "$output/project/plans" "$output/project/rules" "$output/shared/contracts"
+  : > "$output/project/adr/accepted/.gitkeep"
+  : > "$output/project/adr/rejected/.gitkeep"
+  : > "$output/shared/locks/.locks/.gitkeep"
   rm -f "$output/shared/prompt-evolution/history.json"
   if [[ -d "$output/shared/prompt-evolution/events" ]]; then
     find "$output/shared/prompt-evolution/events" -maxdepth 1 -type f \
