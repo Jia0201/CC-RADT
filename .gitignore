@@ -52,7 +52,7 @@ secrets.json
 
 # Generated packages and temporary output
 dist/
-formal/
+/formal/
 releases/
 tmp/
 temp/
