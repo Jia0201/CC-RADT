@@ -118,6 +118,10 @@ status: active
 | `agents/security-reviewer/security-reviewer.md` | 运行包文件 | 按 security/file-ownership.md |
 | `agents/security-reviewer/skills.md` | 运行包文件 | 按 security/file-ownership.md |
 | `agents/security-reviewer/workflow.md` | 运行包文件 | 按 security/file-ownership.md |
+| `assets/readme/cc-radt-architecture-en.png` | 运行包文件 | 按 security/file-ownership.md |
+| `assets/readme/cc-radt-architecture-zh.png` | 运行包文件 | 按 security/file-ownership.md |
+| `assets/readme/cc-radt-workflow-en.png` | 运行包文件 | 按 security/file-ownership.md |
+| `assets/readme/cc-radt-workflow-zh.png` | 运行包文件 | 按 security/file-ownership.md |
 | `cron/.gitkeep` | 运行包文件 | 按 security/file-ownership.md |
 | `cron/index.md` | 运行包文件 | 按 security/file-ownership.md |
 | `cron/schedules.md` | 运行包文件 | 按 security/file-ownership.md |
@@ -309,7 +313,9 @@ status: active
 | `playbook.md` | 运行包文件 | 按 security/file-ownership.md |
 | `project/.gitkeep` | 运行包文件 | 按 security/file-ownership.md |
 | `project/PROJECT.md` | 运行包文件 | 按 security/file-ownership.md |
+| `project/adr/accepted/.gitkeep` | 运行包文件 | 按 security/file-ownership.md |
 | `project/adr/index.md` | 运行包文件 | 按 security/file-ownership.md |
+| `project/adr/rejected/.gitkeep` | 运行包文件 | 按 security/file-ownership.md |
 | `project/adr/template.md` | 运行包文件 | 按 security/file-ownership.md |
 | `project/api-contracts.md` | 运行包文件 | 按 security/file-ownership.md |
 | `project/architecture.md` | 运行包文件 | 按 security/file-ownership.md |
@@ -498,6 +504,7 @@ status: active
 | `shared/events/index.md` | 运行包文件 | 按 security/file-ownership.md |
 | `shared/handoffs/HANDOFF_TEMPLATE.md` | 运行包文件 | 按 security/file-ownership.md |
 | `shared/index.md` | 运行包文件 | 按 security/file-ownership.md |
+| `shared/locks/.locks/.gitkeep` | 运行包文件 | 按 security/file-ownership.md |
 | `shared/locks/LOCKS.md` | 运行包文件 | 按 security/file-ownership.md |
 | `shared/locks/LOCK_TEMPLATE.md` | 运行包文件 | 按 security/file-ownership.md |
 | `shared/pipeline-status.md` | 运行包文件 | 按 security/file-ownership.md |

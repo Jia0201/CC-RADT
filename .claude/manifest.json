@@ -11,14 +11,16 @@
   "install_layout": "claude-subdir",
   "artifact_root": ".",
   "ai_teams_root": ".claude/ai-teams",
-  "created_at": "2026-08-09 20:37:37",
-  "file_count": 948,
+  "created_at": "2026-08-09 23:23:04",
+  "file_count": 957,
   "sensitive_scan": "passed",
   "file_summary": {
     "commands": 23,
     "root_entries": [
       "README.md",
       "README.en.md",
+      "CHANGELOG.md",
+      "RELEASE_RECORD.md",
       "THIRD_PARTY_NOTICES.md",
       "VERSION",
       "MANIFEST.json",

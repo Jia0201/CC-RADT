@@ -1,15 +1,31 @@
 # CC-RADT
 
-**Claude Code Research and Development Teams**  
+**Claude Code Research and Development Teams**
+
 **中文名：基于 Claude Code 的全流程研发团队**
 
-[简体中文](README.md) | [English](README.en.md) | [GitHub 仓库](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams)
+[简体中文](README.md) | [English](README.en.md) | [完整安装指南](../../INSTALL.md) | [GitHub 仓库](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams)
 
 CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把需求分析、任务规划、前后端开发、测试、安全审查、项目文档、工程记忆和角色治理组织成一个可以放进真实项目、持续更新并可追溯的研发团队。
 
 它不是一组静态提示词，也不替代你的业务项目。CC-RADT 负责维护团队、规则、上下文与协作状态；你的项目代码仍保留在原来的目录中。
 
 > 当前版本：`v1.0.0`。Claude Code 是当前优先运行环境；Codex 和 OpenCode 适配保留在后续路线中。
+
+## 什么是研发 Harness
+
+研发 Harness 是围绕模型建立的一层可执行工程环境。它不仅告诉模型“做什么”，还持续提供“由谁做、先读什么、允许改什么、如何协作、怎样验证、失败后如何恢复”的约束与反馈。
+
+在 CC-RADT 中，Harness 由以下部分共同组成：
+
+- **Agent 团队**：把产品、计划、开发、测试、记忆、文档、角色和安全职责分开。
+- **项目上下文**：持续维护架构、接口、UI、命令、风险和验证方式，让团队逐步熟悉项目。
+- **规则与安全门禁**：限制敏感文件、删除、权限、锁、所有权和高风险操作。
+- **共享工作区**：保存任务、执行方案、状态、锁、交接、广播和回流记录。
+- **工具与自动化**：通过 Hooks、Skills、MCP 和命令把检查与反馈接入真实执行链路。
+- **验证与恢复**：使用 QA、状态事务、Lead 接管、上下文压缩和记忆恢复保持任务连续。
+
+因此，CC-RADT 的目标不是增加更多提示词，而是把模型能力约束成可重复、可检查、可恢复的软件研发过程。
 
 ## 为什么使用 CC-RADT
 
@@ -32,9 +48,17 @@ CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把�
 - Windows：PowerShell 7，并准备 Git Bash 或 WSL 运行 Bash 工具；Hooks 本身使用 Node.js。
 - Git 是辅助能力，不是初始化项目的必要条件。
 
-### 2. 把安装包合并到项目根目录
+### 2. 下载安装内容
 
-下载生成好的 CC-RADT 安装包，将其中内容合并到目标项目根目录。推荐形态如下：
+从 [GitHub Releases](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/releases) 下载最新安装包，或在项目外的临时目录克隆 `main`：
+
+```bash
+git clone --depth 1 --branch main https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git cc-radt
+```
+
+不要把 `cc-radt/` 整个嵌套到业务项目中；需要将它包含的 `.claude/`、`.mcp.json`、README 和安装说明合并到目标项目根目录。
+
+安装后的推荐形态如下：
 
 ```text
 target-project/
@@ -49,49 +73,70 @@ target-project/
     └── ai-teams/                # CC-RADT v1 稳定运行命名空间
         ├── index/ENTRY.md
         ├── agents/
+        ├── prompts/
+        ├── rule/
         ├── project/
         ├── memory/
         ├── kb/
         ├── shared/
         ├── security/
+        ├── hooks/
+        ├── skills/
+        ├── mcp/
         └── tools/
 ```
 
-`CC-RADT` 是项目名称；`.claude/ai-teams/` 与 `ai-teams-*` 是 v1 为兼容现有升级、Hooks 和工具链保留的运行命名空间。
+`CC-RADT` 是项目名称；`` 与 `ai-teams-*` 是 v1 为兼容现有升级、Hooks 和工具链保留的运行命名空间。
 
-已有 `.claude/settings.json` 或 `.mcp.json` 时请合并配置，不要直接覆盖。`settings.local.example.json` 只是本地配置示例，不覆盖用户的私有设置。
+### 3. 按项目现状合并
 
-### 3. 验证安装
+如果目标项目尚无 Claude Code 配置，将安装内容复制到项目根目录即可。如果已有配置，必须保留原内容并逐项合并：
+
+| 安装内容 | 处理方式 |
+|---|---|
+| `` | 整个目录复制到目标项目的 `.claude/` 下 |
+| `.claude/agents/` | 合并 12 个具名 Agent 文件；同名文件先备份 |
+| `.claude/rules/` | 合并 CC-RADT 规则入口；同名文件先备份 |
+| `.claude/manifest.json` | 复制到目标项目的 `.claude/` 下 |
+| `.claude/settings.json` | 合并 `agent`、`ai_teams`、`permissions.deny` 和 `hooks`；保留原项目其他字段 |
+| `.mcp.json` | 合并 `mcpServers`；保留原项目已有服务器 |
+| `.claude/settings.local.example.json` | 仅作示例，不覆盖用户的 `settings.local.json` |
+
+更详细的字段说明、冲突处理和故障排查见 [`INSTALL.md`](../../INSTALL.md)。
+
+### 4. 验证安装
 
 在目标项目根目录执行：
 
 ```bash
-bash .claude/ai-teams/tools/bin/ai-teams-check.sh
+bash tools/bin/ai-teams-check.sh
 ```
 
 Windows：
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-check.ps1
+pwsh -NoProfile -ExecutionPolicy Bypass -File tools/bin/ai-teams-check.ps1
 ```
 
-### 4. 初始化项目画像
+自检通过后，启动或重启 Claude Code，让新会话加载 `.claude/agents/`、`.claude/rules/`、settings 和 Hooks。
+
+### 5. 初始化项目画像
 
 ```bash
-bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
+bash tools/bin/ai-teams-init-project.sh --target "$PWD" --write
 ```
 
 Windows：
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
+pwsh -NoProfile -ExecutionPolicy Bypass -File tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
 初始化会扫描当前项目，写入 CC-RADT 自己管理的 `project/`、`rule/project/`、索引和记忆候选区。它会识别技术栈、目录、接口、UI 风格、命令、验证方式、项目规则和风险线索；不会把 Git 历史当作项目事实的唯一来源，也不会读取敏感文件内容或修改业务代码。
 
-### 5. 直接提出需求
+### 6. 确认团队并提出需求
 
-重新进入 Claude Code 后，可以直接描述任务：
+在 Claude Code 中使用 `/agents`，确认 12 个 CC-RADT 具名 Agent 已出现，然后直接描述任务：
 
 ```text
 检查登录页与登录接口的字段契约，修复联调问题并完成回归测试。
@@ -101,24 +146,7 @@ Lead 会选择工作流、调用对应 Agent、检查交接并汇总结果。只
 
 ## 工作原理
 
-```mermaid
-flowchart LR
-    U["用户需求"] --> L["Lead 识别意图与风险"]
-    L --> W["选择 WF-01 至 WF-12"]
-    W --> P["PD / Plan-PM"]
-    P --> D["对应开发 Agent"]
-    D --> Q["QA 验证"]
-    L -.并行监督.-> S["Security-Reviewer"]
-    L -.持续维护.-> M["Memory"]
-    L -.持续维护.-> O["Doc"]
-    L -.角色治理.-> R["Role"]
-    Q --> L
-    S --> L
-    M --> L
-    O --> L
-    R --> L
-    L --> U
-```
+![CC-RADT 多 Agent 执行链路](assets/readme/cc-radt-workflow-zh.png)
 
 Lead 是唯一调度者。子 Agent 使用独立上下文，任务通过结构化 task prompt 下发；任务目标、范围、禁止范围、输入、输出和验收标准必须完整。协作状态、锁、交接、回流和项目事实都会落到文件，而不是只保存在临时对话里。
 
@@ -164,18 +192,7 @@ CC-RADT 不强制所有任务经过一条冗长流水线。Lead 会在 12 套工
 
 ## 工程大脑与项目边界
 
-```mermaid
-flowchart TB
-    C["Claude Code 官方入口"] --> A[".claude/agents + .claude/rules + settings"]
-    A --> E["index/ENTRY.md"]
-    E --> R["rule/ 按需路由"]
-    R --> P["project/ 项目事实"]
-    R --> M["memory/ 工程记忆"]
-    R --> K["kb/ 稳定知识"]
-    R --> S["shared/ 实时协作"]
-    R --> G["security/ 动作与安全规则"]
-    R --> T["tools + hooks + MCP + Skills"]
-```
+![CC-RADT 工程大脑与项目边界](assets/readme/cc-radt-architecture-zh.png)
 
 - `project/`：当前业务项目事实，所有 Agent 在工作前都要按需读取；由 Doc 持续维护。
 - `memory/`：需要跨会话恢复和长期记住的事实；由 Memory 管理。
@@ -203,7 +220,7 @@ flowchart TB
 | 删除保护 | `security/delete-policy.md` | 禁止未经确认的删除，也禁止借其他脚本绕过 |
 | 文件所有权 | `security/file-ownership.md` | 明确目录 Owner、协作写入和复核边界 |
 | 文件锁 | `security/lock-policy.md` | 多 Agent 修改重叠文件前检查锁，处理等待和死锁 |
-| 任务状态 | `security/task-policy.md`、`security/state-transaction-policy.md` | 状态变更使用事件和事务化写入 |
+| 任务状态 | `security/task-policy.md`、`state-transaction-policy.md` | 状态变更使用事件和事务化写入 |
 | 失败接管 | `security/supervision-policy.md` | Agent 报错、无权限、跑偏或停滞时由 Lead 接管 |
 | 接口契约 | `security/interface-contract-policy.md` | 前后端不得单边猜测字段或擅改 API 契约 |
 | ADR | `security/adr.md`、`project/adr/` | 长期结构性决策记录原因，普通任务不写 ADR |
@@ -227,7 +244,7 @@ prompts/agents/<agent>/
 
 ## Skills 与 MCP
 
-- `skills/registry.json` 登记工程内置的本地副本，按 Agent 职责分配，发布后不依赖开发者机器上的全局 Skills 目录。
+- `skills/registry.json` 登记工程内置的本地副本，按 Agent 职责分配，安装后不依赖维护者机器上的全局 Skills 目录。
 - `.mcp.json` 和 `mcp/claude-project.mcp.json` 当前登记 10 个 MCP 入口，包括 Chrome、Context7、shadcn、Filesystem、Figma、MySQL、GitHub、CodeGraph、Puppeteer fallback 和 Canva remote。
 - 需要账号、数据库或浏览器扩展的 MCP 仍需用户在本机提供环境变量或完成官方安装；配置中不携带密钥。
 - Chrome 自动化推荐 [hangwin/mcp-chrome](https://github.com/hangwin/mcp-chrome)，使用前按项目说明安装浏览器扩展。
@@ -235,8 +252,8 @@ prompts/agents/<agent>/
 查看实际可用情况：
 
 ```bash
-bash .claude/ai-teams/tools/bin/ai-teams-skills-list.sh
-bash .claude/ai-teams/tools/bin/ai-teams-mcp-list.sh
+bash tools/bin/ai-teams-skills-list.sh
+bash tools/bin/ai-teams-mcp-list.sh
 ```
 
 ## 常用指令
@@ -245,15 +262,15 @@ bash .claude/ai-teams/tools/bin/ai-teams-mcp-list.sh
 
 | 目标 | 命令 |
 |---|---|
-| 项目初始化 | `bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write` |
-| 工程自检 | `bash .claude/ai-teams/tools/bin/ai-teams-check.sh` |
-| 查看状态 | `bash .claude/ai-teams/tools/bin/ai-teams-status.sh` |
-| MCP 查询 | `bash .claude/ai-teams/tools/bin/ai-teams-mcp-list.sh` |
-| Skills 查询 | `bash .claude/ai-teams/tools/bin/ai-teams-skills-list.sh` |
-| 上下文压缩预览 | `bash .claude/ai-teams/tools/bin/ai-teams-context-compact.sh --dry-run` |
-| 提示词状态 | `node .claude/ai-teams/tools/bin/ai-teams-prompt-status.mjs --json` |
-| 日志清理计划 | `bash .claude/ai-teams/tools/bin/ai-teams-logs-clean.sh --before YYYY-MM-DD --plan` |
-| 回滚计划 | `bash .claude/ai-teams/tools/bin/ai-teams-rollback.sh --snapshot <路径> --plan` |
+| 项目初始化 | `bash tools/bin/ai-teams-init-project.sh --target "$PWD" --write` |
+| 工程自检 | `bash tools/bin/ai-teams-check.sh` |
+| 查看状态 | `bash tools/bin/ai-teams-status.sh` |
+| MCP 查询 | `bash tools/bin/ai-teams-mcp-list.sh` |
+| Skills 查询 | `bash tools/bin/ai-teams-skills-list.sh` |
+| 上下文压缩预览 | `bash tools/bin/ai-teams-context-compact.sh --dry-run` |
+| 提示词状态 | `node tools/bin/ai-teams-prompt-status.mjs --json` |
+| 日志清理计划 | `bash tools/bin/ai-teams-logs-clean.sh --before YYYY-MM-DD --plan` |
+| 回滚计划 | `bash tools/bin/ai-teams-rollback.sh --snapshot <路径> --plan` |
 
 完整指令见 [`tools/commands/index.md`](tools/commands/index.md)。高风险工具默认要求先执行 plan 或 dry-run。
 
@@ -275,37 +292,15 @@ bash .claude/ai-teams/tools/bin/ai-teams-mcp-list.sh
 | `tools/` | 指令说明与执行脚本 |
 | `templates/` | Agent、项目、规则、Hook 等标准模板 |
 
-完整地图从 [`index/ENTRY.md`](index/ENTRY.md) 开始。
-
-## 从源码构建安装包
-
-以下命令仅适用于源码仓库维护者，生成的运行包不会再包含打包脚本：
-
-```bash
-git clone https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git
-cd Claude-Code-Research-and-Development-Teams
-```
-
-```bash
-bash tools/bin/ai-teams-package.sh formal \
-  --install-layout claude-subdir \
-  --output "$HOME/CC-RADT-dist/formal" \
-  --verify
-```
-
-主工程自检：
-
-```bash
-bash tools/bin/ai-teams-check.sh
-```
+完整地图从 [`index/ENTRY.md`](index/ENTRY.md) 开始，详细安装与配置合并步骤见 [`INSTALL.md`](../../INSTALL.md)。
 
 ## 当前状态与路线
 
-`v1.0.0` 已具备主工程、12 Agent、12 套工作流、四层记忆、项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、升级、回滚和正式安装包验证链路。
+`v1.0.0` 已具备 12 Agent、12 套工作流、四层记忆、项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、升级、回滚和运行自检链路。
 
-后续计划包括真实项目长期回归、GitHub 开源工程治理、精简安装包，以及 Codex / OpenCode 适配。当前状态详见 [`index/STATUS.md`](index/STATUS.md)。
+后续计划包括真实项目长期回归、精简部署形态，以及 Codex / OpenCode 适配。当前状态详见 [`index/STATUS.md`](index/STATUS.md)，用户可感知变化见 [Changelog](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/main/CHANGELOG.md)。需要扩展 Harness 本体时，请切换到 [`dev` 分支](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/dev) 并阅读[二次开发指南](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/dev/DEVELOPMENT.md)。
 
-## 文档依据
+## 设计依据与致谢
 
 CC-RADT 的 Claude Code 接入遵循官方文档：
 
@@ -315,4 +310,9 @@ CC-RADT 的 Claude Code 接入遵循官方文档：
 - [Settings](https://code.claude.com/docs/en/settings)
 - [Permissions](https://code.claude.com/docs/en/permissions)
 
-内置第三方 Skills 的来源、许可证和未纳入公开仓库的内容见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。项目自身的开源许可证、贡献指南、行为准则和发布说明将在 GitHub 发布流程的下一阶段确定。
+同时感谢以下公开工程实践为本项目提供启发：
+
+- [OpenAI Harness Engineering](https://openai.com/index/harness-engineering/)：Agent-first 工程环境、仓库可读性、反馈回路和持续验证方法。
+- [Oh My OpenCode](https://github.com/opensoft/oh-my-opencode)：专业 Agent、后台协作、工具、Skills 与 MCP 组织方面的开源探索。
+
+内置第三方 Skills 的来源和许可证见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。CC-RADT 是独立开源项目，与 Anthropic、OpenAI 和 Oh My OpenCode 项目不存在官方隶属或背书关系；相关产品和项目名称归各自权利方所有。

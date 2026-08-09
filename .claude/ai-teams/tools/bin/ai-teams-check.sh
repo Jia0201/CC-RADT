@@ -348,6 +348,30 @@ for file in "${required_files[@]}"; do
   fi
 done
 
+if [[ "$packaging_enabled" -eq 1 ]]; then
+  source_version_files=(
+    "CHANGELOG.md"
+    "CONTRIBUTING.md"
+    ".gitmessage"
+    ".github/PULL_REQUEST_TEMPLATE.md"
+    "security/version-control-policy.md"
+    "templates/version-control/commit-message.md"
+    "templates/version-control/development-change-record.md"
+    "templates/version-control/release-record.md"
+    "templates/version-control/release-checklist.md"
+    "tools/release/README.md"
+    "tools/release/ai-teams-version-report.mjs"
+  )
+  for file in "${source_version_files[@]}"; do
+    if [[ -f "$file" ]]; then
+      echo "正常版本治理文件： $file"
+    else
+      echo "缺失版本治理文件： $file"
+      missing=1
+    fi
+  done
+fi
+
 echo
 echo "== Claude Code 入口体积 =="
 entry_file="CLAUDE.md"
@@ -1346,7 +1370,12 @@ function check(file) {
       if (/[<>{}$*]/u.test(target)) continue;
       target = target.split('#')[0].split('?')[0];
       try { target = decodeURI(target); } catch {}
-      const resolved = path.resolve(path.dirname(file), target);
+      const relativeFile = path.relative(root, file);
+      const formalTemplatePrefix = path.join('templates', 'package', 'formal') + path.sep;
+      const formalBrainPrefix = '.claude/ai-teams/';
+      const resolved = relativeFile.startsWith(formalTemplatePrefix) && target.startsWith(formalBrainPrefix)
+        ? path.resolve(root, target.slice(formalBrainPrefix.length))
+        : path.resolve(path.dirname(file), target);
       if (!fs.existsSync(resolved)) errors.push(path.relative(root, file) + ':' + (index + 1) + ' -> ' + target);
     }
   });

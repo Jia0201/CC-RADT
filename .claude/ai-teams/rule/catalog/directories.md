@@ -29,6 +29,8 @@ status: active
 | `agents/qa` | 运行包目录 |
 | `agents/role` | 运行包目录 |
 | `agents/security-reviewer` | 运行包目录 |
+| `assets` | 运行包目录 |
+| `assets/readme` | 运行包目录 |
 | `cron` | 运行包目录 |
 | `cron/jobs` | 运行包目录 |
 | `cron/reports` | 运行包目录 |

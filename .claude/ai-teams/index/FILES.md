@@ -148,7 +148,6 @@ status: active
 - `tools/bin/ai-teams-rule-refresh.mjs`
 - `tools/bin/ai-teams-rule-create.mjs`
 - `tools/bin/ai-teams-rule-refresh.ps1`
-- `tools/bin/ai-teams-package.ps1`
 - `hooks/scripts/ai-teams-run-hook.mjs`
 - `hooks/scripts/ai-teams-run-hook.sh`
 - `hooks/scripts/ai-teams-run-hook.ps1`

@@ -12,8 +12,8 @@ e0a731446d865428b82b526c6e342de83df840d9089aa2ca18c08b1b45bc512e  ./.claude/agen
 38663e55cd2cf5b97b0f3fb6b247d4741938838c16873950bfd91a7c4e097904  ./.claude/agents/security-reviewer.md
 9f3eeecba63de8afadab09d22ed3a373f6abfa28c04cc120fc9d68442a1e5804  ./.claude/ai-teams/.gitignore
 b82af924de639d5aba4e3fcf3affd0064c0950f16676850801af78213e3a959f  ./.claude/ai-teams/MANIFEST.json
-6dbd2988cbdd473c3cb8ae03e948691ccdfdff749c6bc12a03ca24c3bbdca63e  ./.claude/ai-teams/README.en.md
-64e1c86ac2a7104d295b7f50ee6a446ec39678ed732090ada8f0a16e3a24649a  ./.claude/ai-teams/README.md
+21ef9ccbeee387813e9db35e618e3c7c0ba6362e6321ab2f6a05befc70399a2b  ./.claude/ai-teams/README.en.md
+2364e1617c5836df9961d008e75bccd58903d7be35814b3baf1f5ab82550019d  ./.claude/ai-teams/README.md
 2de54f0c0222d3bf4c5039730566be3a74d5632ff869b64416f1a344fca39e8b  ./.claude/ai-teams/THIRD_PARTY_NOTICES.md
 59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03  ./.claude/ai-teams/VERSION
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/agents/.gitkeep
@@ -113,6 +113,10 @@ e68e798e8b310e376d6205257567ffed63ec4db7adc27fc300be098b88b32da4  ./.claude/ai-t
 d20d38a5fe654559b3736f3f62a6fd69a49028e11251d2cf38a32523befb477b  ./.claude/ai-teams/agents/security-reviewer/security-reviewer.md
 0e480532681dbd9a086df79e7fa62a024094a79581c416a7385189ab7515e0b9  ./.claude/ai-teams/agents/security-reviewer/skills.md
 cd3bbfa6ab42b47cec677a11f4cf296e7b4c05c60fbd6b41e8ba8a0bd1d16bca  ./.claude/ai-teams/agents/security-reviewer/workflow.md
+f2f2752e40734220ceef93c046bc53b269a1e90acbf0681e351f9ab4818b9cd0  ./.claude/ai-teams/assets/readme/cc-radt-architecture-en.png
+786aa307be55b9b0b764223f24400415d7b0d0da6287bec5404100ea1548635f  ./.claude/ai-teams/assets/readme/cc-radt-architecture-zh.png
+f11cd1740146e5316f7f7e022f67997484567e12e9c85817a380e10f6f5b9e08  ./.claude/ai-teams/assets/readme/cc-radt-workflow-en.png
+8af6954c355afff6325b659a2ed80b75da35e44f53cccc9dc262b4451a85b407  ./.claude/ai-teams/assets/readme/cc-radt-workflow-zh.png
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/cron/.gitkeep
 1d40f1706e0dd11ee4376fd901d580f51df8fbc97e7552ab3294424fc0b4ffce  ./.claude/ai-teams/cron/index.md
 f153d8727d6a4d7e9b5130951cbc1ca006fc4bb293a44df054e79a82b3643eb5  ./.claude/ai-teams/cron/schedules.md
@@ -141,7 +145,7 @@ a3d169346585f74d0e03dba6f70e233d3b1e1887fc3ccb8f85643e86b6543018  ./.claude/ai-t
 7a586266e7914e5bede5e58a0e256431e846844d14b1a6db6f88bac706c58382  ./.claude/ai-teams/index/CODEGRAPH.md
 61b5a12b64736fdd3b0a3d2dfb9eec9048a075cc31f3a464d668855d5da73f08  ./.claude/ai-teams/index/COMMANDS.md
 13f3cc170966c890763b24f92ca2b1ec96b97c716e5c9ab81a767a825c298424  ./.claude/ai-teams/index/ENTRY.md
-e139809f229014efd41c09f6ffa229f2b3b794251e2622eca47965226772bb05  ./.claude/ai-teams/index/FILES.md
+df3c37dc56ba9526d15057383d3896011fb4808d8f340e56c60368810dccd453  ./.claude/ai-teams/index/FILES.md
 291e9c412cff48cc6d774f8f566f0ab0c3ac7bf151d5550c14399b77eba9fbf4  ./.claude/ai-teams/index/INDEX.md
 104202f83e290f7b2b3b885927558d51f05c69f88dc9020e27e8d4fa82a1325f  ./.claude/ai-teams/index/NAVIGATION.md
 2969d7e941905b0136645e68677d65324d6905a9beebbb81c24a8fafc0046ce2  ./.claude/ai-teams/index/PROJECT.md
@@ -304,7 +308,9 @@ cff8f04e95191a3857305d03f38602d88d35ce981614f123714449fefcf971fd  ./.claude/ai-t
 899ef13d4fc6021dad2a7172a6da00665a8562c29344fa2e4aab96ec83880681  ./.claude/ai-teams/playbook.md
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/project/.gitkeep
 7cab72a05f460b001731472fbe4ee4695147544d4258a51c5134d750be26af32  ./.claude/ai-teams/project/PROJECT.md
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/project/adr/accepted/.gitkeep
 32941ff004e64272e1afb39951407712bd3e09b2fc7d06e1560353b6dc6323be  ./.claude/ai-teams/project/adr/index.md
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/project/adr/rejected/.gitkeep
 a23f65e39ed6e55805e1e4eba002bafcad1f944a92b33be37de762f6d63cba76  ./.claude/ai-teams/project/adr/template.md
 d34e34d4e1d00b1eb9b40e3a0ddb2e0ae51da2083cef3771ba5efbb881805b56  ./.claude/ai-teams/project/api-contracts.md
 9a2bdda9499d2d5fb981b0622dd1947162c3a1d65bd35bea63033ad3ce109ebd  ./.claude/ai-teams/project/architecture.md
@@ -408,8 +414,8 @@ e87a4699fc80b051ed7291601b0e0571a2921e9447f6f703fde5a84d293fec81  ./.claude/ai-t
 43af6533aee0f7e41961cd473f1f8d73824b30edc2fbee267341958c94a62697  ./.claude/ai-teams/rule/agents/qa.md
 de3872fd1f2822a0b8b1c25fb1756f96abe0416c4eb9ea3e73e9c3c7f6313a89  ./.claude/ai-teams/rule/agents/role.md
 845ffe0cb4cb1be3d50450ffe94b2c036a840eee402cf7015d1070bb5e10a6af  ./.claude/ai-teams/rule/agents/security-reviewer.md
-9c879d93dc304683344196b56845dae94ca29d50956f0af2921d0c14e98705b2  ./.claude/ai-teams/rule/catalog/directories.md
-77d20505ac3f44f856b1ad921cbfa27385c6a9362e98f94cf62e1cb553f053ca  ./.claude/ai-teams/rule/catalog/files.md
+237d300b0dd277c81a6f8b048bbb779348c5c708185f82d85b4f8a4e9ad545ea  ./.claude/ai-teams/rule/catalog/directories.md
+1f83132a5b06f0499070c49a69c70b3dd5598e45fdb61498c8ed9ca171b3469b  ./.claude/ai-teams/rule/catalog/files.md
 0e04782a11b8ba078e201afc7cb563f94177c3a07364cb2fc13c8d86d2e4e668  ./.claude/ai-teams/rule/catalog/index.md
 b7adff98f66cd6bd419246299a8b4f81876e61afd780e84bed35dbce11b12f45  ./.claude/ai-teams/rule/custom/agents/index.md
 654b962aa4144347a4c2327080a70558296202c780bcb589fb6433f2f5e0c246  ./.claude/ai-teams/rule/custom/index.md
@@ -493,6 +499,7 @@ bc8b2bed1bb7d4ab9a3b8ff6ef26bc9bbc9172ebeeecb3d2359031d28f721d9c  ./.claude/ai-t
 72c71d2ab238dfa8fa8d5ed50af8d5f369291e8d6c58a0e1adb90fe3cf45aced  ./.claude/ai-teams/shared/events/index.md
 87dcb7963b90e82815951ee343bc70db9204b8fb8ff66107e8ff56bd2431e8c2  ./.claude/ai-teams/shared/handoffs/HANDOFF_TEMPLATE.md
 6b74f6fee9613a4dce5109202c8c340cf5c1886fd73b2bc5ca1c7d864222046a  ./.claude/ai-teams/shared/index.md
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/shared/locks/.locks/.gitkeep
 b22a69aba3209c120be29f29dfb6e195927032671007902c2bc62ad6ea605011  ./.claude/ai-teams/shared/locks/LOCKS.md
 e23733f5a7cc4be5120dcdf3f16b258d1b0b749d9aadd0777bf92bb6f6e077fa  ./.claude/ai-teams/shared/locks/LOCK_TEMPLATE.md
 fa3d66d0b5b544236f44bce6da8511ae63de915fc5fc9d9f8dcade6639f3c252  ./.claude/ai-teams/shared/pipeline-status.md
@@ -861,7 +868,7 @@ fc36e9c3172015e2a9b6ca8178dc63cba43e45ca0213b5af025747824c961a98  ./.claude/ai-t
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/tools/.gitkeep
 b99eb4a30bb3a218bbdf16d23b9d553bd3e9b6cacf4d11e63468b01f7da49db0  ./.claude/ai-teams/tools/bin/ai-teams-check-simplify.sh
 c761bf874afcd219d0295489f4d40bd4e30a0925ddabfcde9811ee4c832d6c70  ./.claude/ai-teams/tools/bin/ai-teams-check.ps1
-344d80003233d318e5d816c137435152a904150c354881d0586de93617470ba0  ./.claude/ai-teams/tools/bin/ai-teams-check.sh
+3fe1345e759cc3bd03ceb47e70d034d15e3c4881ce7f9d85efaec4ae031cc447  ./.claude/ai-teams/tools/bin/ai-teams-check.sh
 ae510a6bb6f0806eee35399b2aa0c7cd3ff64a8f4ad0ae7130f9c1d3c733323b  ./.claude/ai-teams/tools/bin/ai-teams-codegraph-status.sh
 551ea5652f1d128734f2a86dd57dbd2ee6f414c375e5f684fd2cc7d916f5faa8  ./.claude/ai-teams/tools/bin/ai-teams-context-compact.sh
 8f66eb917eebc55402b0973b4b3e38218556542c2f6477e6edd991fdc90ee6bb  ./.claude/ai-teams/tools/bin/ai-teams-e2e-fixtures.sh
@@ -932,7 +939,7 @@ f83cd0aa81813f5c657379365d1b0e7a5768a66e0cee628c5fb3c3a9b1521d87  ./.claude/ai-t
 06ff2e94688f7cc6a500d9bc895f50cde697f2af10ed69efc4f098b3b9ff975c  ./.claude/ai-teams/tools/rollback/README.md
 cceb33ffb654b3803b0a7f192c5610a3d3567c708324f346208b7e0f387b39c1  ./.claude/ai-teams/tools/skills/README.md
 b296b53e7b9a28680b7fab7de428ab2d058eb42abf1cc063007df3c0de4c728a  ./.claude/ai-teams/tools/upgrade/README.md
-af4599cbacbaae04e754bcc5ef4eb5c14b9f45a61758e8ee8266eead543ec52b  ./.claude/manifest.json
+b99da10f3ff7e4b17eecd6ae4db4e3942f834ba9e02d23be283c6afcbd588b38  ./.claude/manifest.json
 2fd750e9e681d7b8489db632a797833a0b8393723034b6b058d082c74cbfe3db  ./.claude/rules/ai-teams-backend-service.md
 b50c7a1454bd0335fa4f24e65c3632c8c51b7af9792bc6830857c0327dd0c96b  ./.claude/rules/ai-teams-backend-systems.md
 ad992083e66ea62669b7f691e53d1625d44800b55bd513b0b2e6252172069103  ./.claude/rules/ai-teams-custom.md
@@ -942,6 +949,8 @@ c92ea6f1a06a744463f7e0f35ca1486070409e86b5390b79d1c582cc076b2cce  ./.claude/rule
 5dccf92d4e7bf685028c948bdbf15194cc5b8fbee038bd4d9c9144a2f25f687e  ./.claude/settings.json
 1e42c28f25d1cb87baa71a8b0f0cc3fc8cb2f14774c5bc102971aea6e705050e  ./.claude/settings.local.example.json
 5b8c84e38f5828485b9a5f614c08c6c57109cc00bde076276d945289f699d586  ./.mcp.json
+fd8adedff5b47e1f7eb5f550688514b6a973ac29f4169ca3daea94c7dab64218  ./CHANGELOG.md
 79d01c28628d26534c1597eb62a9a65337a8e7cdc607552f38deb218175429e1  ./INSTALL.md
-c1cf2ecebf7585e3358abf49af582ce46ce99aa7e4246721acd1b7efce3c4b67  ./README.en.md
-91518ad18a9333a1f4f0b4c38ac4ea9fe32406ea38f74bcbd16479c042a83ba3  ./README.md
+b9be4f506132a9c31204002653783ed523c97c1cf7f04758c457446159221c41  ./README.en.md
+ed414a079a6f12642cca5eb6062211bb59ea5e121680315329727a059f942031  ./README.md
+3cbe9a65b28137fe77c1ae9381370407b7d67f7c9bf33bf64cce00acff5830be  ./RELEASE_RECORD.md
