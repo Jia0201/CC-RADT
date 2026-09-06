@@ -21,6 +21,58 @@ A local read-only observer adds per-session filtering, task and log reading, and
 
 Preserve existing project knowledge and memory during upgrades. Merge the new managed hooks and permission rules using the upgrade guide.
 
+> **Version branches:** [`main`](https://github.com/Jia0201/CC-RADT/tree/main) contains v1.1.0 and subsequent documentation improvements; [`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0) preserves the original release. Use [Releases](https://github.com/Jia0201/CC-RADT/releases) for frozen versioned downloads.
+
+## Engineering Observer
+
+The built-in read-only observer brings session activity, task files, logs, review evidence, and role definitions into a local browser view. Each project shares one service across Claude Code sessions; each browser tab keeps its own session filter.
+
+![Observer overview with two sessions and an activity timeline](assets/readme/observer/observer-multi-session.png)
+
+*Actual v1.1.0 UI captured from isolated test fixtures. The sessions, tasks, and failures shown here are sample data, not real project activity.*
+
+| View | What you can inspect |
+|---|---|
+| Overview and sessions | Separate sessions, Agent activity, tool failures, and a timeline |
+| Tasks | Existing task files and their recorded evidence |
+| Logs | Text records from allowed project log sources |
+| Evidence and reviews | Existing review records and retained file versions |
+| Team and configuration | Role definitions on disk |
+
+<details>
+<summary>Task evidence and review screenshots</summary>
+
+![Task file and its evidence in the detail panel](assets/readme/observer/observer-task-evidence.png)
+
+The task view opens the recorded file alongside the list. It does not execute the task.
+
+![Existing review record displayed in the observer](assets/readme/observer/observer-review.png)
+
+The review view reads an existing decision. Approval and rework remain in Claude Code.
+
+</details>
+
+<details>
+<summary>Mobile layout</summary>
+
+<img src="assets/readme/observer/observer-mobile.png" alt="Observer mobile layout" width="390">
+
+</details>
+
+### Open the observer
+
+After installation, restart Claude Code. The new session prints a local access link without opening a browser automatically. From the **application project root**, you can also run:
+
+```bash
+node .claude/ai-teams/tools/observer/cli.mjs start
+node .claude/ai-teams/tools/observer/cli.mjs status
+node .claude/ai-teams/tools/observer/cli.mjs stop
+```
+
+`start` starts or reuses the service; `status` retrieves the full access link; `stop` stops only the observer. In the development source checkout, use `tools/observer/cli.mjs`.
+
+The observer listens on `127.0.0.1`, uses a random access credential, and stores bounded history outside the project. Set `AI_TEAMS_OBSERVER=0` before starting Claude Code to disable automatic startup and recording. See the [observer guide](tools/observer/README.md) for retention, configuration, and limitations. The web UI does not execute commands, approve work, or change configuration.
+
 ## Why CC-RADT
 
 - **Multi-agent by default**: Lead selects named agents and an appropriate workflow instead of delegating to generic workers.
@@ -106,12 +158,6 @@ Check the login page and login API contract, fix integration mismatches, and run
 ```
 
 Lead selects the workflow and named agents, supervises handoffs, and returns the verified result. The default team flow is skipped only when the user explicitly asks for a single agent or an answer-only response.
-
-## Local Read-Only Observer
-
-The Harness includes a local observer. After loading the new Hook configuration, each CC session receives its access URL once. Concurrent sessions in the same project share one service while retaining separate activity records and browser filters. Execution, approvals and configuration changes stay in the CC CLI.
-
-Run `node tools/observer/cli.mjs start` or `status` to get the URL; installed projects use `.claude/ai-teams/tools/observer/cli.mjs`. No npm runtime dependencies are required. History stays outside the project and release package. See [Observer documentation](tools/observer/README.md) for scope and configuration.
 
 ## How It Works
 

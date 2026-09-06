@@ -75,9 +75,11 @@ try {
   await first.locator('[data-page="tasks"]').click();
   await first.getByRole('button', { name: /T-042.md 文件观测/ }).click();
   await first.locator('#evidence-text').filter({ hasText: '导出结果复核' }).waitFor();
+  await first.screenshot({ path: path.join(output, 'observer-task-evidence.png'), fullPage: true });
   await first.locator('[data-page="reviews"]').click();
   await first.getByRole('button', { name: /R-12.md 文件观测/ }).click();
   await first.locator('#evidence-text').filter({ hasText: 'changes-required' }).waitFor();
+  await first.screenshot({ path: path.join(output, 'observer-review.png'), fullPage: true });
   await first.locator('[data-page="config"]').click();
   await first.getByRole('button', { name: /qa.md 文件观测/ }).click();
   await first.locator('#evidence-text').filter({ hasText: '检查任务结果' }).waitFor();
