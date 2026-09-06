@@ -2528,7 +2528,10 @@ from pathlib import Path
 for name in sys.argv[1:]:
     path = Path(name)
     text = path.read_text(encoding="utf-8")
-    text = text.replace(".claude/ai-teams/", "")
+    # Only relocate links and image sources. Commands still run from the
+    # application project root and must retain their installation prefix.
+    text = text.replace("](.claude/ai-teams/", "](")
+    text = text.replace('src=".claude/ai-teams/', 'src="')
     for document in ["INSTALL.md", "USAGE.md", "UPGRADE.md", "RELEASE_NOTES.md"]:
         text = text.replace(f"](../../../{document})", f"](../../{document})")
         text = text.replace(f"]({document})", f"](../../{document})")
