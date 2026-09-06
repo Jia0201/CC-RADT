@@ -4,13 +4,21 @@
 
 **Chinese name: A Full-Lifecycle R&D Team Built on Claude Code**
 
-[简体中文](README.md) | [English](README.en.md) | [Installation guide](INSTALL.md) | [GitHub repository](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams)
+[简体中文](README.md) | [English](README.en.md) | [Installation guide](INSTALL.md) | [GitHub repository](https://github.com/Jia0201/CC-RADT)
 
 CC-RADT is a multi-agent software development harness for Claude Code. It organizes product discovery, planning, frontend and backend implementation, testing, security review, project documentation, engineering memory, and role governance into a traceable team that can work inside a real codebase.
 
 It is not a static prompt collection and it does not replace your application repository. CC-RADT manages the team, rules, context, and collaboration state while your project code remains where it is.
 
-> Current version: `v1.0.0`. Claude Code is the primary runtime. Codex and OpenCode adapters remain on the roadmap.
+> Current version: `v1.1.0`. Claude Code is the primary runtime. Codex and OpenCode adapters remain on the roadmap.
+
+## What's New in v1.1.0
+
+A local read-only observer adds per-session filtering, task and log reading, and retained file versions. Project initialization is now explicit. Lead system prompt `1.0.1`, rendered task contracts, heartbeat handling, sensitive-path matching, and installation validation improve everyday reliability.
+
+[Release notes and v1.0.0 comparison](RELEASE_NOTES.md) · [Detailed user guide (Chinese)](USAGE.md) · [Upgrade guide (Chinese)](UPGRADE.md) · [Download v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
+
+Preserve existing project knowledge and memory during upgrades. Merge the new managed hooks and permission rules using the upgrade guide.
 
 ## What a Development Harness Means
 
@@ -31,7 +39,7 @@ The goal is not to add more prompt text. It is to turn model capability into a r
 
 - **Multi-agent by default**: Lead selects named agents and an appropriate workflow instead of delegating to generic workers.
 - **Full development lifecycle**: PD, Plan-PM, four development agents, QA, Memory, Doc, Role, and Security-Reviewer work as one team.
-- **Growing project awareness**: initialization and normal work keep `.claude/ai-teams/project/` current with architecture, APIs, UI conventions, commands, risks, and verification facts.
+- **Growing project awareness**: after user-initiated initialization, normal work keeps `.claude/ai-teams/project/` current with architecture, APIs, UI conventions, commands, risks, and verification facts.
 - **Recoverable engineering memory**: shared memory, per-agent memory, project context, and reusable knowledge are stored separately.
 - **On-demand rule loading**: `.claude/ai-teams/rule/` routes only the context needed for the current task.
 - **Traceable governance**: sensitive files, deletion, ownership, locks, state transactions, escalation, and ADRs have explicit boundaries.
@@ -50,10 +58,10 @@ The goal is not to add more prompt text. It is to turn model capability into a r
 
 ### 2. Download the installation content
 
-Download the latest package from [GitHub Releases](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/releases), or clone `main` into a temporary directory outside the target project:
+Download the latest package from [GitHub Releases](https://github.com/Jia0201/CC-RADT/releases), or clone `main` into a temporary directory outside the target project:
 
 ```bash
-git clone --depth 1 --branch main https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git cc-radt
+git clone --depth 1 --branch main https://github.com/Jia0201/CC-RADT.git cc-radt
 ```
 
 Do not nest the entire `cc-radt/` directory inside the application. Merge its `.claude/`, `.mcp.json`, READMEs, and installation guide into the target project root.
@@ -120,6 +128,8 @@ After the check passes, start or restart Claude Code so the new session loads `.
 
 ### 5. Initialize project knowledge
 
+Initialization is user-initiated. Claude Code does not prompt for it, run it, or write an initialization profile at startup, on resume, or for ordinary requests. Run it only when you want persistent project knowledge:
+
 ```bash
 bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
 ```
@@ -130,7 +140,7 @@ Windows:
 pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
-Initialization scans the current project and writes only to CC-RADT-managed `.claude/ai-teams/project/`, `.claude/ai-teams/rule/project/`, indexes, and memory candidate areas. It identifies the stack, structure, API surface, UI conventions, commands, verification paths, existing instructions, and risk signals. It does not treat Git history as the sole source of truth, read sensitive file contents, or modify application code.
+Manual initialization scans the current project and writes only to CC-RADT-managed `.claude/ai-teams/project/`, `.claude/ai-teams/rule/project/`, indexes, and memory candidate areas. It identifies the stack, structure, API surface, UI conventions, commands, verification paths, existing instructions, and risk signals. It does not treat Git history as the sole source of truth, read sensitive file contents, or modify application code.
 
 ### 6. Confirm the team and ask for work
 
@@ -141,6 +151,12 @@ Check the login page and login API contract, fix integration mismatches, and run
 ```
 
 Lead selects the workflow and named agents, supervises handoffs, and returns the verified result. The default team flow is skipped only when the user explicitly asks for a single agent or an answer-only response.
+
+## Built-In Read-Only Observer
+
+After CC loads the installed Hook configuration, SessionStart starts or reuses the project observer and shows its local URL once per session. Multiple CC sessions share the service but retain separate activity identities and browser filters. The web UI never executes tasks or approves actions.
+
+Run `node .claude/ai-teams/tools/observer/cli.mjs status` from the business project to retrieve the URL; `start` / `stop` only manage the observer. History lives in private user state outside the project. See [Observer documentation](.claude/ai-teams/tools/observer/README.md) for scope and configuration.
 
 ## How It Works
 
@@ -294,9 +310,9 @@ Start from [`.claude/ai-teams/index/ENTRY.md`](.claude/ai-teams/index/ENTRY.md) 
 
 ## Status and Roadmap
 
-`v1.0.0` includes 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, and runtime self-checks.
+`v1.1.0` includes 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, runtime self-checks, and the read-only engineering observer.
 
-The roadmap includes long-running real-project regression, a simplified deployment profile, and Codex / OpenCode adapters. See [`.claude/ai-teams/index/STATUS.md`](.claude/ai-teams/index/STATUS.md) for current status and the public [Changelog](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/main/CHANGELOG.md) for user-visible changes. To extend the harness itself, switch to the [`dev` branch](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/dev) and read the [development guide](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/dev/DEVELOPMENT.en.md).
+The roadmap includes long-running real-project regression, a simplified deployment profile, and Codex / OpenCode adapters. See [`.claude/ai-teams/index/STATUS.md`](.claude/ai-teams/index/STATUS.md) for current status and the public [Changelog](https://github.com/Jia0201/CC-RADT/blob/main/CHANGELOG.md) for user-visible changes. To extend the harness itself, switch to the [`dev` branch](https://github.com/Jia0201/CC-RADT/tree/dev) and read the [development guide](https://github.com/Jia0201/CC-RADT/blob/dev/DEVELOPMENT.en.md).
 
 ## Foundations and Acknowledgements
 

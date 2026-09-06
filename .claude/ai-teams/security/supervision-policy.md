@@ -23,7 +23,7 @@ status: active
 ## 立即接管条件
 
 - `PostToolUseFailure`、`PermissionDenied`、`StopFailure`。
-- 连续 30 秒没有 Hook 活动且 Agent 仍标记运行中。
+- 连续 30 秒没有 Hook 活动时先标记 `idle-review`；Lead 复核 Agent 状态、进程和最近目标，只有确认卡断、无响应或跑偏后才升级为接管。
 - Agent 修改无关范围、偏离任务目标或未按项目规则执行。
 - 敏感文件、删除、不可逆命令、锁或文件所有权冲突。
 - Agent 需要用户权限、外部认证或环境条件才能继续。

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CC-RADT · 研发观察台</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="navigation">
+      <a class="brand" href="/" aria-label="CC-RADT 观察台首页"><span class="brand-mark">R<span>↗</span></span><span>CC-RADT<small>HARNESS OBSERVER</small></span></a>
+      <div class="nav-caption">工作空间</div>
+      <div class="project-label"><span class="project-icon">◈</span><span id="project-name">本地项目</span><span class="local-tag">LOCAL</span></div>
+      <nav aria-label="主导航">
+        <button data-page="overview" class="nav-item active"><span class="nav-symbol">◫</span>概览与会话<span class="nav-number">01</span></button>
+        <button data-page="tasks" class="nav-item"><span class="nav-symbol">▤</span>任务记录<span class="nav-number">02</span></button>
+        <button data-page="logs" class="nav-item"><span class="nav-symbol">≋</span>活动日志<span class="nav-number">03</span></button>
+        <button data-page="reviews" class="nav-item"><span class="nav-symbol">◇</span>证据与审查<span class="nav-number">04</span></button>
+        <button data-page="config" class="nav-item"><span class="nav-symbol">⊞</span>团队与配置<span class="nav-number">05</span></button>
+      </nav>
+      <div class="nav-bottom"><div class="readonly-seal"><span>↳</span> 观察，不干预</div><p>任务执行与操作<br>始终留在 CC CLI。</p><span class="edition">READ-ONLY / V1</span></div>
+    </aside>
+    <main>
+      <header class="topbar"><div><div class="eyebrow">ENGINEERING OBSERVABILITY <span>/</span> 本机工作空间</div><h1 id="page-title">概览与会话</h1></div><div class="top-status"><span class="status-dot" id="connection-dot"></span><span id="connection" role="status" aria-live="polite">连接观察服务</span><span class="divider"></span><span class="readonly-tag">只读模式</span></div></header>
+      <div class="intro"><p id="page-description">让执行过程有迹可循。按会话查看活动，再沿证据回溯。</p><span id="last-scan">等待首次采集</span></div>
+      <div class="summary-strip"><div><span class="summary-label">已登记会话</span><strong id="session-count">—</strong></div><div><span class="summary-label">当前筛选事件</span><strong id="event-count">—</strong></div><div><span class="summary-label">可读证据源</span><strong id="source-count">—</strong></div><div class="summary-note"><span class="small-dot"></span>只采集元信息 · 不读取聊天正文</div></div>
+      <section id="locked" class="locked" hidden><span class="empty-icon">⌁</span><h2>使用 CC 给出的链接进入</h2><p>打开启动提示中的完整地址，才能读取本项目数据。<br>也可从终端运行观察器的 status 命令获取地址。</p></section>
+      <div id="workspace" class="workspace">
+        <aside class="session-panel"><div class="panel-heading"><h2>会话窗口</h2><span id="session-total" class="count">0</span></div><button id="all-sessions" class="all-sessions selected">全部会话 <span>↗</span></button><div id="sessions"></div><div class="session-footnote">多个 CC 窗口共享观察服务。<br>每个页面独立筛选，不影响其他窗口。</div></aside>
+        <section class="work-panel"><div class="work-heading"><div><h2 id="section-title">活动时间线</h2><span id="scope-label">全部会话 · 项目共享证据单独列出</span></div><button id="refresh" class="icon-button" title="重新读取观察数据" aria-label="刷新观察数据">↻</button></div><div class="filters"><label class="search"><span>⌕</span><input id="search" placeholder="搜索工具、会话或证据来源" aria-label="搜索记录"></label><label class="error-filter"><input id="errors-only" type="checkbox">仅失败记录</label><button id="export" class="subtle-button">导出当前视图 ↓</button></div><div id="record-list" class="record-list"></div><div id="coverage" class="coverage"></div></section>
+        <aside class="inspector" aria-label="记录详情"><div class="panel-heading"><h2>证据详情</h2><span class="muted">↗</span></div><div id="inspector"><div class="inspector-empty"><div class="wire-icon">⤷</div><h3>从一条记录开始</h3><p>选择活动或文件，查看元信息、来源与已留存的内容。</p><div class="hint-line">原始活动 / 文件观测 / 历史版本</div></div></div></aside>
+      </div>
+      <footer><span><span class="small-dot"></span> CC 负责执行 · Observer 负责呈现</span><span>LOCAL FIRST / NO CONTROL CHANNEL</span></footer>
+    </main>
+  </div>
+</body>
+</html>

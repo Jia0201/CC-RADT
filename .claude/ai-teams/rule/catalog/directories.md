@@ -32,8 +32,6 @@ status: active
 | `assets` | 运行包目录 |
 | `assets/readme` | 运行包目录 |
 | `cron` | 运行包目录 |
-| `cron/jobs` | 运行包目录 |
-| `cron/reports` | 运行包目录 |
 | `hooks` | 运行包目录 |
 | `hooks/configs` | 运行包目录 |
 | `hooks/scripts` | 运行包目录 |
@@ -53,7 +51,6 @@ status: active
 | `kb/agents/qa` | 运行包目录 |
 | `kb/agents/role` | 运行包目录 |
 | `kb/agents/security-reviewer` | 运行包目录 |
-| `kb/archive` | 运行包目录 |
 | `kb/candidates` | 运行包目录 |
 | `kb/shared` | 运行包目录 |
 | `logs` | 运行包目录 |
@@ -202,10 +199,8 @@ status: active
 | `shared/escalations/resolved` | 运行包目录 |
 | `shared/events` | 运行包目录 |
 | `shared/handoffs` | 运行包目录 |
-| `shared/inbox` | 运行包目录 |
 | `shared/locks` | 运行包目录 |
 | `shared/locks/.locks` | 运行包目录 |
-| `shared/outbox` | 运行包目录 |
 | `shared/prompt-evolution` | 运行包目录 |
 | `shared/prompt-evolution/candidates` | 运行包目录 |
 | `shared/prompt-evolution/events` | 运行包目录 |
@@ -213,7 +208,6 @@ status: active
 | `shared/supervision` | 运行包目录 |
 | `shared/tasks` | 运行包目录 |
 | `shared/transactions` | 运行包目录 |
-| `shared/workspace` | 运行包目录 |
 | `skills` | 运行包目录 |
 | `skills/agents` | 运行包目录 |
 | `skills/agents/dev-backend-service` | 运行包目录 |
@@ -326,9 +320,6 @@ status: active
 | `templates/rule-create` | 运行包目录 |
 | `templates/security-rule-create` | 运行包目录 |
 | `templates/skill-create` | 运行包目录 |
-| `templates/skill-create/assets` | 运行包目录 |
-| `templates/skill-create/references` | 运行包目录 |
-| `templates/skill-create/scripts` | 运行包目录 |
 | `templates/tool-create` | 运行包目录 |
 | `third_party` | 运行包目录 |
 | `third_party/licenses` | 运行包目录 |
@@ -344,6 +335,8 @@ status: active
 | `tools/kb` | 运行包目录 |
 | `tools/mcp` | 运行包目录 |
 | `tools/memory` | 运行包目录 |
+| `tools/observer` | 运行包目录 |
+| `tools/observer/web` | 运行包目录 |
 | `tools/rollback` | 运行包目录 |
 | `tools/rollback/snapshots` | 运行包目录 |
 | `tools/skills` | 运行包目录 |

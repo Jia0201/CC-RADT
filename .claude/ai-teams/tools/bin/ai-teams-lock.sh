@@ -111,7 +111,7 @@ case "$cmd" in
       current_owner="$(awk -F= '$1 == "owner" {print $2}' "$lock_dir/meta.env")"
     fi
     if [[ -n "$current_owner" && "$current_owner" != "$owner" ]]; then
-      echo "释放失败：锁属于 $current_owner，不属于 $owner" >&2
+      echo "释放失败：锁属于 ${current_owner}，不属于 ${owner}" >&2
       exit 4
     fi
     rm -rf "$lock_dir"

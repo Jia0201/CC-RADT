@@ -140,6 +140,7 @@ status: active
 | `hooks/scripts/hook-output.mjs` | 运行包文件 | 按 security/file-ownership.md |
 | `hooks/scripts/index-stale-mark.sh` | 运行包文件 | 按 security/file-ownership.md |
 | `hooks/scripts/lock-timeout-check.sh` | 运行包文件 | 按 security/file-ownership.md |
+| `hooks/scripts/observer-hook.mjs` | 运行包文件 | 按 security/file-ownership.md |
 | `hooks/scripts/prompt-contract-check.mjs` | 运行包文件 | 按 security/file-ownership.md |
 | `hooks/scripts/prompt-evolution-event.mjs` | 运行包文件 | 按 security/file-ownership.md |
 | `hooks/scripts/protected-file-check.sh` | 运行包文件 | 按 security/file-ownership.md |
@@ -363,6 +364,7 @@ status: active
 | `prompts/agents/lead/evals/cases.json` | 运行包文件 | 按 security/file-ownership.md |
 | `prompts/agents/lead/index.md` | 运行包文件 | 按 security/file-ownership.md |
 | `prompts/agents/lead/retry/v1.0.0.prompt.md` | 运行包文件 | 按 security/file-ownership.md |
+| `prompts/agents/lead/system/1.0.1.prompt.md` | 运行包文件 | 按 security/file-ownership.md |
 | `prompts/agents/lead/system/v1.0.0.prompt.md` | 运行包文件 | 按 security/file-ownership.md |
 | `prompts/agents/lead/task/default.v1.0.0.prompt.md` | 运行包文件 | 按 security/file-ownership.md |
 | `prompts/agents/memory/evals/cases.json` | 运行包文件 | 按 security/file-ownership.md |
@@ -877,6 +879,7 @@ status: active
 | `tools/bin/ai-teams-codegraph-status.sh` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/bin/ai-teams-context-compact.sh` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/bin/ai-teams-e2e-fixtures.sh` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/bin/ai-teams-heartbeat-test.mjs` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/bin/ai-teams-hook-output-test.mjs` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/bin/ai-teams-init-project.ps1` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/bin/ai-teams-init-project.sh` | 运行包文件 | 按 security/file-ownership.md |
@@ -941,6 +944,18 @@ status: active
 | `tools/kb/README.md` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/mcp/README.md` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/memory/README.md` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/README.md` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/browser-test.mjs` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/cli.mjs` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/collector-worker.mjs` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/collector.mjs` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/installation-test.mjs` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/observer.test.mjs` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/runtime.mjs` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/server.mjs` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/web/app.js` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/web/index.html` | 运行包文件 | 按 security/file-ownership.md |
+| `tools/observer/web/style.css` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/rollback/README.md` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/skills/README.md` | 运行包文件 | 按 security/file-ownership.md |
 | `tools/upgrade/README.md` | 运行包文件 | 按 security/file-ownership.md |

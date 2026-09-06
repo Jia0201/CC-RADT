@@ -5,11 +5,12 @@
   "autoMemoryEnabled": false,
   "includeGitInstructions": false,
   "ai_teams": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "hooks_enabled": true,
     "brain_root": ".claude/ai-teams",
     "default_agent_mode": "multi-agent",
     "lead_agent": "lead",
+    "initialization_mode": "manual",
     "subagent_runtime": {
       "official_project_dir": ".claude/agents/",
       "component_agent_dir": ".claude/ai-teams/agents/"
@@ -39,23 +40,38 @@
     }
   },
   "permissions": {
-    "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./**/.env)", "Read(./**/.env.*)", "Read(./**/*credentials*)", "Read(./**/*credential*)", "Read(./**/*token*)", "Read(./**/*secret*)", "Read(./**/*.pem)", "Read(./**/*.key)", "Read(./**/*.p12)", "Read(./**/*.pfx)", "Read(./**/id_rsa)", "Read(./**/id_ed25519)", "Read(./**/service-account*.json)", "Bash(rm -rf *)", "Bash(git reset --hard*)", "Bash(git clean -fd*)", "Bash(git push --force*)"]
+    "deny": ["Read(/.env)", "Read(/.env.*)", "Read(/**/.env)", "Read(/**/.env.*)", "Read(/**/.credentials)", "Read(/**/.credentials.*)", "Read(/**/credentials.json)", "Read(/**/credentials.yaml)", "Read(/**/credentials.yml)", "Read(/**/.token)", "Read(/**/.token.*)", "Read(/**/token.json)", "Read(/**/token.yaml)", "Read(/**/token.yml)", "Read(/**/.secret)", "Read(/**/.secret.*)", "Read(/**/secret.json)", "Read(/**/secret.yaml)", "Read(/**/secret.yml)", "Read(/**/secrets/**)", "Read(/**/.secrets/**)", "Read(/**/*.pem)", "Read(/**/*.key)", "Read(/**/*.p12)", "Read(/**/*.pfx)", "Read(/**/id_rsa)", "Read(/**/id_ed25519)", "Read(/**/service-account*.json)", "Bash(rm -rf *)", "Bash(git reset --hard*)", "Bash(git clean -fd*)", "Bash(git push --force*)"]
   },
   "disableAllHooks": false,
   "hooks": {
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "startup|resume|clear|compact",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "ai-teams-session-start"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "native-claude-memory-audit"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 6
           }
         ]
       }
@@ -65,30 +81,41 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "ai-teams-user-prompt-submit.sh"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "git-activity-watch"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "reconcile"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       }
     ],
     "PreToolUse": [
       {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
+          }
+        ]
+      },
+      {
         "matcher": "Agent",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-contract-check.mjs"]
           }
         ]
@@ -97,8 +124,7 @@
         "matcher": "Read|Grep|Glob",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "sensitive-file-check.sh"]
           }
         ]
@@ -107,18 +133,15 @@
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "sensitive-file-check.sh"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "protected-file-check.sh"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "protected-file-lock-check.sh"]
           }
         ]
@@ -127,8 +150,7 @@
         "matcher": "Bash",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "delete-check.sh"]
           }
         ]
@@ -139,9 +161,13 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "activity"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       },
@@ -149,13 +175,11 @@
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "index-stale-mark.sh"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "external-change-check.sh"]
           }
         ]
@@ -166,14 +190,17 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "failure"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "post-tool-failure"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       }
@@ -183,14 +210,17 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "failure"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "permission-denied"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       }
@@ -200,9 +230,13 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "start"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       }
@@ -212,14 +246,17 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "stop"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "subagent-stop"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       }
@@ -229,8 +266,7 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "stop"]
           }
         ]
@@ -241,14 +277,17 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "stop"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "task-completed"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       }
@@ -258,8 +297,7 @@
         "matcher": "manual|auto",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "context-compression-check.sh"]
           }
         ]
@@ -270,8 +308,7 @@
         "matcher": "manual|auto",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "context-compression-check.sh"]
           }
         ]
@@ -282,14 +319,17 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "failure"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/prompt-evolution-event.mjs", "stop-failure"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       }
@@ -299,24 +339,25 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "context-compression-check.sh"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "lock-timeout-check.sh"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/ai-teams-run-hook.mjs", "git-activity-watch"]
           },
           {
-            "type": "command",
-            "command": "node",
+            "type": "command", "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/agent-heartbeat.mjs", "reconcile"]
+          },
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
           }
         ]
       }

@@ -15,6 +15,7 @@ AI-Teams 使用 Claude Code 官方生命周期 Hook，将安全拦截、Lead 运
 | Hook | 用途 |
 |---|---|
 | ai-teams-run-hook | Hook 跨平台运行器，Node 原生执行，保留 Bash / PowerShell 包装入口 |
+| observer-hook | 启动 / 复用本项目只读观察台，按 session_id 隔离活动记录，首次向用户显示本机地址 |
 | ai-teams-user-prompt-submit | 每次用户 prompt 进入前注入 AI-Teams Lead / 多 Agent 运行守卫 |
 | protected-file-check | 修改高风险文件前提醒或阻断 |
 | sensitive-file-check | 阻止读取敏感文件内容 |
@@ -44,6 +45,14 @@ AI-Teams 使用 Claude Code 官方生命周期 Hook，将安全拦截、Lead 运
 - `PreToolUse: Agent`：调用 `hooks/scripts/prompt-contract-check.mjs`，拒绝缺少版本、任务 ID、目标、项目上下文、范围、输出合同和验收条件的命名 Agent 派单。
 - `PreCompact`、`PostCompact`：在 Claude 自动或手动压缩前后生成恢复候选。
 - `Stop`：补充上下文阈值、锁超时、Git 辅助状态和心跳检查。
+
+## 只读观察台 Hook
+
+- 脚本：`hooks/scripts/observer-hook.mjs`；模块：[Observer](../tools/observer/README.md)。
+- `SessionStart` 启动或复用本地服务，并按会话和服务实例去重提示；同项目多会话共享服务，各自记录活动。
+- `SessionEnd`、`UserPromptSubmit`、工具与 Agent 生命周期等事件只写观察器外置元信息，不写业务任务状态，不复制完整命令或聊天正文。
+- 不复用旧心跳文件中的单 Agent 名称作为跨会话实例标识，不改变现有心跳和安全 Hook 的决策。
+- 任何启动或采集失败均放行，`AI_TEAMS_OBSERVER=0` 可禁用。服务启停与配置从终端完成，网页只有读接口。
 
 ## 用户 Prompt 入口 Hook
 

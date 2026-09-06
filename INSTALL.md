@@ -2,6 +2,8 @@
 
 本文说明如何把 CC-RADT 安装到一个全新项目或已经使用 Claude Code 的项目中。
 
+当前版本为 v1.1.0。已有 v1.0.0 用户先阅读 [升级指南](UPGRADE.md)；完整使用、观察台操作与故障排查见 [使用指南](USAGE.md)。环境最低要求以包内配置为准：Claude Code `2.1.140`、Node.js 18+，Bash 工具需要 Bash 和 Python 3。
+
 ## 1. 安装前检查
 
 在目标项目根目录确认以下文件是否已经存在：
@@ -22,14 +24,14 @@ CLAUDE.md
 推荐从 GitHub 下载 ZIP 并解压到项目外。也可以执行：
 
 ```bash
-git clone --depth 1 https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git cc-radt
+git clone --depth 1 https://github.com/Jia0201/CC-RADT.git cc-radt
 ```
 
 不要把 `cc-radt/` 整个目录嵌套到目标项目；需要合并的是仓库内的 `.claude/` 和 `.mcp.json` 等根文件。
 
 ## 3. 新项目安装
 
-当目标项目没有 `.claude/settings.json` 和 `.mcp.json` 时，把下载目录内的全部内容复制到目标项目根目录即可。
+当目标项目没有 `.claude/settings.json` 和 `.mcp.json` 时，把下载目录内的 `.claude/` 和 `.mcp.json` 合并到目标项目根目录。README、使用说明、发布记录等可留在解压目录阅读，避免覆盖业务项目同名文档。
 
 复制后至少应存在：
 
@@ -69,6 +71,8 @@ git clone --depth 1 https://github.com/Jia0201/Claude-Code-Research-and-Developm
 | `hooks` | 按事件追加 CC-RADT Hook，不删除项目已有 Hook |
 | `disableAllHooks` | 必须为 `false`，否则 CC-RADT Hook 不会执行 |
 
+上述追加规则适用于首次安装。v1.0.0 升级时应识别并替换旧 CC-RADT Hook，避免重复执行；旧版由 CC-RADT 引入的宽泛敏感文件 deny 规则应按新包替换，不能简单取并集。业务自己的 Hook 和 deny 保留，具体见 [升级指南](UPGRADE.md)。
+
 合并完成后用 Node.js 验证 JSON：
 
 ```bash
@@ -103,6 +107,8 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-team
 
 ## 6. 初始化项目画像
 
+初始化只由用户主动调用。启动、恢复会话和普通需求不会自动询问、自动执行或写入初始化画像。
+
 在目标项目根目录执行，不要先进入 `.claude/ai-teams/`：
 
 macOS / Linux：
@@ -117,7 +123,7 @@ Windows PowerShell：
 pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
-`--target` 必须指向业务项目根目录。初始化结果写入 `.claude/ai-teams/project/`、项目规则、索引和记忆候选区，不修改业务代码。
+`--target` 必须指向业务项目根目录。手动初始化结果写入 `.claude/ai-teams/project/`、项目规则、索引和记忆候选区，不修改业务代码。
 
 ## 7. 首次启动确认
 
