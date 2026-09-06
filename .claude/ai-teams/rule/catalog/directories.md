@@ -31,6 +31,7 @@ status: active
 | `agents/security-reviewer` | 运行包目录 |
 | `assets` | 运行包目录 |
 | `assets/readme` | 运行包目录 |
+| `assets/readme/observer` | 运行包目录 |
 | `cron` | 运行包目录 |
 | `hooks` | 运行包目录 |
 | `hooks/configs` | 运行包目录 |

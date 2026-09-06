@@ -12,8 +12,8 @@ e0a731446d865428b82b526c6e342de83df840d9089aa2ca18c08b1b45bc512e  ./.claude/agen
 38663e55cd2cf5b97b0f3fb6b247d4741938838c16873950bfd91a7c4e097904  ./.claude/agents/security-reviewer.md
 9f3eeecba63de8afadab09d22ed3a373f6abfa28c04cc120fc9d68442a1e5804  ./.claude/ai-teams/.gitignore
 7ee5144d9172bf8ff70c493d6402dcd9fbc697769a94009405c9aef08333a6d5  ./.claude/ai-teams/MANIFEST.json
-365b4c278963e08eba8c55635b0c847723979a8a21f5ce7d01edca2e802ada5b  ./.claude/ai-teams/README.en.md
-2636307ff11651ec141dfedd865949496b83a31a88f226bba6f2a3ff4a418ac2  ./.claude/ai-teams/README.md
+ab1f5f869f93e1284da496af6cf9ab75d74d90027e0a9a1ae5e5f2b0f09c0811  ./.claude/ai-teams/README.en.md
+a42d2f9fa05b88344fdfe5fd486f879f265f34911ac5049035bbd10e2ee710d3  ./.claude/ai-teams/README.md
 2de54f0c0222d3bf4c5039730566be3a74d5632ff869b64416f1a344fca39e8b  ./.claude/ai-teams/THIRD_PARTY_NOTICES.md
 1575e1af4a95f12f70b4ee6a6adce8160953d93ea17dc2611b90883ccc3ad3b8  ./.claude/ai-teams/VERSION
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/agents/.gitkeep
@@ -117,6 +117,10 @@ f2f2752e40734220ceef93c046bc53b269a1e90acbf0681e351f9ab4818b9cd0  ./.claude/ai-t
 786aa307be55b9b0b764223f24400415d7b0d0da6287bec5404100ea1548635f  ./.claude/ai-teams/assets/readme/cc-radt-architecture-zh.png
 f11cd1740146e5316f7f7e022f67997484567e12e9c85817a380e10f6f5b9e08  ./.claude/ai-teams/assets/readme/cc-radt-workflow-en.png
 8af6954c355afff6325b659a2ed80b75da35e44f53cccc9dc262b4451a85b407  ./.claude/ai-teams/assets/readme/cc-radt-workflow-zh.png
+51ba45eaa36b9be67001e3d41ee97c780842a1f9e0664041a19af0c193e896b2  ./.claude/ai-teams/assets/readme/observer/observer-mobile.png
+955109dd257d672dd73a24be0d479989605de1c6c9c48f00025a7b7e706e0f53  ./.claude/ai-teams/assets/readme/observer/observer-multi-session.png
+2a71a83dbff4b37a48dbb58ce983e1f620d438c2f4e600f0c96680f9b552dd88  ./.claude/ai-teams/assets/readme/observer/observer-review.png
+5ebbe3bbe2c11ad0b5f3831b9a49ed72fa7b55c80de0928a12ba80d15d92a546  ./.claude/ai-teams/assets/readme/observer/observer-task-evidence.png
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./.claude/ai-teams/cron/.gitkeep
 1d40f1706e0dd11ee4376fd901d580f51df8fbc97e7552ab3294424fc0b4ffce  ./.claude/ai-teams/cron/index.md
 f153d8727d6a4d7e9b5130951cbc1ca006fc4bb293a44df054e79a82b3643eb5  ./.claude/ai-teams/cron/schedules.md
@@ -416,8 +420,8 @@ e87a4699fc80b051ed7291601b0e0571a2921e9447f6f703fde5a84d293fec81  ./.claude/ai-t
 43af6533aee0f7e41961cd473f1f8d73824b30edc2fbee267341958c94a62697  ./.claude/ai-teams/rule/agents/qa.md
 de3872fd1f2822a0b8b1c25fb1756f96abe0416c4eb9ea3e73e9c3c7f6313a89  ./.claude/ai-teams/rule/agents/role.md
 845ffe0cb4cb1be3d50450ffe94b2c036a840eee402cf7015d1070bb5e10a6af  ./.claude/ai-teams/rule/agents/security-reviewer.md
-f57f58bcae4db6ab5308dababefdc2772feb1abb8e47fa137404c6d38454c090  ./.claude/ai-teams/rule/catalog/directories.md
-267dfae32d226c1bcaf07256a4bd8e6f083e4451e4321417533b5435e78db581  ./.claude/ai-teams/rule/catalog/files.md
+2c9c733cc147f8b8f2ab670a7fc6239dec6fb8aedc6fc1176622f59b72491711  ./.claude/ai-teams/rule/catalog/directories.md
+7eab7f350ae849ab672777ec4ad7b390cfad107d92842d5e97c3ea9890161b16  ./.claude/ai-teams/rule/catalog/files.md
 0e04782a11b8ba078e201afc7cb563f94177c3a07364cb2fc13c8d86d2e4e668  ./.claude/ai-teams/rule/catalog/index.md
 b7adff98f66cd6bd419246299a8b4f81876e61afd780e84bed35dbce11b12f45  ./.claude/ai-teams/rule/custom/agents/index.md
 654b962aa4144347a4c2327080a70558296202c780bcb589fb6433f2f5e0c246  ./.claude/ai-teams/rule/custom/index.md
@@ -940,7 +944,7 @@ bfd8944245d3e05041cb5e7fdb4882f5350576898ba7fe9a7959fc154bffae9e  ./.claude/ai-t
 c2a77457c29b95a719c5353ea6577e11fed24be011e81a1dd212f9795ce421b6  ./.claude/ai-teams/tools/mcp/README.md
 f83cd0aa81813f5c657379365d1b0e7a5768a66e0cee628c5fb3c3a9b1521d87  ./.claude/ai-teams/tools/memory/README.md
 8f69fef0011597551d1407b094b9a195deba5e0537020fe4bd1e686a68826b23  ./.claude/ai-teams/tools/observer/README.md
-b65a2300686a7c4ba1f24fdcef41a0ea99c210cdc95f1e78bb56274b23f6846c  ./.claude/ai-teams/tools/observer/browser-test.mjs
+8bbddeddde99fea948676370ba476c593e3427706e8fb2a6904d8b7157cf44c1  ./.claude/ai-teams/tools/observer/browser-test.mjs
 41ada4c28bb17f351479f0940e2ebe7cf79f40d0992f80f4745f6563fa3390a1  ./.claude/ai-teams/tools/observer/cli.mjs
 502feda0733e87eda16906719625840f6ddf582e03fb41739dd55caada8db97c  ./.claude/ai-teams/tools/observer/collector-worker.mjs
 62cdf078bb9e865aa4e512634b3ef862d99eec0886b6952513df8305c66c3b30  ./.claude/ai-teams/tools/observer/collector.mjs
@@ -954,7 +958,7 @@ e6f7bdc5b1341ea719d75713254c1b12eee88d6990de11da3681d2cd5ec5f89d  ./.claude/ai-t
 06ff2e94688f7cc6a500d9bc895f50cde697f2af10ed69efc4f098b3b9ff975c  ./.claude/ai-teams/tools/rollback/README.md
 cceb33ffb654b3803b0a7f192c5610a3d3567c708324f346208b7e0f387b39c1  ./.claude/ai-teams/tools/skills/README.md
 b296b53e7b9a28680b7fab7de428ab2d058eb42abf1cc063007df3c0de4c728a  ./.claude/ai-teams/tools/upgrade/README.md
-76629faa9c4f4dfbcf273cfc0d846f78291b6f69f73e72c775a934b94900c577  ./.claude/manifest.json
+d1f081aaf87a9a6a4b86b18413a524e744ac7f703dfa328c53fc4cb83ce94c72  ./.claude/manifest.json
 2fd750e9e681d7b8489db632a797833a0b8393723034b6b058d082c74cbfe3db  ./.claude/rules/ai-teams-backend-service.md
 b50c7a1454bd0335fa4f24e65c3632c8c51b7af9792bc6830857c0327dd0c96b  ./.claude/rules/ai-teams-backend-systems.md
 ad992083e66ea62669b7f691e53d1625d44800b55bd513b0b2e6252172069103  ./.claude/rules/ai-teams-custom.md
@@ -964,11 +968,11 @@ c92ea6f1a06a744463f7e0f35ca1486070409e86b5390b79d1c582cc076b2cce  ./.claude/rule
 dbbeeacce7ee607a76d5307ec5a2e39a40a86a079737cf03df01c57a7b8569ec  ./.claude/settings.json
 1e42c28f25d1cb87baa71a8b0f0cc3fc8cb2f14774c5bc102971aea6e705050e  ./.claude/settings.local.example.json
 5b8c84e38f5828485b9a5f614c08c6c57109cc00bde076276d945289f699d586  ./.mcp.json
-fa55ac29872a06dc40d680ae5cc56962acd24db2c50b517bf17b1672997325a6  ./CHANGELOG.md
+52750f849582ed80f2369e5cd59ae558b3ed499603b7d350751721e1cee9aacb  ./CHANGELOG.md
 c6fd5d500dcac086e739ba3bf34d76ef5a38a5241a03db96ab77c2df3b7469b8  ./INSTALL.md
-37ee02c070a7b38b3b2405c24983f3f902b406845c51a9ee890c4311a6e29967  ./README.en.md
-ed0905d548ec416a0090defcebe39a6391a37b83daf088dddb51663f6d8462fe  ./README.md
+63bd6b92667ca79ad315fdface2908d12b3f747e0c0c5123bc73157b62edd067  ./README.en.md
+34842ba8766375829bde3e2bd0c7a2fe3a877cc61d8e22d40bdf8b8660c99d38  ./README.md
 e7b1ba11ebebae28ac80ab8f70fe1b81c86c36d02df984daa87063ed7c55cf06  ./RELEASE_NOTES.md
-48c9858f3d15dae745cd88798970c3b21b44399fec3ce2b58c799e569020b3e5  ./RELEASE_RECORD.md
+dc9b5e204da7e6cc5ea4f8402ae1fcb742d7e8b00ddec6841e24efde10b5b4c5  ./RELEASE_RECORD.md
 351ed85dfd185b57db092c13a7adf16012a32d73436c9c56cd67d127f3eceedc  ./UPGRADE.md
 685de86ef6e1a878bafa1674bc14421c99bcffde4802f355266bcd2342f62ea5  ./USAGE.md

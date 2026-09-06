@@ -20,6 +20,58 @@ A local read-only observer adds per-session filtering, task and log reading, and
 
 Preserve existing project knowledge and memory during upgrades. Merge the new managed hooks and permission rules using the upgrade guide.
 
+> **Version branches:** [`main`](https://github.com/Jia0201/CC-RADT/tree/main) contains v1.1.0 and subsequent documentation improvements; [`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0) preserves the original release. Use [Releases](https://github.com/Jia0201/CC-RADT/releases) for frozen versioned downloads.
+
+## Engineering Observer
+
+The built-in read-only observer brings session activity, task files, logs, review evidence, and role definitions into a local browser view. Each project shares one service across Claude Code sessions; each browser tab keeps its own session filter.
+
+![Observer overview with two sessions and an activity timeline](assets/readme/observer/observer-multi-session.png)
+
+*Actual v1.1.0 UI captured from isolated test fixtures. The sessions, tasks, and failures shown here are sample data, not real project activity.*
+
+| View | What you can inspect |
+|---|---|
+| Overview and sessions | Separate sessions, Agent activity, tool failures, and a timeline |
+| Tasks | Existing task files and their recorded evidence |
+| Logs | Text records from allowed project log sources |
+| Evidence and reviews | Existing review records and retained file versions |
+| Team and configuration | Role definitions on disk |
+
+<details>
+<summary>Task evidence and review screenshots</summary>
+
+![Task file and its evidence in the detail panel](assets/readme/observer/observer-task-evidence.png)
+
+The task view opens the recorded file alongside the list. It does not execute the task.
+
+![Existing review record displayed in the observer](assets/readme/observer/observer-review.png)
+
+The review view reads an existing decision. Approval and rework remain in Claude Code.
+
+</details>
+
+<details>
+<summary>Mobile layout</summary>
+
+<img src="assets/readme/observer/observer-mobile.png" alt="Observer mobile layout" width="390">
+
+</details>
+
+### Open the observer
+
+After installation, restart Claude Code. The new session prints a local access link without opening a browser automatically. From the **application project root**, you can also run:
+
+```bash
+node .claude/ai-teams/tools/observer/cli.mjs start
+node .claude/ai-teams/tools/observer/cli.mjs status
+node .claude/ai-teams/tools/observer/cli.mjs stop
+```
+
+`start` starts or reuses the service; `status` retrieves the full access link; `stop` stops only the observer. In the development source checkout, use `tools/observer/cli.mjs`.
+
+The observer listens on `127.0.0.1`, uses a random access credential, and stores bounded history outside the project. Set `AI_TEAMS_OBSERVER=0` before starting Claude Code to disable automatic startup and recording. See the [observer guide](tools/observer/README.md) for retention, configuration, and limitations. The web UI does not execute commands, approve work, or change configuration.
+
 ## What a Development Harness Means
 
 A development harness is an executable engineering environment around the model. It defines not only what to do, but who should do it, what context must be read, what may be changed, how agents coordinate, how results are verified, and how failures are recovered.
@@ -39,9 +91,9 @@ The goal is not to add more prompt text. It is to turn model capability into a r
 
 - **Multi-agent by default**: Lead selects named agents and an appropriate workflow instead of delegating to generic workers.
 - **Full development lifecycle**: PD, Plan-PM, four development agents, QA, Memory, Doc, Role, and Security-Reviewer work as one team.
-- **Growing project awareness**: after user-initiated initialization, normal work keeps `project/` current with architecture, APIs, UI conventions, commands, risks, and verification facts.
+- **Growing project awareness**: after user-initiated initialization, normal work keeps `.claude/ai-teams/project/` current with architecture, APIs, UI conventions, commands, risks, and verification facts.
 - **Recoverable engineering memory**: shared memory, per-agent memory, project context, and reusable knowledge are stored separately.
-- **On-demand rule loading**: `rule/` routes only the context needed for the current task.
+- **On-demand rule loading**: `.claude/ai-teams/rule/` routes only the context needed for the current task.
 - **Traceable governance**: sensitive files, deletion, ownership, locks, state transactions, escalation, and ADRs have explicit boundaries.
 - **Governed prompts**: all 12 agents use versioned system, task, and retry prompts with evaluation, approval, activation, and rollback.
 - **Portable capabilities**: Skills are vendored into the project and MCP configuration avoids developer-machine paths.
@@ -94,7 +146,7 @@ target-project/
         └── tools/
 ```
 
-`CC-RADT` is the project name. `` and the `ai-teams-*` commands remain the stable v1 runtime namespace so existing hooks, upgrades, and tools continue to work.
+`CC-RADT` is the project name. `.claude/ai-teams/` and the `ai-teams-*` commands remain the stable v1 runtime namespace so existing hooks, upgrades, and tools continue to work.
 
 ### 3. Merge without overwriting project configuration
 
@@ -102,7 +154,7 @@ If the target has no Claude Code configuration, copy the installation content in
 
 | Installation content | Action |
 |---|---|
-| `` | Copy the complete directory under the target project's `.claude/` |
+| `.claude/ai-teams/` | Copy the complete directory under the target project's `.claude/` |
 | `.claude/agents/` | Merge the 12 named agent files; back up name conflicts first |
 | `.claude/rules/` | Merge the CC-RADT rule adapters; back up name conflicts first |
 | `.claude/manifest.json` | Copy under the target project's `.claude/` |
@@ -115,13 +167,13 @@ See [`INSTALL.md`](../../INSTALL.md) for field-level instructions, conflict hand
 ### 4. Verify the installation
 
 ```bash
-bash tools/bin/ai-teams-check.sh
+bash .claude/ai-teams/tools/bin/ai-teams-check.sh
 ```
 
 Windows:
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File tools/bin/ai-teams-check.ps1
+pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-check.ps1
 ```
 
 After the check passes, start or restart Claude Code so the new session loads `.claude/agents/`, `.claude/rules/`, settings, and Hooks.
@@ -131,16 +183,16 @@ After the check passes, start or restart Claude Code so the new session loads `.
 Initialization is user-initiated. Claude Code does not prompt for it, run it, or write an initialization profile at startup, on resume, or for ordinary requests. Run it only when you want persistent project knowledge:
 
 ```bash
-bash tools/bin/ai-teams-init-project.sh --target "$PWD" --write
+bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
 ```
 
 Windows:
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
+pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
-Manual initialization scans the current project and writes only to CC-RADT-managed `project/`, `rule/project/`, indexes, and memory candidate areas. It identifies the stack, structure, API surface, UI conventions, commands, verification paths, existing instructions, and risk signals. It does not treat Git history as the sole source of truth, read sensitive file contents, or modify application code.
+Manual initialization scans the current project and writes only to CC-RADT-managed `.claude/ai-teams/project/`, `.claude/ai-teams/rule/project/`, indexes, and memory candidate areas. It identifies the stack, structure, API surface, UI conventions, commands, verification paths, existing instructions, and risk signals. It does not treat Git history as the sole source of truth, read sensitive file contents, or modify application code.
 
 ### 6. Confirm the team and ask for work
 
@@ -151,12 +203,6 @@ Check the login page and login API contract, fix integration mismatches, and run
 ```
 
 Lead selects the workflow and named agents, supervises handoffs, and returns the verified result. The default team flow is skipped only when the user explicitly asks for a single agent or an answer-only response.
-
-## Built-In Read-Only Observer
-
-After CC loads the installed Hook configuration, SessionStart starts or reuses the project observer and shows its local URL once per session. Multiple CC sessions share the service but retain separate activity identities and browser filters. The web UI never executes tasks or approves actions.
-
-Run `node tools/observer/cli.mjs status` from the business project to retrieve the URL; `start` / `stop` only manage the observer. History lives in private user state outside the project. See [Observer documentation](tools/observer/README.md) for scope and configuration.
 
 ## How It Works
 
@@ -181,7 +227,7 @@ Lead is the only orchestrator. Subagents start with isolated contexts and receiv
 | Role | Agent governance | Role boundaries, agent definitions, Skills, capability changes |
 | Security-Reviewer | Continuous safety review | Sensitive files, deletion, permissions, hooks, MCP, locks, violations |
 
-See [`agents/index.md`](agents/index.md) for the canonical team index. Claude Code-facing definitions live in `.claude/agents/`.
+See [`.claude/ai-teams/agents/index.md`](agents/index.md) for the canonical team index. Claude Code-facing definitions live in `.claude/agents/`.
 
 ## Workflow Selection
 
@@ -202,27 +248,27 @@ CC-RADT does not force every request through one long pipeline. Lead chooses the
 | WF-11 High-risk change | Permissions, migrations, production, security | Lead + Security + specialist + QA |
 | WF-12 Documentation and knowledge | Docs, rules, indexes, memory | Doc + Memory + Role + Security |
 
-Selection rules and completion gates are defined in [`playbook.md`](playbook.md).
+Selection rules and completion gates are defined in [`.claude/ai-teams/playbook.md`](playbook.md).
 
 ## Engineering Brain and Project Boundary
 
 ![CC-RADT engineering brain and project boundary](assets/readme/cc-radt-architecture-en.png)
 
-- `project/` contains current application facts and is maintained continuously by Doc.
-- `memory/` contains facts needed for recovery and long-term continuity.
-- `kb/` contains stable reusable knowledge, not live action rules.
-- `shared/` contains tasks, plans, locks, status, handoffs, broadcasts, and escalations.
-- `security/` defines action policies, ownership boundaries, and risk gates.
-- `rule/` is a low-token routing layer and does not duplicate source knowledge.
+- `.claude/ai-teams/project/` contains current application facts and is maintained continuously by Doc.
+- `.claude/ai-teams/memory/` contains facts needed for recovery and long-term continuity.
+- `.claude/ai-teams/kb/` contains stable reusable knowledge, not live action rules.
+- `.claude/ai-teams/shared/` contains tasks, plans, locks, status, handoffs, broadcasts, and escalations.
+- `.claude/ai-teams/security/` defines action policies, ownership boundaries, and risk gates.
+- `.claude/ai-teams/rule/` is a low-token routing layer and does not duplicate source knowledge.
 
 ## Four-Layer Memory
 
 | Layer | Content | Location |
 |---|---|---|
-| L1 Live context | Current tasks, plans, locks, handoffs, state | `shared/` |
-| L2 Project memory | Profile, architecture, APIs, UI, commands, risks | `project/` |
-| L3 Team memory | Shared long-term and per-agent memory | `memory/MEMORY.md`, `memory/agents/` |
-| L4 Stable knowledge | Reusable engineering and domain knowledge | `kb/` |
+| L1 Live context | Current tasks, plans, locks, handoffs, state | `.claude/ai-teams/shared/` |
+| L2 Project memory | Profile, architecture, APIs, UI, commands, risks | `.claude/ai-teams/project/` |
+| L3 Team memory | Shared long-term and per-agent memory | `.claude/ai-teams/memory/MEMORY.md`, `.claude/ai-teams/memory/agents/` |
+| L4 Stable knowledge | Reusable engineering and domain knowledge | `.claude/ai-teams/kb/` |
 
 The compaction hook detects pressure and creates recovery material; Memory still decides what becomes formal memory. Logs, memory, project facts, and the knowledge base never substitute for one another.
 
@@ -230,15 +276,15 @@ The compaction hook detects pressure and creates recovery material; Memory still
 
 | Capability | Entry point | Rule |
 |---|---|---|
-| Sensitive files | `security/sensitive-files.md` | Do not read `.env`, keys, certificates, tokens, or credentials by default |
-| Deletion protection | `security/delete-policy.md` | No unapproved deletion and no bypass through helper scripts |
-| Ownership | `security/file-ownership.md` | Defines directory owners and review boundaries |
-| Locks | `security/lock-policy.md` | Check overlapping edits, wait states, and deadlock handling |
-| State | `security/task-policy.md`, `state-transaction-policy.md` | Persist state changes through events and transactional writes |
-| Lead takeover | `security/supervision-policy.md` | Lead takes over errors, permission failures, drift, or stalls |
-| API contracts | `security/interface-contract-policy.md` | Never guess fields or change a contract unilaterally |
-| ADRs | `security/adr.md`, `project/adr/` | Record long-term design decisions, not normal task logs |
-| Prompt governance | `security/prompt-*.md` | Candidate, evaluation, approval, activation, and rollback are traceable |
+| Sensitive files | `.claude/ai-teams/security/sensitive-files.md` | Do not read `.env`, keys, certificates, tokens, or credentials by default |
+| Deletion protection | `.claude/ai-teams/security/delete-policy.md` | No unapproved deletion and no bypass through helper scripts |
+| Ownership | `.claude/ai-teams/security/file-ownership.md` | Defines directory owners and review boundaries |
+| Locks | `.claude/ai-teams/security/lock-policy.md` | Check overlapping edits, wait states, and deadlock handling |
+| State | `.claude/ai-teams/security/task-policy.md`, `state-transaction-policy.md` | Persist state changes through events and transactional writes |
+| Lead takeover | `.claude/ai-teams/security/supervision-policy.md` | Lead takes over errors, permission failures, drift, or stalls |
+| API contracts | `.claude/ai-teams/security/interface-contract-policy.md` | Never guess fields or change a contract unilaterally |
+| ADRs | `.claude/ai-teams/security/adr.md`, `.claude/ai-teams/project/adr/` | Record long-term design decisions, not normal task logs |
+| Prompt governance | `.claude/ai-teams/security/prompt-*.md` | Candidate, evaluation, approval, activation, and rollback are traceable |
 
 CC-RADT does not automatically commit Git changes, publish external artifacts, install unknown third-party MCP servers or Skills, or delete user project files.
 
@@ -247,27 +293,27 @@ CC-RADT does not automatically commit Git changes, publish external artifacts, i
 Each agent has independent system, task, retry, and evaluation assets:
 
 ```text
-prompts/agents/<agent>/
+.claude/ai-teams/prompts/agents/<agent>/
 ├── system/
 ├── task/
 ├── retry/
 └── evals/
 ```
 
-`prompts/registry.json` selects active versions. Failures, corrections, and rejected outcomes create redacted evidence and candidates. Activation requires QA regression, Role consistency checks, Security review, and Lead approval. Agents cannot directly modify their own active system prompts.
+`.claude/ai-teams/prompts/registry.json` selects active versions. Failures, corrections, and rejected outcomes create redacted evidence and candidates. Activation requires QA regression, Role consistency checks, Security review, and Lead approval. Agents cannot directly modify their own active system prompts.
 
 ## Skills and MCP
 
-- `skills/registry.json` records vendored role-specific Skills. Installed projects do not depend on a maintainer's global Skills directory.
-- `.mcp.json` and `mcp/claude-project.mcp.json` currently register ten MCP entries: Chrome, Context7, shadcn, Filesystem, Figma, MySQL, GitHub, CodeGraph, Puppeteer fallback, and Canva remote.
+- `.claude/ai-teams/skills/registry.json` records vendored role-specific Skills. Installed projects do not depend on a maintainer's global Skills directory.
+- `.mcp.json` and `.claude/ai-teams/mcp/claude-project.mcp.json` currently register ten MCP entries: Chrome, Context7, shadcn, Filesystem, Figma, MySQL, GitHub, CodeGraph, Puppeteer fallback, and Canva remote.
 - Account-, database-, and browser-dependent servers still require local environment variables or official installation. No credentials are bundled.
 - Browser automation recommends [hangwin/mcp-chrome](https://github.com/hangwin/mcp-chrome); install its Chrome extension before use.
 
 Inspect the actual runtime state:
 
 ```bash
-bash tools/bin/ai-teams-skills-list.sh
-bash tools/bin/ai-teams-mcp-list.sh
+bash .claude/ai-teams/tools/bin/ai-teams-skills-list.sh
+bash .claude/ai-teams/tools/bin/ai-teams-mcp-list.sh
 ```
 
 ## Common Commands
@@ -276,43 +322,43 @@ The runtime package contains 23 operating and maintenance commands:
 
 | Goal | Command |
 |---|---|
-| Initialize project | `bash tools/bin/ai-teams-init-project.sh --target "$PWD" --write` |
-| Run self-check | `bash tools/bin/ai-teams-check.sh` |
-| Show status | `bash tools/bin/ai-teams-status.sh` |
-| List MCP | `bash tools/bin/ai-teams-mcp-list.sh` |
-| List Skills | `bash tools/bin/ai-teams-skills-list.sh` |
-| Preview compaction | `bash tools/bin/ai-teams-context-compact.sh --dry-run` |
-| Prompt status | `node tools/bin/ai-teams-prompt-status.mjs --json` |
-| Plan log cleanup | `bash tools/bin/ai-teams-logs-clean.sh --before YYYY-MM-DD --plan` |
-| Plan rollback | `bash tools/bin/ai-teams-rollback.sh --snapshot <path> --plan` |
+| Initialize project | `bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write` |
+| Run self-check | `bash .claude/ai-teams/tools/bin/ai-teams-check.sh` |
+| Show status | `bash .claude/ai-teams/tools/bin/ai-teams-status.sh` |
+| List MCP | `bash .claude/ai-teams/tools/bin/ai-teams-mcp-list.sh` |
+| List Skills | `bash .claude/ai-teams/tools/bin/ai-teams-skills-list.sh` |
+| Preview compaction | `bash .claude/ai-teams/tools/bin/ai-teams-context-compact.sh --dry-run` |
+| Prompt status | `node .claude/ai-teams/tools/bin/ai-teams-prompt-status.mjs --json` |
+| Plan log cleanup | `bash .claude/ai-teams/tools/bin/ai-teams-logs-clean.sh --before YYYY-MM-DD --plan` |
+| Plan rollback | `bash .claude/ai-teams/tools/bin/ai-teams-rollback.sh --snapshot <path> --plan` |
 
-See [`tools/commands/index.md`](tools/commands/index.md) for the full command index. High-risk tools require a plan or dry run first.
+See [`.claude/ai-teams/tools/commands/index.md`](tools/commands/index.md) for the full command index. High-risk tools require a plan or dry run first.
 
 ## Directory Map
 
 | Path | Purpose |
 |---|---|
 | `.claude/` | Claude Code settings, official agents, and rule adapters |
-| `agents/` | Roles, workflows, and capability components for 12 agents |
-| `prompts/` | Versioned prompts, evaluations, and registry |
-| `rule/` | On-demand routing for agents, tasks, and project context |
-| `project/` | Profile and evolving facts for the managed project |
-| `memory/` | Shared memory, per-agent memory, recovery material |
-| `kb/` | Shared and per-agent knowledge bases |
-| `shared/` | Live collaboration workspace |
-| `security/` | Security and action policies |
-| `hooks/`, `cron/` | Event automation and scheduled maintenance |
-| `skills/`, `mcp/` | Portable capabilities and tool configuration |
-| `tools/` | Command documentation and executable tools |
-| `templates/` | Standard agent, project, rule, and hook templates |
+| `.claude/ai-teams/agents/` | Roles, workflows, and capability components for 12 agents |
+| `.claude/ai-teams/prompts/` | Versioned prompts, evaluations, and registry |
+| `.claude/ai-teams/rule/` | On-demand routing for agents, tasks, and project context |
+| `.claude/ai-teams/project/` | Profile and evolving facts for the managed project |
+| `.claude/ai-teams/memory/` | Shared memory, per-agent memory, recovery material |
+| `.claude/ai-teams/kb/` | Shared and per-agent knowledge bases |
+| `.claude/ai-teams/shared/` | Live collaboration workspace |
+| `.claude/ai-teams/security/` | Security and action policies |
+| `.claude/ai-teams/hooks/`, `cron/` | Event automation and scheduled maintenance |
+| `.claude/ai-teams/skills/`, `mcp/` | Portable capabilities and tool configuration |
+| `.claude/ai-teams/tools/` | Command documentation and executable tools |
+| `.claude/ai-teams/templates/` | Standard agent, project, rule, and hook templates |
 
-Start from [`index/ENTRY.md`](index/ENTRY.md) for the full map. See [`INSTALL.md`](../../INSTALL.md) for exact installation and configuration merge steps.
+Start from [`.claude/ai-teams/index/ENTRY.md`](index/ENTRY.md) for the full map. See [`INSTALL.md`](../../INSTALL.md) for exact installation and configuration merge steps.
 
 ## Status and Roadmap
 
 `v1.1.0` includes 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, runtime self-checks, and the read-only engineering observer.
 
-The roadmap includes long-running real-project regression, a simplified deployment profile, and Codex / OpenCode adapters. See [`index/STATUS.md`](index/STATUS.md) for current status and the public [Changelog](https://github.com/Jia0201/CC-RADT/blob/main/CHANGELOG.md) for user-visible changes. To extend the harness itself, switch to the [`dev` branch](https://github.com/Jia0201/CC-RADT/tree/dev) and read the [development guide](https://github.com/Jia0201/CC-RADT/blob/dev/DEVELOPMENT.en.md).
+The roadmap includes long-running real-project regression, a simplified deployment profile, and Codex / OpenCode adapters. See [`.claude/ai-teams/index/STATUS.md`](index/STATUS.md) for current status and the public [Changelog](https://github.com/Jia0201/CC-RADT/blob/main/CHANGELOG.md) for user-visible changes. To extend the harness itself, switch to the [`dev` branch](https://github.com/Jia0201/CC-RADT/tree/dev) and read the [development guide](https://github.com/Jia0201/CC-RADT/blob/dev/DEVELOPMENT.en.md).
 
 ## Foundations and Acknowledgements
 
@@ -329,4 +375,4 @@ The project also draws inspiration from:
 - [OpenAI Harness Engineering](https://openai.com/index/harness-engineering/) for agent-first environments, repository legibility, feedback loops, and continuous verification.
 - [Oh My OpenCode](https://github.com/opensoft/oh-my-opencode) for its open-source exploration of specialized agents, background collaboration, tools, Skills, and MCP organization.
 
-See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for bundled third-party Skill sources and licenses. CC-RADT is an independent open-source project and is not affiliated with or endorsed by Anthropic, OpenAI, or the Oh My OpenCode project. Product and project names belong to their respective owners.
+See [`.claude/ai-teams/THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for bundled third-party Skill sources and licenses. CC-RADT is an independent open-source project and is not affiliated with or endorsed by Anthropic, OpenAI, or the Oh My OpenCode project. Product and project names belong to their respective owners.

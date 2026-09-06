@@ -20,6 +20,60 @@ CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把�
 
 升级时保留现有项目画像与记忆，并合并更新 Hook 和权限规则。完整步骤见升级指南。
 
+> **版本分支**：[`main`](https://github.com/Jia0201/CC-RADT/tree/main) 展示 v1.1.0 及后续文档改进；[`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0) 保留旧版。需要固定版本的安装包时，从 [Releases](https://github.com/Jia0201/CC-RADT/releases) 下载。
+
+<a id="内置只读观察台"></a>
+
+## 研发观测台（Observer）
+
+内置只读观测台，把多会话活动、任务文件、项目日志、已有审查证据和角色定义放在同一个本机网页中。一个项目的多个 Claude Code 会话共享服务，每个浏览器标签页可以独立筛选会话。
+
+![研发观测台：双会话与活动时间线](.claude/ai-teams/assets/readme/observer/observer-multi-session.png)
+
+*以上为 v1.1.0 实际界面截图，使用隔离测试样例；会话、任务和失败事件均为示例数据，不代表真实项目运行记录。*
+
+| 页面 | 可以查看的内容 |
+|---|---|
+| 概览与会话 | 独立会话、Agent 活动、工具失败和活动时间线 |
+| 任务记录 | 已写入文件的任务内容与证据 |
+| 活动日志 | 允许范围内的项目日志文本 |
+| 证据与审查 | 已有审查记录及文件留存版本 |
+| 团队与配置 | 磁盘上的角色定义 |
+
+<details>
+<summary>展开查看：任务证据与审查页面</summary>
+
+![任务记录：打开任务文件并阅读证据详情](.claude/ai-teams/assets/readme/observer/observer-task-evidence.png)
+
+任务记录页可以在列表旁阅读已落盘文件，便于核对目标与验收依据。
+
+![证据与审查：阅读已有审查结论](.claude/ai-teams/assets/readme/observer/observer-review.png)
+
+审查页展示已有记录；审批、返工与任务执行仍在 Claude Code 中完成。
+
+</details>
+
+<details>
+<summary>展开查看：移动端布局</summary>
+
+<img src=".claude/ai-teams/assets/readme/observer/observer-mobile.png" alt="研发观测台移动端布局" width="390">
+
+</details>
+
+### 如何打开
+
+安装后重启 Claude Code，新会话会提示本机访问链接，不会自动打开浏览器。也可在**业务项目根目录**执行：
+
+```bash
+node .claude/ai-teams/tools/observer/cli.mjs start
+node .claude/ai-teams/tools/observer/cli.mjs status
+node .claude/ai-teams/tools/observer/cli.mjs stop
+```
+
+`start` 启动或复用服务，`status` 重新取得完整访问链接，`stop` 仅停止观测服务。开发源码目录中使用 `tools/observer/cli.mjs`。
+
+服务仅监听 `127.0.0.1`，使用随机访问凭据，历史记录保存在项目外并设有保留上限。启动 Claude Code 前设置 `AI_TEAMS_OBSERVER=0` 可禁用自动启动与记录。完整配置、保留策略和限制见 [观测台说明](.claude/ai-teams/tools/observer/README.md)。网页不执行命令、不审批任务、不修改配置。
+
 ## 什么是研发 Harness
 
 研发 Harness 是围绕模型建立的一层可执行工程环境。它不仅告诉模型“做什么”，还持续提供“由谁做、先读什么、允许改什么、如何协作、怎样验证、失败后如何恢复”的约束与反馈。
@@ -153,12 +207,6 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-team
 ```
 
 Lead 会选择工作流、调用对应 Agent、检查交接并汇总结果。只有在你明确要求“单 Agent”“不要多 Agent”或“只回答”时，才会跳过默认团队协作。
-
-## 内置只读观察台
-
-CC 加载安装后的 Hook 配置时，会自动检测本项目观察服务，在每个会话首次进入时提示本机地址。同项目多个会话共享服务，但分别记录会话和 Agent 活动；不同页面可独立筛选。网页只查看任务、日志、已有审查记录和角色定义，不执行任务或审批。
-
-从业务项目根目录运行 `node .claude/ai-teams/tools/observer/cli.mjs status` 可再次获取地址，`start` / `stop` 只管理观察服务。历史数据保存在用户私有状态目录，不写业务项目。完整范围及禁用方法见 [观察台说明](.claude/ai-teams/tools/observer/README.md)。
 
 ## 工作原理
 

@@ -122,6 +122,10 @@ status: active
 | `assets/readme/cc-radt-architecture-zh.png` | 运行包文件 | 按 security/file-ownership.md |
 | `assets/readme/cc-radt-workflow-en.png` | 运行包文件 | 按 security/file-ownership.md |
 | `assets/readme/cc-radt-workflow-zh.png` | 运行包文件 | 按 security/file-ownership.md |
+| `assets/readme/observer/observer-mobile.png` | 运行包文件 | 按 security/file-ownership.md |
+| `assets/readme/observer/observer-multi-session.png` | 运行包文件 | 按 security/file-ownership.md |
+| `assets/readme/observer/observer-review.png` | 运行包文件 | 按 security/file-ownership.md |
+| `assets/readme/observer/observer-task-evidence.png` | 运行包文件 | 按 security/file-ownership.md |
 | `cron/.gitkeep` | 运行包文件 | 按 security/file-ownership.md |
 | `cron/index.md` | 运行包文件 | 按 security/file-ownership.md |
 | `cron/schedules.md` | 运行包文件 | 按 security/file-ownership.md |
