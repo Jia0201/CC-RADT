@@ -22,7 +22,7 @@ status: active
 
 - 名称：AI-Teams
 - 版本：1.1.0
-- 阶段：主工程能力已完成本轮整合，正在生成 v1.1.0 正式包
+- 阶段：v1.1.0 已完成验证并正式发布，发布映射见 `tools/release/publications/v1.1.0.md`
 - 首选编辑器：Claude Code
 - 兼容预留：Codex、OpenCode
 

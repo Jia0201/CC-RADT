@@ -1,5 +1,9 @@
 # 版本与发布工具
 
+## 已发布版本
+
+- [v1.1.0 发布映射与验证](publications/v1.1.0.md)：源提交、运行提交、版本标签、Release 与归档校验。
+
 `ai-teams-version-report.mjs` 只读取 Git 元数据、版本文件和可选安装包元数据，不读取 diff 或敏感文件内容。
 
 预览当前 dev 变化：

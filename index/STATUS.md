@@ -11,7 +11,8 @@ status: active
 ## 当前状态
 
 - 版本：1.1.0
-- 阶段：CC-RADT v1.1.0 本地正式包已生成
+- 阶段：CC-RADT v1.1.0 已在 GitHub 正式发布并设为最新版
+- 发布映射与验证：[v1.1.0 发布记录](../tools/release/publications/v1.1.0.md)
 - 当前批次：只读研发观察台、运行链路改进和安装包链路已完成
 - 初始化策略：已切换为用户主动手动初始化；启动、恢复和普通请求不再自动询问、执行或写入初始化画像
 
@@ -104,8 +105,8 @@ status: active
 - 心跳准确性：Lead 等待不再创建子 Agent 状态；30 秒静默仅进入 `idle-review`；Agent 完成后清理接管标记
 - 敏感 Hook：已使用精确敏感文件名/目录匹配，并新增正常鉴权源码放行回归
 - Claude 入口：源工程仅保留根 `CLAUDE.md`；安装布局不创建第二份同名入口，通过 `.claude/settings.json`、`.claude/agents/`、`.claude/rules/` 和 `index/ENTRY.md` 接入工程大脑
-- 当前开源候选包：`$HOME/project/AI/CC-RADT-v1.0/formal`
-- 本轮安装包回归：948 个文件、23 个运行指令、12 个 Agent、10 个 MCP、36 个活动提示词；除 checksum 自身外 947 个文件的 SHA-256 校验通过
+- 当前正式安装包：[CC-RADT v1.1.0 Release](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
+- 本轮安装包回归：975 个文件、23 个运行指令、12 个 Agent、10 个 MCP、36 个活动提示词；除 checksum 自身外 974 个文件的 SHA-256 校验通过
 - 提示词系统报告：`logs/audit/prompt-evolution-system-report-20260719.md`
 
 ## 下一阶段
