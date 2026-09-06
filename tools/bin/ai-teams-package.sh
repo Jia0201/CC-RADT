@@ -182,6 +182,9 @@ copy_formal() {
     --exclude "CONTRIBUTING.md" \
     --exclude "DEVELOPMENT.md" \
     --exclude "DEVELOPMENT.en.md" \
+    --exclude "/USAGE.md" \
+    --exclude "/UPGRADE.md" \
+    --exclude "/RELEASE_NOTES.md" \
     --exclude ".DS_Store" \
     --exclude ".env" \
     --exclude ".env.*" \
@@ -229,21 +232,34 @@ data["agent"] = "lead"
 data.pop("notes", None)
 data["permissions"] = {
     "deny": [
-        "Read(./.env)",
-        "Read(./.env.*)",
-        "Read(./**/.env)",
-        "Read(./**/.env.*)",
-        "Read(./**/*credentials*)",
-        "Read(./**/*credential*)",
-        "Read(./**/*token*)",
-        "Read(./**/*secret*)",
-        "Read(./**/*.pem)",
-        "Read(./**/*.key)",
-        "Read(./**/*.p12)",
-        "Read(./**/*.pfx)",
-        "Read(./**/id_rsa)",
-        "Read(./**/id_ed25519)",
-        "Read(./**/service-account*.json)",
+        "Read(/.env)",
+        "Read(/.env.*)",
+        "Read(/**/.env)",
+        "Read(/**/.env.*)",
+        "Read(/**/.credentials)",
+        "Read(/**/.credentials.*)",
+        "Read(/**/credentials.json)",
+        "Read(/**/credentials.yaml)",
+        "Read(/**/credentials.yml)",
+        "Read(/**/.token)",
+        "Read(/**/.token.*)",
+        "Read(/**/token.json)",
+        "Read(/**/token.yaml)",
+        "Read(/**/token.yml)",
+        "Read(/**/.secret)",
+        "Read(/**/.secret.*)",
+        "Read(/**/secret.json)",
+        "Read(/**/secret.yaml)",
+        "Read(/**/secret.yml)",
+        "Read(/**/secrets/**)",
+        "Read(/**/.secrets/**)",
+        "Read(/**/*.pem)",
+        "Read(/**/*.key)",
+        "Read(/**/*.p12)",
+        "Read(/**/*.pfx)",
+        "Read(/**/id_rsa)",
+        "Read(/**/id_ed25519)",
+        "Read(/**/service-account*.json)",
         "Bash(rm -rf *)",
         "Bash(git reset --hard*)",
         "Bash(git clean -fd*)",
@@ -270,16 +286,20 @@ ai["runtime_policy"] = {
     "must_follow_ai_teams": True,
     "multi_agent_default": "required",
     "lead_agent_required": True,
-    "require_project_initialization_check": True,
+    "require_project_initialization_check": False,
     "require_harness_root_and_target_project_root": True,
-    "per_query_policy": "每次用户请求进入时，先确认 AI-Teams harness 工程根目录与目标项目根目录；未初始化目标项目时，主动询问并引导执行初始化；除非用户明确要求单 Agent、不要多 Agent 或只回答，否则必须按 AI-Teams 多 Agent 流程执行。",
+    "per_query_policy": "每次用户请求进入时，先区分 AI-Teams harness 工程根目录与目标项目根目录；项目初始化只能由用户明确发起，未初始化时不得自动询问、自动执行或写入初始化画像；除非用户明确要求单 Agent、不要多 Agent 或只回答，否则必须按 AI-Teams 多 Agent 流程执行。",
     "single_agent_override_phrases": ["单 Agent", "单Agent", "不需要多Agent", "不要多 Agent", "只回答", "不要启动多Agent", "不要启动多 Agent"],
 }
 ai["initialization"] = {
-    "required_before_project_work": True,
+    "mode": "manual",
+    "user_initiated_only": True,
+    "auto_prompt": False,
+    "auto_execute": False,
+    "required_before_project_work": False,
     "command": "bash tools/bin/ai-teams-init-project.sh --target <目标项目路径> --write",
     "windows_command": "pwsh -NoProfile -ExecutionPolicy Bypass -File tools/bin/ai-teams-init-project.ps1 -Target <目标项目路径> -Write",
-    "ask_user_when_missing": "未发现已初始化目标项目画像时，必须先询问目标项目路径和是否立即初始化。",
+    "uninitialized_behavior": "保持未初始化状态，不主动询问、不执行初始化、不写入初始化画像。仅在用户明确要求初始化时运行 command 或 windows_command；其他任务只读取完成当前请求所必需的项目文件，不猜测未验证事实。",
     "writes_to": ["project/", "index/", "memory/"],
     "never_reads_sensitive_content": True,
     "agent_review_required_after_script": True,
@@ -472,21 +492,34 @@ data["agent"] = "lead"
 data.pop("notes", None)
 data["permissions"] = {
     "deny": [
-        "Read(./.env)",
-        "Read(./.env.*)",
-        "Read(./**/.env)",
-        "Read(./**/.env.*)",
-        "Read(./**/*credentials*)",
-        "Read(./**/*credential*)",
-        "Read(./**/*token*)",
-        "Read(./**/*secret*)",
-        "Read(./**/*.pem)",
-        "Read(./**/*.key)",
-        "Read(./**/*.p12)",
-        "Read(./**/*.pfx)",
-        "Read(./**/id_rsa)",
-        "Read(./**/id_ed25519)",
-        "Read(./**/service-account*.json)",
+        "Read(/.env)",
+        "Read(/.env.*)",
+        "Read(/**/.env)",
+        "Read(/**/.env.*)",
+        "Read(/**/.credentials)",
+        "Read(/**/.credentials.*)",
+        "Read(/**/credentials.json)",
+        "Read(/**/credentials.yaml)",
+        "Read(/**/credentials.yml)",
+        "Read(/**/.token)",
+        "Read(/**/.token.*)",
+        "Read(/**/token.json)",
+        "Read(/**/token.yaml)",
+        "Read(/**/token.yml)",
+        "Read(/**/.secret)",
+        "Read(/**/.secret.*)",
+        "Read(/**/secret.json)",
+        "Read(/**/secret.yaml)",
+        "Read(/**/secret.yml)",
+        "Read(/**/secrets/**)",
+        "Read(/**/.secrets/**)",
+        "Read(/**/*.pem)",
+        "Read(/**/*.key)",
+        "Read(/**/*.p12)",
+        "Read(/**/*.pfx)",
+        "Read(/**/id_rsa)",
+        "Read(/**/id_ed25519)",
+        "Read(/**/service-account*.json)",
         "Bash(rm -rf *)",
         "Bash(git reset --hard*)",
         "Bash(git clean -fd*)",
@@ -527,16 +560,20 @@ ai["runtime_policy"] = {
     "must_follow_ai_teams": True,
     "multi_agent_default": "required",
     "lead_agent_required": True,
-    "require_project_initialization_check": True,
+    "require_project_initialization_check": False,
     "require_harness_root_and_target_project_root": True,
-    "per_query_policy": "每次 query 进入时必须遵循 AI-Teams；非平凡任务默认多 Agent；未初始化目标项目时必须先询问并引导初始化；除非用户明确要求单 Agent、不要多 Agent 或只回答，否则不得降级为单 Agent。",
+    "per_query_policy": "每次 query 进入时必须遵循 AI-Teams；非平凡任务默认多 Agent；项目初始化只能由用户明确发起，未初始化时不得自动询问、自动执行或写入初始化画像；除非用户明确要求单 Agent、不要多 Agent 或只回答，否则不得降级为单 Agent。",
     "single_agent_override_phrases": ["单 Agent", "单Agent", "不需要多Agent", "不要多 Agent", "只回答", "不要启动多Agent", "不要启动多 Agent"],
 }
 ai["initialization"] = {
-    "required_before_project_work": True,
+    "mode": "manual",
+    "user_initiated_only": True,
+    "auto_prompt": False,
+    "auto_execute": False,
+    "required_before_project_work": False,
     "command": "bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target \"$PWD\" --write",
     "windows_command": "pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write",
-    "ask_user_when_missing": "未发现 .claude/ai-teams/project/context.md 已初始化目标项目时，必须主动询问用户是否初始化项目。",
+    "uninitialized_behavior": "保持未初始化状态，不主动询问、不执行初始化、不写入初始化画像。仅在用户明确要求初始化时运行 command 或 windows_command；其他任务只读取完成当前请求所必需的项目文件，不猜测未验证事实。",
     "harness_root_required": ".claude/ai-teams",
     "target_project_root_required": ".",
     "writes_to": [".claude/ai-teams/project/", ".claude/ai-teams/index/", ".claude/ai-teams/memory/"],
@@ -741,6 +778,7 @@ data["ai_teams"] = {
     "brain_root": ".claude/ai-teams",
     "default_agent_mode": "multi-agent",
     "lead_agent": "lead",
+    "initialization_mode": "manual",
     "subagent_runtime": {
         "official_project_dir": ".claude/agents/",
         "component_agent_dir": ".claude/ai-teams/agents/",
@@ -777,6 +815,12 @@ def compact_scalar_arrays(text):
     while index < len(lines):
         line = lines[index]
         stripped = line.strip()
+        # Keep the two fixed exec-form fields together. This is formatting only:
+        # lifecycle observers must not force us to loosen the runtime line budget.
+        if stripped == '"type": "command",' and index + 1 < len(lines) and lines[index + 1].strip() == '"command": "node",':
+            result.append(line + ' "command": "node",')
+            index += 2
+            continue
         if stripped in {'"args": [', '"deny": ['}:
             indent = line[: len(line) - len(line.lstrip())]
             key = stripped.split('"', 2)[1]
@@ -957,15 +1001,13 @@ for item in agents:
     agent_focus, outputs = focus.get(agent_id, (f"执行 {title} 对应职责。", "任务产出、交接和风险说明。"))
     directives = runtime_directives.get(agent_id, "- 按 AI-Teams 组件文档、专属 playbook、项目事实和安全规则执行，不自行扩展范围。")
     tools = ""
-    initial = ""
     if agent_id == "lead":
         tools = "\ntools: Agent(pd, plan-pm, dev-frontend-web, dev-frontend-miniapp, dev-backend-systems, dev-backend-service, qa, memory, doc, role, security-reviewer), Read, Grep, Glob, Bash, Write, Edit, MultiEdit"
-        initial = "\ninitialPrompt: \"读取 AI 团队详情\""
     content = f'''---
 name: {agent_id}
 description: {quote(description)}
 color: {color}
-style: {quote(style)}{tools}{initial}
+style: {quote(style)}{tools}
 ---
 # {title}
 
@@ -983,7 +1025,7 @@ style: {quote(style)}{tools}{initial}
 AI_TEAMS_ROOT=.claude/ai-teams
 ```
 
-目标项目路径是 Claude Code 当前打开的项目根目录。未完成初始化时，不允许自行猜项目路径，必须回到 Lead 询问并引导初始化。
+目标项目路径是 Claude Code 当前打开的项目根目录。项目初始化只在用户明确要求时执行；未完成初始化时，不允许自行猜项目路径，也不得自动询问或执行初始化。
 
 ## 必读入口
 
@@ -1212,6 +1254,7 @@ clean_formal_runtime_artifacts() {
 
 reset_formal_runtime_state() {
   clean_formal_runtime_artifacts
+  rm -f "$output/project/.initialized"
   rm -rf "$output/project/adr/accepted" "$output/project/adr/rejected" "$output/shared/contracts"
   mkdir -p "$output/project/adr/accepted" "$output/project/adr/rejected" "$output/project/requirements" "$output/project/plans" "$output/project/rules" "$output/shared/contracts"
   : > "$output/project/adr/accepted/.gitkeep"
@@ -2030,7 +2073,7 @@ Claude Code 进入目标项目后，通过 .claude/settings.json 中的 `ai_team
 
 AI-Teams 会在 .claude/settings.json 中使用 `ai_teams.brain_root` 指向 .claude/ai-teams/。这属于 Claude Code 的项目级引导配置，不会要求用户迁移业务代码。.claude/settings.local.example.json 仍然可用，用户自己的本地配置和私有 overrides 不应被覆盖。
 
-.claude/settings.json 会强制记录默认多 Agent、AI-Teams harness 工程路径、目标项目路径、`rule/` 按需读取路由、`security/` 规则入口和敏感文件 `permissions.deny`。未初始化目标项目时，Claude Code 必须主动询问用户是否初始化；除非用户明确说不需要多 Agent，否则非平凡任务必须按 AI-Teams 多 Agent 流程执行。
+.claude/settings.json 会记录默认多 Agent、AI-Teams harness 工程路径、目标项目路径、`rule/` 按需读取路由、`security/` 规则入口和敏感文件 `permissions.deny`。项目初始化为用户主动操作；启动和普通请求不会自动询问、自动执行或写入初始化画像。除非用户明确说不需要多 Agent，否则非平凡任务必须按 AI-Teams 多 Agent 流程执行。
 
 ## 快速开始
 
@@ -2046,7 +2089,7 @@ cd .claude/ai-teams
 bash tools/bin/ai-teams-check.sh
 ```
 
-初始化目标项目：
+用户决定建立持久项目画像时，可手动初始化目标项目：
 
 ```bash
 bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
@@ -2058,7 +2101,7 @@ Windows PowerShell：
 pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
-初始化会创建目标项目画像、运行期上下文、需求索引、计划索引、项目命令、验证方式、风险线索、既有规则吸收区、项目知识图谱，并刷新 rule/project/ 的目录、文件、前端 UI、前端语法、后端规范和后端接口入口。后续业务执行中，Lead 关闭非平凡任务前会按 security/project-policy.md 检查是否需要继续更新 `project/` 与 `rule/`。
+该命令不会在启动或普通请求中自动运行。手动初始化会创建目标项目画像、运行期上下文、需求索引、计划索引、项目命令、验证方式、风险线索、既有规则吸收区、项目知识图谱，并刷新 rule/project/ 的目录、文件、前端 UI、前端语法、后端规范和后端接口入口。后续业务执行中，Lead 关闭非平凡任务前会按 security/project-policy.md 检查是否需要继续更新 `project/` 与 `rule/`。
 
 ## 工程与项目边界
 
@@ -2486,7 +2529,9 @@ for name in sys.argv[1:]:
     path = Path(name)
     text = path.read_text(encoding="utf-8")
     text = text.replace(".claude/ai-teams/", "")
-    text = text.replace("](INSTALL.md)", "](../../INSTALL.md)")
+    for document in ["INSTALL.md", "USAGE.md", "UPGRADE.md", "RELEASE_NOTES.md"]:
+        text = text.replace(f"](../../../{document})", f"](../../{document})")
+        text = text.replace(f"]({document})", f"](../../{document})")
     path.write_text(text, encoding="utf-8")
 PY
 }
@@ -2872,6 +2917,21 @@ if [[ "$edition" == "formal" && "$install_layout" == "claude-subdir" ]]; then
   cp "templates/package/formal/README.en.md" "$artifact_root/README.en.md"
   cp "templates/package/formal/INSTALL.md" "$artifact_root/INSTALL.md"
   cp "CHANGELOG.md" "$artifact_root/CHANGELOG.md"
+  cp "USAGE.md" "$artifact_root/USAGE.md"
+  cp "UPGRADE.md" "$artifact_root/UPGRADE.md"
+  cp "RELEASE_NOTES.md" "$artifact_root/RELEASE_NOTES.md"
+  python3 - "$artifact_root" <<'PY'
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+for name in ["README.md", "README.en.md", "INSTALL.md"]:
+    path = root / name
+    text = path.read_text(encoding="utf-8")
+    for document in ["USAGE.md", "UPGRADE.md", "RELEASE_NOTES.md"]:
+        text = text.replace(f"](../../../{document})", f"]({document})")
+    path.write_text(text, encoding="utf-8")
+PY
 fi
 
 mkdir -p "$output/logs/agent" "$output/logs/task" "$output/logs/command" "$output/logs/hook" "$output/logs/package" "$output/logs/upgrade" "$output/logs/audit" "$output/logs/security" "$output/logs/compressed/archive"
@@ -3078,7 +3138,7 @@ ai_teams_checksum_tree "$artifact_root" "$checksum"
 
 verify_result="not-run"
 if [[ "$verify" -eq 1 && "$edition" == "formal" ]]; then
-  (cd "$output" && bash tools/bin/ai-teams-check.sh)
+  (cd "$output" && AI_TEAMS_DISTRIBUTION_CHECK=1 bash tools/bin/ai-teams-check.sh)
   verify_result="formal self-check passed"
 elif [[ "$edition" == "simplify" ]]; then
   bash tools/bin/ai-teams-check-simplify.sh "$output"

@@ -58,13 +58,19 @@ AI-Teams 以目标项目当前文件、用户当前需求、已确认项目文�
 
 这三个 Agent 不替代执行 Agent 的代码、需求、计划或 QA 工作；它们负责让项目事实、记忆候选和安全边界在执行过程中持续闭环。
 
-## 3. 初始化前规则
+## 3. 手动初始化规则
 
-如果 `project/project-profile.md` 或 `project/context.md` 显示“尚未初始化目标项目”，且用户需求涉及项目分析、开发、测试、重构、审计、升级或文档治理，Lead 必须先执行以下动作：
+项目初始化是用户主动操作，不是启动门禁。`SessionStart`、`UserPromptSubmit`、Lead 或任何子 Agent 检测到“尚未初始化目标项目”时，均不得自动询问、自动执行或写入初始化画像。
 
-1. 询问用户目标项目路径。
-2. 确认 AI-Teams harness 工程路径。
-3. 引导或执行初始化：
+未初始化时必须遵守：
+
+1. 继续处理用户当前任务，只读取完成任务所必需的目标项目文件。
+2. 不猜测项目路径、技术栈、UI 规则、接口契约或工程规范；未验证内容明确标记为待确认。
+3. 不运行初始化脚本，不创建初始化任务，不把初始化提示插入普通回复。
+4. `git-activity-watch` 静默跳过，不创建 Git 基线，不改写 `project/`、`index/` 或运行事件。
+5. 只有用户明确提出“初始化项目”或明确调用初始化指令时，Lead 才确认目标项目路径并执行下列命令。
+
+主工程调试布局：
 
 ```bash
 bash tools/bin/ai-teams-init-project.sh --target <目标项目路径> --write
@@ -82,9 +88,9 @@ Windows PowerShell：
 pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
-初始化只写入 AI-Teams 管理文件，不修改目标项目业务代码，不读取敏感文件内容。
+手动初始化只写入 AI-Teams 管理文件，不修改目标项目业务代码，不读取敏感文件内容。
 
-初始化脚本只提供扫描辅助。初始化完成后，Lead 必须推动 Agent 介入复核：
+初始化脚本只提供扫描辅助。用户明确启动初始化且脚本完成后，Lead 必须推动 Agent 介入复核：
 
 1. Doc 复核并扩写 `project/PROJECT.md`、`project/context.md`、`project/project-profile.md`、`project/architecture.md`、`project/commands.md`、`project/dependencies.md`、`project/graph.md` 和 `project/rules/index.md`。
 2. PD 复核需求入口、业务目标和已有需求材料。

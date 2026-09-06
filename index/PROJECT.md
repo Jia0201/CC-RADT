@@ -21,8 +21,8 @@ status: active
 ## 项目
 
 - 名称：AI-Teams
-- 版本：1.0.0
-- 阶段：主工程骨架已完成，正在进行需求对齐和中文化修复
+- 版本：1.1.0
+- 阶段：主工程能力已完成本轮整合，正在生成 v1.1.0 正式包
 - 首选编辑器：Claude Code
 - 兼容预留：Codex、OpenCode
 
@@ -69,4 +69,3 @@ status: active
 ## ADR
 
 见 `project/adr/index.md` 和 `security/adr.md`。
-

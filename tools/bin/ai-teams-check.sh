@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$(cd "$script_dir/../.." && pwd)"
+
 packaging_enabled=0
 if [[ -f "tools/bin/ai-teams-package.sh" && -f "tools/commands/ai/package-formal.md" && -f "tools/commands/ai/package-simplify.md" ]]; then
   packaging_enabled=1
@@ -10,6 +13,8 @@ claude_settings_file=".claude/settings.json"
 claude_local_example_file=".claude/settings.local.example.json"
 project_mcp_file=".mcp.json"
 formal_claude_subdir=0
+distribution_check="${AI_TEAMS_DISTRIBUTION_CHECK:-0}"
+runtime_initialized=0
 if [[ "$packaging_enabled" -ne 1 && ! -d ".claude" && -f "../settings.json" ]]; then
   formal_claude_subdir=1
   claude_settings_file="../settings.json"
@@ -252,6 +257,7 @@ required_files=(
   "tools/bin/ai-teams-context-compact.sh"
   "tools/bin/ai-teams-memory-audit.mjs"
   "tools/bin/ai-teams-hook-output-test.mjs"
+  "tools/bin/ai-teams-heartbeat-test.mjs"
   "tools/bin/ai-teams-lock.sh"
   "tools/bin/ai-teams-state-event.sh"
   "tools/bin/ai-teams-state-render.sh"
@@ -525,6 +531,7 @@ if [[ "$packaging_enabled" -ne 1 ]]; then
 fi
 
 if [[ "$formal_claude_subdir" -eq 1 ]]; then
+  [[ -f "project/.initialized" ]] && runtime_initialized=1
   echo
   echo "== 运行包清洁度 =="
   settings_lines="$(wc -l < "$claude_settings_file" | tr -d '[:space:]')"
@@ -535,22 +542,30 @@ if [[ "$formal_claude_subdir" -eq 1 ]]; then
     echo "正常：运行包 settings.json 为 ${settings_lines} 行"
   fi
 
-  runtime_artifacts="$(
-    {
-      find shared/events -maxdepth 1 -type f \
-        ! -name ".gitkeep" ! -name "index.md" ! -name "EVENT_TEMPLATE.md" -print
-      find project/requirements project/plans -maxdepth 1 -type f ! -name "index.md" -print
-      for log_dir in logs/agent logs/task logs/command logs/hook logs/package logs/upgrade logs/audit logs/security; do
-        find "$log_dir" -maxdepth 1 -type f ! -name "index.md" -print
-      done
-    } 2>/dev/null
-  )"
-  if [[ -n "$runtime_artifacts" ]]; then
-    echo "运行包包含不应交付的运行态或质检产物："
-    printf '%s\n' "$runtime_artifacts"
+  if [[ "$distribution_check" == "1" && "$runtime_initialized" -eq 1 ]]; then
+    echo "待分发安装包不得包含 project/.initialized"
     missing=1
+  fi
+  if [[ "$distribution_check" == "1" || "$runtime_initialized" -ne 1 ]]; then
+    runtime_artifacts="$(
+      {
+        find shared/events -maxdepth 1 -type f \
+          ! -name ".gitkeep" ! -name "index.md" ! -name "EVENT_TEMPLATE.md" -print
+        find project/requirements project/plans -maxdepth 1 -type f ! -name "index.md" -print
+        for log_dir in logs/agent logs/task logs/command logs/hook logs/package logs/upgrade logs/audit logs/security; do
+          find "$log_dir" -maxdepth 1 -type f ! -name "index.md" -print
+        done
+      } 2>/dev/null
+    )"
+    if [[ -n "$runtime_artifacts" ]]; then
+      echo "运行包包含不应交付的运行态或质检产物："
+      printf '%s\n' "$runtime_artifacts"
+      missing=1
+    else
+      echo "正常：运行事件、项目任务材料和日志正文均为空"
+    fi
   else
-    echo "正常：运行事件、项目任务材料和日志正文均为空"
+    echo "正常：已初始化运行态允许保存项目任务、事件和日志记录"
   fi
 
   bytecode_cache="$(
@@ -1124,14 +1139,11 @@ if [[ -f "$lead_adapter" ]]; then
   else
     echo "正常：Lead subagent 主定义限制为 AI-Teams 11 个下游 Agent"
   fi
-  if ! grep -Fq 'initialPrompt: "读取 AI 团队详情"' "$lead_adapter"; then
-    echo "Lead subagent initialPrompt 必须保持短提示：$lead_adapter"
-    missing=1
-  elif grep -Fq "先解析 AI-Teams" "$lead_adapter"; then
-    echo "Lead subagent initialPrompt 不得包含长启动说明：$lead_adapter"
+  if grep -Eq '^initialPrompt:' "$lead_adapter"; then
+    echo "Lead subagent 不得设置 initialPrompt；它会先于用户真实需求自动提交：$lead_adapter"
     missing=1
   else
-    echo "正常：Lead subagent initialPrompt 为短提示"
+    echo "正常：Lead subagent 不使用会覆盖用户意图的 initialPrompt"
   fi
 fi
 
@@ -1252,7 +1264,7 @@ if [[ "$packaging_enabled" -eq 1 ]]; then
     echo "正常：accepted ADR 不少于 7 个"
   fi
 
-  expected_adrs=(ADR-0001 ADR-0002 ADR-0003 ADR-0005 ADR-0006 ADR-0007 ADR-0012)
+  expected_adrs=(ADR-0001 ADR-0002 ADR-0003 ADR-0005 ADR-0006 ADR-0007 ADR-0012 ADR-0013)
   for adr_number in "${expected_adrs[@]}"; do
     if find project/adr/accepted project/adr/rejected -maxdepth 1 -type f -name "$adr_number-*.md" | grep -q .; then
       echo "正常 ADR 编号： $adr_number"
@@ -1477,6 +1489,13 @@ done
 
 echo
 echo "== 核心脚本 =="
+if unicode_variable_hits="$(rg -n --pcre2 '\$[A-Za-z_][A-Za-z0-9_]*[^\x00-\x7F]' tools/bin hooks/scripts -g '*.sh' -g '*.ps1' 2>/dev/null || true)" && [[ -n "$unicode_variable_hits" ]]; then
+  echo "Shell 变量后存在未分隔的非 ASCII 字符，旧版 Bash 可能误解析变量名："
+  printf '%s\n' "$unicode_variable_hits"
+  missing=1
+else
+  echo "正常：Shell 变量与非 ASCII 标点均使用明确边界"
+fi
 core_scripts=(
   "tools/bin/ai-teams-check.sh"
   "tools/bin/ai-teams-status.sh"
@@ -1552,9 +1571,18 @@ fi
 echo
 echo "== 项目初始化低侵入回归 =="
 init_fixture="$(mktemp -d)"
-mkdir -p "$init_fixture/.claude/ai-teams" "$init_fixture/.claude/agents" "$init_fixture/src"
+mkdir -p \
+  "$init_fixture/.claude/ai-teams" \
+  "$init_fixture/.claude/agents" \
+  "$init_fixture/src" \
+  "$init_fixture/service/src/main/java" \
+  "$init_fixture/service/target/classes" \
+  "$init_fixture/config"
 printf '%s\n' '{"name":"ai-teams-init-check","dependencies":{"vite":"latest","react":"latest"}}' > "$init_fixture/package.json"
 printf '%s\n' ':root { color: #111827; }' > "$init_fixture/src/styles.css"
+printf '%s\n' 'final class TokenUtils {}' > "$init_fixture/service/src/main/java/TokenUtils.java"
+printf '%s\n' 'compiled output' > "$init_fixture/service/target/classes/TokenUtils.class"
+printf '%s\n' '{}' > "$init_fixture/config/token.json"
 printf '%s\n' ':root { color: red; }' > "$init_fixture/.claude/ai-teams/harness-only.css"
 printf '%s\n' '# Harness Agent' > "$init_fixture/.claude/agents/harness-only.md"
 if init_report="$(bash tools/bin/ai-teams-init-project.sh --target "$init_fixture" --plan 2>&1)"; then
@@ -1565,6 +1593,15 @@ if init_report="$(bash tools/bin/ai-teams-init-project.sh --target "$init_fixtur
        grep -Fq -- '- .claude/ai-teams' <<<"$init_report" || \
        grep -Fq -- '- .claude/agents' <<<"$init_report"; then
     echo "初始化回归错误地扫描了 AI-Teams 本体或官方 Agent 目录"
+    missing=1
+  elif grep -Fq 'service/target' <<<"$init_report"; then
+    echo "初始化回归错误地扫描了构建产物目录"
+    missing=1
+  elif grep -Fq 'TokenUtils.java（敏感命名' <<<"$init_report"; then
+    echo "初始化回归把正常鉴权源码误判为敏感文件"
+    missing=1
+  elif ! grep -Fq 'config/token.json（敏感命名' <<<"$init_report"; then
+    echo "初始化回归未保护明确的 token 文件"
     missing=1
   elif grep -Fq 'No such file or directory' <<<"$init_report"; then
     echo "初始化回归出现路径命令替换错误"
@@ -1577,6 +1614,28 @@ else
   printf '%s\n' "$init_report"
   missing=1
 fi
+
+rule_fixture="$(mktemp -d)"
+mkdir -p "$rule_fixture/tools/bin"
+cp -R rule "$rule_fixture/rule"
+if node tools/bin/ai-teams-rule-refresh.mjs --root "$rule_fixture" --target "$init_fixture" --write >/dev/null 2>&1; then
+  if grep -Fq 'service/target' "$rule_fixture/rule/project/files.md"; then
+    echo "Rule 刷新回归错误地扫描了构建产物目录"
+    missing=1
+  elif ! grep -Fq 'service/src/main/java/TokenUtils.java' "$rule_fixture/rule/project/files.md"; then
+    echo "Rule 刷新回归未保留正常鉴权源码"
+    missing=1
+  elif grep -Fq 'config/token.json' "$rule_fixture/rule/project/files.md"; then
+    echo "Rule 刷新回归泄露了明确的 token 文件"
+    missing=1
+  else
+    echo "正常：Rule 刷新排除构建产物和明确敏感文件，并保留正常鉴权源码"
+  fi
+else
+  echo "Rule 刷新低侵入回归执行失败"
+  missing=1
+fi
+rm -rf "$rule_fixture"
 rm -rf "$init_fixture"
 
 echo
@@ -1625,6 +1684,7 @@ for node_script in \
   hooks/scripts/prompt-evolution-event.mjs \
   hooks/scripts/prompt-contract-check.mjs \
   tools/bin/ai-teams-hook-output-test.mjs \
+  tools/bin/ai-teams-heartbeat-test.mjs \
   tools/bin/ai-teams-prompt-core.mjs \
   tools/bin/ai-teams-prompt-status.mjs \
   tools/bin/ai-teams-prompt-render.mjs \
@@ -1647,6 +1707,10 @@ if ! node tools/bin/ai-teams-hook-output-test.mjs >/dev/null 2>&1; then
   missing=1
 else
   echo "正常：Hook 输出按 Claude Code 事件 Schema 分流"
+fi
+if ! node tools/bin/ai-teams-heartbeat-test.mjs; then
+  echo "心跳状态回归测试失败"
+  missing=1
 fi
 if ! prompt_status_json="$(node tools/bin/ai-teams-prompt-status.mjs --json 2>/dev/null)"; then
   echo "Prompt 状态工具运行失败"
@@ -1742,6 +1806,15 @@ if [[ "$sensitive_hook_status" -ne 2 ]]; then
 else
   echo "正常：敏感文件 Hook 使用退出码 2 真正阻断"
 fi
+if ! printf '%s' '{"hook_event_name":"PreToolUse","tool_name":"Read","tool_input":{"file_path":"src/main/java/example/TokenUtils.java"}}' | node hooks/scripts/ai-teams-run-hook.mjs sensitive-file-check.sh >/dev/null 2>&1; then
+  echo "敏感文件 Hook 误阻断正常鉴权源码 TokenUtils.java"
+  missing=1
+elif ! printf '%s' '{"hook_event_name":"PreToolUse","tool_name":"Read","tool_input":{"file_path":"src/main/java/example/AuthFilterToken.java"}}' | node hooks/scripts/ai-teams-run-hook.mjs sensitive-file-check.sh >/dev/null 2>&1; then
+  echo "敏感文件 Hook 误阻断正常鉴权源码 AuthFilterToken.java"
+  missing=1
+else
+  echo "正常：敏感文件 Hook 不以 token/secret/credential 子串误伤普通源码"
+fi
 
 echo
 echo "== 每次需求前 Git 增量同步回归 =="
@@ -1765,7 +1838,7 @@ if command -v git >/dev/null 2>&1; then
   git_project="$git_fixture/project"
   mkdir -p "$git_brain/hooks/scripts" "$git_brain/project" "$git_brain/shared/events" "$git_brain/logs/hook" "$git_brain/index" "$git_project/src"
   printf '%s\n' '# 项目代码变化' > "$git_brain/project/change-log.md"
-  printf '%s\n' '# 项目上下文' > "$git_brain/project/context.md"
+  printf '%s\n' '# 项目上下文' '' '尚未初始化目标项目。' > "$git_brain/project/context.md"
   printf '%s\n' '# 状态' > "$git_brain/index/STATUS.md"
   git -C "$git_project" init -q
   git -C "$git_project" config user.name "Local User"
@@ -1773,6 +1846,14 @@ if command -v git >/dev/null 2>&1; then
   printf '%s\n' 'initial' > "$git_project/README.md"
   git -C "$git_project" add README.md
   git -C "$git_project" commit -q -m "initial"
+  printf '%s' '{"hook_event_name":"UserPromptSubmit"}' | AI_TEAMS_ROOT="$git_brain" CLAUDE_PROJECT_DIR="$git_project" node hooks/scripts/ai-teams-run-hook.mjs git-activity-watch >/dev/null
+  if [[ -e "$git_brain/shared/events/git-state.json" ]] || grep -Fq 'AI-TEAMS:git-project-sync:BEGIN' "$git_brain/project/change-log.md"; then
+    echo "Git 增量同步回归失败：未初始化项目仍产生了自动写入"
+    missing=1
+  else
+    echo "正常：未初始化项目的 Git Hook 静默跳过且不写入"
+  fi
+  printf '%s\n' '# 项目上下文' '' '- 初始化状态：已初始化' > "$git_brain/project/context.md"
   printf '%s' '{"hook_event_name":"UserPromptSubmit"}' | AI_TEAMS_ROOT="$git_brain" CLAUDE_PROJECT_DIR="$git_project" node hooks/scripts/ai-teams-run-hook.mjs git-activity-watch >/dev/null
   printf '%s\n' 'export const feature = true;' > "$git_project/src/feature.ts"
   git -C "$git_project" add src/feature.ts
@@ -1790,6 +1871,17 @@ if command -v git >/dev/null 2>&1; then
   rm -rf "$git_fixture"
 else
   echo "提示：未安装 git，跳过 Git 增量同步回归。"
+fi
+
+echo
+echo "== 手动初始化提示词回归 =="
+prompt_guard_output="$(printf '%s' '{"hook_event_name":"UserPromptSubmit"}' | AI_TEAMS_ROOT="$PWD" node hooks/scripts/ai-teams-run-hook.mjs ai-teams-user-prompt-submit.sh 2>/dev/null || true)"
+if [[ "$prompt_guard_output" == *"Project initialization is manual and user-initiated only"* ]] && \
+   [[ "$prompt_guard_output" != *"ask for target project path and initialization permission"* ]]; then
+  echo "正常：普通请求不会注入自动初始化询问"
+else
+  echo "UserPromptSubmit Hook 未正确声明手动初始化策略"
+  missing=1
 fi
 
 echo
@@ -1901,6 +1993,9 @@ if formal:
     if ai.get("default_agent_mode") != "multi-agent" or ai.get("lead_agent") != "lead":
         print(f"{settings_path} 运行包必须默认由 lead 调度 multi-agent")
         ok = False
+    if ai.get("initialization_mode") != "manual":
+        print(f"{settings_path} 运行包必须声明 initialization_mode=manual")
+        ok = False
     runtime = ai.get("subagent_runtime", {})
     if runtime.get("official_project_dir") != ".claude/agents/":
         print(f"{settings_path} 运行包必须登记 Claude Code 官方 Agent 目录")
@@ -1957,8 +2052,8 @@ if runtime_policy.get("must_follow_ai_teams") is not True:
 if runtime_policy.get("multi_agent_default") != "required":
     print(f"{settings_path} 未强制 multi_agent_default=required")
     ok = False
-if runtime_policy.get("require_project_initialization_check") is not True:
-    print(f"{settings_path} 未强制初始化检查")
+if runtime_policy.get("require_project_initialization_check") is not False:
+    print(f"{settings_path} 必须关闭启动时初始化检查")
     ok = False
 if runtime_policy.get("require_harness_root_and_target_project_root") is not True:
     print(f"{settings_path} 未强制区分 harness_root 与 target_project_root")
@@ -1971,8 +2066,20 @@ if "target_project_root" not in paths:
     print(f"{settings_path} 缺少 paths.target_project_root")
     ok = False
 initialization = ai.get("initialization", {})
-if initialization.get("required_before_project_work") is not True:
-    print(f"{settings_path} 未强制 required_before_project_work")
+if initialization.get("mode") != "manual":
+    print(f"{settings_path} initialization.mode 必须为 manual")
+    ok = False
+if initialization.get("user_initiated_only") is not True:
+    print(f"{settings_path} 初始化必须仅由用户主动发起")
+    ok = False
+if initialization.get("auto_prompt") is not False or initialization.get("auto_execute") is not False:
+    print(f"{settings_path} 必须关闭初始化自动询问和自动执行")
+    ok = False
+if initialization.get("required_before_project_work") is not False:
+    print(f"{settings_path} required_before_project_work 必须为 false")
+    ok = False
+if "ask_user_when_missing" in initialization:
+    print(f"{settings_path} 不得保留自动询问初始化配置")
     ok = False
 if not initialization.get("windows_command"):
     print(f"{settings_path} initialization 缺少 Windows PowerShell 命令")
@@ -2106,9 +2213,13 @@ if mcp.get("security_policy") not in {"security/mcp-policy.md", ".claude/ai-team
     ok = False
 permissions = data.get("permissions", {})
 deny = permissions.get("deny", [])
-for required_deny in ("Read(./.env)", "Read(./**/.env)", "Read(./**/*token*)", "Read(./**/*.pem)"):
+for required_deny in ("Read(/.env)", "Read(/**/.env)", "Read(/**/.token)", "Read(/**/secrets/**)", "Read(/**/*.pem)"):
     if required_deny not in deny:
         print(f"{settings_path} permissions.deny 缺少 {required_deny}")
+        ok = False
+for overbroad_deny in ("Read(./**/*token*)", "Read(./**/*secret*)", "Read(./**/*credential*)", "Read(./**/*credentials*)"):
+    if overbroad_deny in deny:
+        print(f"{settings_path} permissions.deny 会误伤正常源码：{overbroad_deny}")
         ok = False
 for agent in agents:
     item = registered.get(agent)

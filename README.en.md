@@ -3,15 +3,23 @@
 **Claude Code Research and Development Teams**  
 **Chinese name: A Full-Lifecycle R&D Team Built on Claude Code**
 
-[简体中文](README.md) | [English](README.en.md) | [GitHub repository](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams)
+[简体中文](README.md) | [English](README.en.md) | [GitHub repository](https://github.com/Jia0201/CC-RADT)
 
-> **Development branch**: the `dev` branch contains the CC-RADT engineering source used to maintain agents, policies, hooks, Skills, MCP, prompts, and the runtime packaging pipeline. End users should install from [`main`](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/main) or [Releases](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/releases). Read [`DEVELOPMENT.en.md`](DEVELOPMENT.en.md) before extending the harness.
+> **Development branch**: the `dev` branch contains the CC-RADT engineering source used to maintain agents, policies, hooks, Skills, MCP, prompts, and the runtime packaging pipeline. End users should install from [`main`](https://github.com/Jia0201/CC-RADT/tree/main) or [Releases](https://github.com/Jia0201/CC-RADT/releases). Read [`DEVELOPMENT.en.md`](DEVELOPMENT.en.md) before extending the harness.
 
 CC-RADT is a multi-agent software development harness for Claude Code. It organizes product discovery, planning, frontend and backend implementation, testing, security review, project documentation, engineering memory, and role governance into a traceable team that can work inside a real codebase.
 
 It is not a static prompt collection and it does not replace your application repository. CC-RADT manages the team, rules, context, and collaboration state while your project code remains where it is.
 
-> Current version: `v1.0.0`. Claude Code is the primary runtime. Codex and OpenCode adapters remain on the roadmap.
+> Current version: `v1.1.0`. Claude Code is the primary runtime. Codex and OpenCode adapters remain on the roadmap.
+
+## What's New in v1.1.0
+
+A local read-only observer adds per-session filtering, task and log reading, and retained file versions. Project initialization is now explicit. Lead system prompt `1.0.1`, rendered task contracts, heartbeat handling, sensitive-path matching, and installation validation improve everyday reliability.
+
+[Release notes and v1.0.0 comparison](RELEASE_NOTES.md) · [Detailed user guide (Chinese)](USAGE.md) · [Upgrade guide (Chinese)](UPGRADE.md) · [Download v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
+
+Preserve existing project knowledge and memory during upgrades. Merge the new managed hooks and permission rules using the upgrade guide.
 
 ## Why CC-RADT
 
@@ -77,6 +85,8 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-team
 
 ### 4. Initialize project knowledge
 
+Initialization is user-initiated. Claude Code does not prompt for it, run it, or write an initialization profile at startup, on resume, or for ordinary requests. Run it only when you want persistent project knowledge:
+
 ```bash
 bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
 ```
@@ -87,7 +97,7 @@ Windows:
 pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
-Initialization scans the current project and writes only to CC-RADT-managed `project/`, `rule/project/`, indexes, and memory candidate areas. It identifies the stack, structure, API surface, UI conventions, commands, verification paths, existing instructions, and risk signals. It does not treat Git history as the sole source of truth, read sensitive file contents, or modify application code.
+Manual initialization scans the current project and writes only to CC-RADT-managed `project/`, `rule/project/`, indexes, and memory candidate areas. It identifies the stack, structure, API surface, UI conventions, commands, verification paths, existing instructions, and risk signals. It does not treat Git history as the sole source of truth, read sensitive file contents, or modify application code.
 
 ### 5. Ask for work normally
 
@@ -96,6 +106,12 @@ Check the login page and login API contract, fix integration mismatches, and run
 ```
 
 Lead selects the workflow and named agents, supervises handoffs, and returns the verified result. The default team flow is skipped only when the user explicitly asks for a single agent or an answer-only response.
+
+## Local Read-Only Observer
+
+The Harness includes a local observer. After loading the new Hook configuration, each CC session receives its access URL once. Concurrent sessions in the same project share one service while retaining separate activity records and browser filters. Execution, approvals and configuration changes stay in the CC CLI.
+
+Run `node tools/observer/cli.mjs start` or `status` to get the URL; installed projects use `.claude/ai-teams/tools/observer/cli.mjs`. No npm runtime dependencies are required. History stays outside the project and release package. See [Observer documentation](tools/observer/README.md) for scope and configuration.
 
 ## How It Works
 
@@ -252,7 +268,7 @@ Start from [`index/ENTRY.md`](index/ENTRY.md) for the full map.
 This command is only available in the source repository. Generated runtime packages do not contain the packaging script:
 
 ```bash
-git clone https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git
+git clone https://github.com/Jia0201/CC-RADT.git
 cd Claude-Code-Research-and-Development-Teams
 ```
 
@@ -275,7 +291,7 @@ See [`DEVELOPMENT.en.md`](DEVELOPMENT.en.md) for source setup, directory ownersh
 
 ## Status and Roadmap
 
-`v1.0.0` includes the main harness, 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, and verified package generation.
+`v1.1.0` includes the main harness, 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, verified package generation, and the read-only engineering observer.
 
 The roadmap includes long-running real-project regression, GitHub project governance, a simplified package, and Codex / OpenCode adapters. See [`index/STATUS.md`](index/STATUS.md) for engineering status and [`CHANGELOG.md`](CHANGELOG.md) for user-visible changes.
 
@@ -289,4 +305,4 @@ CC-RADT follows the official Claude Code documentation for its integration model
 - [Settings](https://code.claude.com/docs/en/settings)
 - [Permissions](https://code.claude.com/docs/en/permissions)
 
-See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for the source and license of bundled third-party Skills and for content deliberately excluded from this repository. The project license, contributor guide, code of conduct, and release notes will be finalized in the next GitHub publishing stage.
+See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for bundled third-party Skill sources and licenses, [`CONTRIBUTING.md`](CONTRIBUTING.md) for contribution rules, and the [release notes](RELEASE_NOTES.md) for version changes. A project-level LICENSE has not been selected; this release does not change licensing.

@@ -101,7 +101,7 @@ Dev-Backend-Systems 负责 C、C++、Java、系统级后端和强约束后端开
 - 目标项目既有规则、Claude/AI 工具规则和初始化吸收内容按需读取 [index](../../project/rules/index.md) 与 [imported-rules](../../project/imported-rules.md)；不得默认加载全部 `project/`。
 - 默认只读取 [context](../../project/context.md)、[change-log](../../project/change-log.md) 和当前任务单；UI、接口、架构、命令、验证、风险、决策或方案文件由任务路由按需加入。
 - 需要目录职责或精确文件位置时读取 [structure](../../rule/project/structure.md)、[files](../../rule/project/files.md)；索引过期或与代码冲突时核实代码并通知 Doc 刷新。
-- 未初始化目标项目时不得猜测路径、技术栈、UI、接口或工程规范，必须回到 Lead 按 [project-policy](../../security/project-policy.md) 初始化。
+- 项目初始化只在用户明确要求时执行。未初始化时不得自动询问或执行初始化；只核实当前任务必需的项目文件，并按 [project-policy](../../security/project-policy.md) 标记未验证事实。
 - 当前 Agent 的项目职责、正式写入边界和交接要求以 [dev-backend-systems](../../rule/agents/dev-backend-systems.md)、本 Agent role 和专属 playbook 为准。
 - 任务过程写入 `shared/` 或 `logs/`；项目事实由 Doc 合并到 `project/`；长期恢复信息交给 Memory；通用知识进入 KB 候选。
 

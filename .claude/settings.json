@@ -5,7 +5,7 @@
   "autoMemoryEnabled": false,
   "includeGitInstructions": false,
   "ai_teams": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "stage": "main-engineering",
     "hooks_enabled": true,
     "content_language": "zh-CN-first",
@@ -253,9 +253,9 @@
       "must_follow_ai_teams": true,
       "multi_agent_default": "required",
       "lead_agent_required": true,
-      "require_project_initialization_check": true,
+      "require_project_initialization_check": false,
       "require_harness_root_and_target_project_root": true,
-      "per_query_policy": "每次用户请求进入时，先确认 AI-Teams harness 工程根目录与目标项目根目录；未初始化目标项目时，主动询问并引导执行初始化；除非用户明确要求单 Agent、不要多 Agent 或只回答，否则必须按 AI-Teams 多 Agent 流程执行。",
+      "per_query_policy": "每次用户请求进入时，先区分 AI-Teams harness 工程根目录与目标项目根目录；项目初始化只能由用户明确发起，未初始化时不得自动询问、自动执行或写入初始化画像；除非用户明确要求单 Agent、不要多 Agent 或只回答，否则必须按 AI-Teams 多 Agent 流程执行。",
       "single_agent_override_phrases": [
         "单 Agent",
         "单Agent",
@@ -267,10 +267,14 @@
       ]
     },
     "initialization": {
-      "required_before_project_work": true,
+      "mode": "manual",
+      "user_initiated_only": true,
+      "auto_prompt": false,
+      "auto_execute": false,
+      "required_before_project_work": false,
       "command": "bash tools/bin/ai-teams-init-project.sh --target <目标项目路径> --write",
       "windows_command": "pwsh -NoProfile -ExecutionPolicy Bypass -File tools/bin/ai-teams-init-project.ps1 -Target <目标项目路径> -Write",
-      "ask_user_when_missing": "未发现已初始化目标项目画像时，必须先询问目标项目路径和是否立即初始化。",
+      "uninitialized_behavior": "保持未初始化状态，不主动询问、不执行初始化、不写入初始化画像。仅在用户明确要求初始化时运行 command 或 windows_command；其他任务只读取完成当前请求所必需的项目文件，不猜测未验证事实。",
       "writes_to": [
         "project/",
         "index/",
@@ -445,21 +449,34 @@
   },
   "permissions": {
     "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./**/.env)",
-      "Read(./**/.env.*)",
-      "Read(./**/*credentials*)",
-      "Read(./**/*credential*)",
-      "Read(./**/*token*)",
-      "Read(./**/*secret*)",
-      "Read(./**/*.pem)",
-      "Read(./**/*.key)",
-      "Read(./**/*.p12)",
-      "Read(./**/*.pfx)",
-      "Read(./**/id_rsa)",
-      "Read(./**/id_ed25519)",
-      "Read(./**/service-account*.json)",
+      "Read(/.env)",
+      "Read(/.env.*)",
+      "Read(/**/.env)",
+      "Read(/**/.env.*)",
+      "Read(/**/.credentials)",
+      "Read(/**/.credentials.*)",
+      "Read(/**/credentials.json)",
+      "Read(/**/credentials.yaml)",
+      "Read(/**/credentials.yml)",
+      "Read(/**/.token)",
+      "Read(/**/.token.*)",
+      "Read(/**/token.json)",
+      "Read(/**/token.yaml)",
+      "Read(/**/token.yml)",
+      "Read(/**/.secret)",
+      "Read(/**/.secret.*)",
+      "Read(/**/secret.json)",
+      "Read(/**/secret.yaml)",
+      "Read(/**/secret.yml)",
+      "Read(/**/secrets/**)",
+      "Read(/**/.secrets/**)",
+      "Read(/**/*.pem)",
+      "Read(/**/*.key)",
+      "Read(/**/*.p12)",
+      "Read(/**/*.pfx)",
+      "Read(/**/id_rsa)",
+      "Read(/**/id_ed25519)",
+      "Read(/**/service-account*.json)",
       "Bash(rm -rf *)",
       "Bash(git reset --hard*)",
       "Bash(git clean -fd*)",
@@ -468,6 +485,21 @@
   },
   "disableAllHooks": false,
   "hooks": {
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "startup|resume|clear|compact",
@@ -487,6 +519,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/ai-teams-run-hook.mjs",
               "native-claude-memory-audit"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 6
           }
         ]
       }
@@ -518,11 +558,32 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
               "reconcile"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
+          }
+        ]
+      },
       {
         "matcher": "Agent",
         "hooks": [
@@ -602,6 +663,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
               "activity"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       },
@@ -646,6 +715,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
               "post-tool-failure"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       }
@@ -669,6 +746,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
               "permission-denied"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       }
@@ -684,6 +769,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
               "start"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       }
@@ -707,6 +800,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
               "subagent-stop"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       }
@@ -745,6 +846,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
               "task-completed"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       }
@@ -798,6 +907,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/prompt-evolution-event.mjs",
               "stop-failure"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       }
@@ -837,6 +954,14 @@
               "${CLAUDE_PROJECT_DIR}/hooks/scripts/agent-heartbeat.mjs",
               "reconcile"
             ]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"
+            ],
+            "timeout": 2
           }
         ]
       }

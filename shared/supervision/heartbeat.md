@@ -15,7 +15,7 @@ status: active
 1. `SubagentStart` 登记 Agent 并启动后台心跳监控。
 2. `PostToolUse` 更新 Agent 最近工具、目标和活动时间。
 3. 后台监控每 10 秒刷新 `shared/supervision/heartbeat-current.md`。
-4. 连续 30 秒没有 Hook 活动时标记 `takeover-required`，生成 `shared/events/` 接管事件。
+4. 连续 30 秒没有 Hook 活动时标记 `idle-review`，提示 Lead 区分正常思考、等待与真实停滞；只有确认异常后才升级为 `takeover-required` 并生成接管事件。
 5. `PostToolUseFailure`、`PermissionDenied`、`StopFailure` 立即要求 Lead 接管，不等待超时。
 6. `SubagentStop`、`TaskCompleted`、`TeammateIdle` 要求 Lead 检查交接和验证，不把“停止”自动等同于“完成”。
 7. 会话停止时仍有待接管 Agent，首次 `Stop` 使用顶层 `decision: "block"` 和 `reason` 让 Lead 继续处理。
@@ -25,7 +25,7 @@ status: active
 
 - Agent 是否仍在处理本次任务，是否扩大范围或访问无关文件。
 - 是否出现报错、权限拒绝、锁冲突、Owner 冲突或安全阻断。
-- 最近 30 秒是否没有活动，可能卡断、无响应或等待输入。
+- 最近 30 秒是否没有 Hook 活动；这只是复核信号，不自动等同于失败或卡断。
 - 当前产出是否有文件、验证或交接证据。
 - 是否需要 Lead 立即接管、一次定向重试、改派、拆分或停止。
 

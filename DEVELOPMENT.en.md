@@ -17,7 +17,7 @@ Never copy the `dev` tree directly to `main`. A stable runtime must be generated
 Requirements: Git, Node.js 18+, Python 3, and either Bash on macOS/Linux or PowerShell 7 plus Git Bash/WSL on Windows. Claude Code is required to validate actual loading of project subagents, rules, settings, hooks, Skills, and MCP.
 
 ```bash
-git clone https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git
+git clone https://github.com/Jia0201/CC-RADT.git
 cd Claude-Code-Research-and-Development-Teams
 git switch dev
 bash tools/bin/ai-teams-check.sh
@@ -90,7 +90,7 @@ Use an empty output directory outside the repository:
 
 ```bash
 bash tools/bin/ai-teams-package.sh formal \
-  --version 1.0.0 \
+  --version 1.1.0 \
   --install-layout claude-subdir \
   --output "$HOME/CC-RADT-dist/formal" \
   --verify

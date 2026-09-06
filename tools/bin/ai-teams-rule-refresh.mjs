@@ -124,7 +124,11 @@ function scanTree(base, { maxFiles: limit, excludeHarnessPayload }) {
 function shouldSkip(rel, directory, excludeHarnessPayload) {
   const normalized = rel.replaceAll("\\", "/");
   const parts = normalized.split("/");
-  const ignored = new Set([".git", "node_modules", ".cache", ".codegraph", ".runtime", "dist", "build", "coverage", "__pycache__", ".pytest_cache", ".mypy_cache"]);
+  const ignored = new Set([
+    ".git", "node_modules", "vendor", ".cache", ".codegraph", ".runtime",
+    "target", "dist", "build", "out", ".next", ".nuxt", ".venv", "venv",
+    "coverage", "__pycache__", ".pytest_cache", ".mypy_cache",
+  ]);
   if (parts.some((part) => ignored.has(part))) return true;
   if (!directory && (normalized.endsWith("/.DS_Store") || normalized === ".DS_Store" || normalized === ".claude/settings.local.json")) return true;
   if (!directory && normalized.startsWith("logs/") && path.basename(normalized) !== "index.md") return true;
@@ -135,8 +139,19 @@ function shouldSkip(rel, directory, excludeHarnessPayload) {
 
 function isSensitivePath(rel) {
   const lower = rel.toLowerCase().replaceAll("\\", "/");
+  const parts = lower.split("/");
   const base = lower.slice(lower.lastIndexOf("/") + 1);
-  return base === ".env" || base.startsWith(".env.") || base.endsWith(".pem") || base.endsWith(".key") || base.endsWith(".p12") || base.endsWith(".pfx") || base === "id_rsa" || base === "id_ed25519" || lower.includes("credential") || lower.includes("secret") || lower.includes("token");
+  const namedSensitive = new Set([
+    ".token", "token.json", "token.yaml", "token.yml",
+    ".secret", "secret.json", "secret.yaml", "secret.yml",
+    ".credentials", "credentials.json", "credentials.yaml", "credentials.yml",
+    "id_rsa", "id_ed25519",
+  ]);
+  return base === ".env" || base.startsWith(".env.") ||
+    base.startsWith(".token.") || base.startsWith(".secret.") || base.startsWith(".credentials.") ||
+    base.endsWith(".pem") || base.endsWith(".key") || base.endsWith(".p12") || base.endsWith(".pfx") ||
+    base.startsWith("service-account") && base.endsWith(".json") ||
+    namedSensitive.has(base) || parts.some((part) => ["secrets", ".secrets", ".ssh", ".gnupg"].includes(part));
 }
 
 function renderDirectories(directories, base, mode) {

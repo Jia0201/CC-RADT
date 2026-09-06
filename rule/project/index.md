@@ -22,4 +22,4 @@ status: active
 | 已导入规则 | [imported-rules](../../project/imported-rules.md), [index](../../project/rules/index.md) | 目标项目现有规则文件 |
 | 最近同事变更 | [change-log](../../project/change-log.md) | 需求前 Git 增量同步 |
 
-未初始化时不得猜测项目结构、UI、接口或语法规则，必须由 Lead 引导初始化。
+项目初始化由用户主动发起。未初始化时不得自动询问或执行初始化，也不得猜测项目结构、UI、接口或语法规则；当前任务需要的事实应从必要项目文件中直接核实。

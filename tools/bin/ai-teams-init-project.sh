@@ -195,15 +195,16 @@ detect_project_directories() {
       -path "./.git" -prune -o \
       -path "./.claude/ai-teams" -prune -o \
       -path "./.claude/agents" -prune -o \
-      -path "./node_modules" -prune -o \
-      -path "./vendor" -prune -o \
-      -path "./dist" -prune -o \
-      -path "./build" -prune -o \
-      -path "./target" -prune -o \
-      -path "./.next" -prune -o \
-      -path "./.nuxt" -prune -o \
-      -path "./.venv" -prune -o \
-      -path "./venv" -prune -o \
+      -path "*/node_modules" -prune -o \
+      -path "*/vendor" -prune -o \
+      -path "*/dist" -prune -o \
+      -path "*/build" -prune -o \
+      -path "*/target" -prune -o \
+      -path "*/out" -prune -o \
+      -path "*/.next" -prune -o \
+      -path "*/.nuxt" -prune -o \
+      -path "*/.venv" -prune -o \
+      -path "*/venv" -prune -o \
       -type d -print | sort | head -n 100
   ) | sed -e 's#^\./##' -e '/^$/d' -e 's#^#- #'
 }
@@ -236,10 +237,14 @@ NODE
       -path "./.git" -prune -o \
       -path "./.claude/ai-teams" -prune -o \
       -path "./.claude/agents" -prune -o \
-      -path "./node_modules" -prune -o \
-      -path "./vendor" -prune -o \
-      -path "./dist" -prune -o \
-      -path "./build" -prune -o \
+      -path "*/node_modules" -prune -o \
+      -path "*/vendor" -prune -o \
+      -path "*/dist" -prune -o \
+      -path "*/build" -prune -o \
+      -path "*/target" -prune -o \
+      -path "*/out" -prune -o \
+      -path "*/.next" -prune -o \
+      -path "*/.nuxt" -prune -o \
       -type f \( \
         -iname "*.css" -o -iname "*.scss" -o -iname "*.sass" -o -iname "*.less" -o \
         -iname "tailwind.config.*" -o -iname "uno.config.*" -o -iname "theme.*" -o \
@@ -279,11 +284,14 @@ detect_api_contract_entries() {
       -path "./.git" -prune -o \
       -path "./.claude/ai-teams" -prune -o \
       -path "./.claude/agents" -prune -o \
-      -path "./node_modules" -prune -o \
-      -path "./vendor" -prune -o \
-      -path "./dist" -prune -o \
-      -path "./build" -prune -o \
-      -path "./target" -prune -o \
+      -path "*/node_modules" -prune -o \
+      -path "*/vendor" -prune -o \
+      -path "*/dist" -prune -o \
+      -path "*/build" -prune -o \
+      -path "*/target" -prune -o \
+      -path "*/out" -prune -o \
+      -path "*/.next" -prune -o \
+      -path "*/.nuxt" -prune -o \
       -type f \( \
         -iname "openapi*.yaml" -o -iname "openapi*.yml" -o -iname "openapi*.json" -o \
         -iname "swagger*.yaml" -o -iname "swagger*.yml" -o -iname "swagger*.json" -o \
@@ -342,7 +350,11 @@ detect_docs() {
       -path "./.claude/settings.local.json" -prune -o \
       -path "./.claude/settings.local.example.json" -prune -o \
       -path "./.claude/manifest.json" -prune -o \
-      -path "./node_modules" -prune -o \
+      -path "*/node_modules" -prune -o \
+      -path "*/target" -prune -o \
+      -path "*/build" -prune -o \
+      -path "*/dist" -prune -o \
+      -path "*/out" -prune -o \
       -type f \( -iname "README*" -o -path "./docs/*" -o -iname "*.md" \) \
       -print | sort | head -n 30
   ) | while read -r file; do
@@ -545,7 +557,7 @@ if command -v git >/dev/null 2>&1 && git -C "$target" rev-parse --is-inside-work
   git_changed_count="$(git -C "$target" status --short 2>/dev/null | wc -l | tr -d ' ')"
   [[ -n "$git_branch" ]] || git_branch="detached"
   [[ -n "$git_head" ]] || git_head="unknown"
-  git_assist="分支=$git_branch，HEAD=$git_head，工作区变更=$git_changed_count"
+  git_assist="分支=${git_branch}，HEAD=${git_head}，工作区变更=${git_changed_count}"
 fi
 
 language="$(detect_language)"
@@ -1203,6 +1215,9 @@ EOF
   rm -f "$tmp"
 
   ai_teams_write_status_event "项目初始化扫描已完成：$target"
+  marker_tmp="$(mktemp project/.initialized.XXXXXX)"
+  printf 'version=1\ninitialized_at=%s\n' "$stamp" > "$marker_tmp"
+  mv "$marker_tmp" project/.initialized
 fi
 
 cat "$report"

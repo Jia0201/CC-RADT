@@ -20,8 +20,8 @@ const stateFile = path.join(runtimeDir, "heartbeat-state.json");
 const pidFile = path.join(runtimeDir, "heartbeat-monitor.pid");
 const currentFile = path.join(root, "shared", "supervision", "heartbeat-current.md");
 const eventDir = path.join(root, "shared", "events");
-const intervalMs = 10_000;
-const staleAfterMs = 30_000;
+const intervalMs = positiveInteger(process.env.AI_TEAMS_HEARTBEAT_INTERVAL_MS, 10_000);
+const staleAfterMs = positiveInteger(process.env.AI_TEAMS_HEARTBEAT_STALE_MS, 30_000);
 
 fs.mkdirSync(runtimeDir, { recursive: true });
 fs.mkdirSync(eventDir, { recursive: true });
@@ -41,7 +41,7 @@ const key = agentId === "unknown-agent" ? `${agentType}:${data.session_id || "se
 
 if (mode === "reconcile") {
   const pending = Object.values(state.agents).filter((agent) => agent.takeoverRequired || agent.status === "takeover-required");
-  if (Object.values(state.agents).some((agent) => ["running", "takeover-required", "idle-review"].includes(agent.status))) ensureMonitor();
+  if (Object.values(state.agents).some((agent) => agent.status === "running")) ensureMonitor();
   writeCurrent(state, now);
   if (pending.length > 0) {
     emitHookContext(
@@ -77,7 +77,12 @@ if (["start", "SubagentStart", "TaskCreated"].includes(mode) || eventName === "S
   process.exit(0);
 }
 
-const current = state.agents[key] || {
+const existing = state.agents[key];
+if (mode === "activity" && (!existing || existing.status === "completed")) {
+  process.exit(0);
+}
+
+const current = existing || {
   id: agentId,
   type: agentType,
   startedAt: now.toISOString(),
@@ -102,6 +107,9 @@ if (["failure", "PostToolUseFailure", "PermissionDenied", "StopFailure"].include
 if (["stop", "SubagentStop", "TaskCompleted", "TeammateIdle"].includes(mode) || ["SubagentStop", "TaskCompleted", "TeammateIdle"].includes(eventName)) {
   current.status = eventName === "TeammateIdle" ? "idle-review" : "completed";
   current.completedAt = now.toISOString();
+  current.takeoverRequired = false;
+  current.failure = "";
+  current.staleAlertedAt = "";
   state.agents[key] = current;
   state.updatedAt = now.toISOString();
   writeState(state);
@@ -115,6 +123,11 @@ if (["stop", "SubagentStop", "TaskCompleted", "TeammateIdle"].includes(mode) || 
 }
 
 current.status = current.status === "takeover-required" ? current.status : "running";
+if (current.status === "running") {
+  current.takeoverRequired = false;
+  current.failure = "";
+  current.staleAlertedAt = "";
+}
 state.agents[key] = current;
 state.updatedAt = now.toISOString();
 writeState(state);
@@ -127,7 +140,7 @@ async function monitorLoop() {
   while (true) {
     const tick = new Date();
     const state = readState();
-    const active = Object.values(state.agents).filter((agent) => ["running", "takeover-required", "idle-review"].includes(agent.status));
+    const active = Object.values(state.agents).filter((agent) => agent.status === "running");
     if (active.length === 0) emptyRounds += 1;
     else emptyRounds = 0;
 
@@ -135,11 +148,10 @@ async function monitorLoop() {
       const lastSeen = Date.parse(agent.lastSeenAt || agent.startedAt || tick.toISOString());
       const staleMs = tick.getTime() - lastSeen;
       if (agent.status === "running" && staleMs >= staleAfterMs && !agent.staleAlertedAt) {
-        agent.status = "takeover-required";
-        agent.takeoverRequired = true;
-        agent.failure = `连续 ${Math.floor(staleMs / 1000)} 秒没有 Hook 活动，需检查卡断、等待权限、无响应或任务跑偏`;
+        agent.status = "idle-review";
+        agent.takeoverRequired = false;
+        agent.failure = `连续 ${Math.floor(staleMs / 1000)} 秒没有 Hook 活动，需由 Lead 复核是在思考、等待还是已经停滞`;
         agent.staleAlertedAt = tick.toISOString();
-        appendEvent("lead-takeover", agent, tick, "heartbeat-stale");
       }
     }
 
@@ -243,6 +255,11 @@ function resolveRoot() {
 
 function parseInput(value) {
   try { return JSON.parse(value || "{}"); } catch { return {}; }
+}
+
+function positiveInteger(value, fallback) {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
 async function readStdin() {

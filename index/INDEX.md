@@ -31,6 +31,9 @@ status: active
 
 - `README.md`
 - `README.en.md`
+- `USAGE.md`
+- `UPGRADE.md`
+- `RELEASE_NOTES.md`
 - `DEVELOPMENT.md`
 - `DEVELOPMENT.en.md`
 - `CLAUDE.md`

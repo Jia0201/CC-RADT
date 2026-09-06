@@ -32,7 +32,7 @@
         "agents/lead/workflow.md"
       ],
       "active": {
-        "system": "agents/lead/system/v1.0.0.prompt.md",
+        "system": "agents/lead/system/1.0.1.prompt.md",
         "task": "agents/lead/task/default.v1.0.0.prompt.md",
         "retry": "agents/lead/retry/v1.0.0.prompt.md",
         "evals": "agents/lead/evals/cases.json"
@@ -222,21 +222,32 @@
   },
   "promptTools": {
     "schemaVersion": 1,
-    "updatedAt": "2026-07-18T18:15:28.093Z",
+    "updatedAt": "2026-09-06T13:23:25.933Z",
     "activeMeta": {
       "lead": {
         "system": {
-          "version": "1.0.0",
-          "path": "prompts/agents/lead/system/v1.0.0.prompt.md",
-          "sha256": "50d81cdbdb08d34cd526fd156427889a665469fd0463a7eadb46ca00fa07f1fa",
-          "activatedAt": "2026-07-18T18:04:03.783Z",
-          "candidateId": null,
-          "risk": "high",
+          "version": "1.0.1",
+          "path": "prompts/agents/lead/system/1.0.1.prompt.md",
+          "sha256": "54d0517c63d897f7297267458c15f0b1370f58393871a0bae9b2acb3fe21da47",
+          "activatedAt": "2026-09-06T13:23:25.884Z",
+          "candidateId": "lead-system-1-0-1-54d0517c63d8",
+          "risk": "low",
           "variables": {
             "required": [],
             "optional": []
           },
-          "previous": null
+          "previous": {
+            "version": "1.0.0",
+            "path": "prompts/agents/lead/system/v1.0.0.prompt.md",
+            "sha256": "41da690a87c39df388bdd868aa0020cd4ebb70a8cd713bc8c7bd5c4616b9636e",
+            "activatedAt": "2026-07-18T18:04:03.783Z",
+            "candidateId": null,
+            "risk": "high",
+            "variables": {
+              "required": [],
+              "optional": []
+            }
+          }
         },
         "task": {
           "version": "1.0.0",
@@ -293,7 +304,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/pd/system/v1.0.0.prompt.md",
-          "sha256": "28cb8926f793bcbb46e98a79801687fe539d33dbdfe3e61ffa68239f4946498a",
+          "sha256": "fafa51f57c3b639cc179e7283bb2d5b62b45e39f4bddba8f8bde4a0d43559331",
           "activatedAt": "2026-07-18T18:04:03.784Z",
           "candidateId": null,
           "risk": "high",
@@ -358,7 +369,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/plan-pm/system/v1.0.0.prompt.md",
-          "sha256": "8c1c31d5da54098b4596535007eb79ff11a47cc778f13deb53032ae700aa0296",
+          "sha256": "8854f57db9d5b23d99196a85d49f064fed2898326fccfb3afd8566bdb54653a8",
           "activatedAt": "2026-07-18T18:04:03.784Z",
           "candidateId": null,
           "risk": "high",
@@ -423,7 +434,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/dev-frontend-web/system/v1.0.0.prompt.md",
-          "sha256": "533751eb7086de07a38f7b9931c957a59b91c4bd72ff97f71668e8cfa9995a3e",
+          "sha256": "8c634b9147aba9e7e2799458177574be49f25e1cccc4ab36c190ef4b76c88134",
           "activatedAt": "2026-07-18T18:04:03.785Z",
           "candidateId": null,
           "risk": "high",
@@ -488,7 +499,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/dev-frontend-miniapp/system/v1.0.0.prompt.md",
-          "sha256": "dc2b387efa4a26f01c5b371085ed0a399a633af4868dea1222b35c6d3aa80fd5",
+          "sha256": "151b4aa2e0d5ae5f290887cc3607fb4b1d338678df8c27343c418b25197fef32",
           "activatedAt": "2026-07-18T18:04:03.785Z",
           "candidateId": null,
           "risk": "high",
@@ -553,7 +564,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/dev-backend-systems/system/v1.0.0.prompt.md",
-          "sha256": "0098af3513cda84c841e30540c8a25832cd2436612364e27ce5d6346b509b9a1",
+          "sha256": "6b08829c2b3de806f1c97a679e8d8cfec01d8fb8c05b6fb7d65927d913cdcdf6",
           "activatedAt": "2026-07-18T18:04:03.786Z",
           "candidateId": null,
           "risk": "high",
@@ -618,7 +629,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/dev-backend-service/system/v1.0.0.prompt.md",
-          "sha256": "23c814c3c13c8e10050b1f40e0bb5402518493b3f1ad6d4924ed8ffdaf7becd9",
+          "sha256": "368fefd64e4249224f96ccdb0cf3efad033717b6cdf10963b4d6026338b93512",
           "activatedAt": "2026-07-18T18:04:03.786Z",
           "candidateId": null,
           "risk": "high",
@@ -683,7 +694,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/qa/system/v1.0.0.prompt.md",
-          "sha256": "d91f101b5f0f17b36ae2e10e23bcf5b80b7fc714876ee6e5a878989bfb90e7d9",
+          "sha256": "d6dca5fd59f790cf237de24a57a421b390d505245f3c6a2baf6957b02877b4eb",
           "activatedAt": "2026-07-18T18:15:28.086Z",
           "candidateId": null,
           "risk": "high",
@@ -759,7 +770,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/memory/system/v1.0.0.prompt.md",
-          "sha256": "006b396919d1fafdd387a73b887f923600964b788a32ff426b6c18e294cfdc42",
+          "sha256": "6097f2af68cd280ef553448324847b2cbe23d21941f92897423bb655e4679b1f",
           "activatedAt": "2026-07-18T18:04:03.787Z",
           "candidateId": null,
           "risk": "high",
@@ -824,7 +835,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/doc/system/v1.0.0.prompt.md",
-          "sha256": "7c2070985a1567190542588435e1c73c2617a3640335ef068470177c038809ce",
+          "sha256": "24c83fe4e633435c0b7a0ad7152ae4669a0b956941581a2d7de39a38f00107ca",
           "activatedAt": "2026-07-18T18:04:03.788Z",
           "candidateId": null,
           "risk": "high",
@@ -837,7 +848,7 @@
         "task": {
           "version": "1.0.0",
           "path": "prompts/agents/doc/task/default.v1.0.0.prompt.md",
-          "sha256": "8d9224a6acdfd141d1bac0c303d7ed8cf724fd590cce3c37674f5116fda58f68",
+          "sha256": "079af025596f302cfff0d99361f17a6b2706ff87f1f0975c73534c01571d9366",
           "activatedAt": "2026-07-18T17:46:26.243Z",
           "candidateId": null,
           "risk": "high",
@@ -864,7 +875,7 @@
         "retry": {
           "version": "1.0.0",
           "path": "prompts/agents/doc/retry/v1.0.0.prompt.md",
-          "sha256": "8972e59c92aa627b8714e465f15712cbc6efa29900fc52899255edec8eed56d8",
+          "sha256": "3289e10e3288de4a7fccc8fd9b86bf9620a4b7be5e62ad6c2cb0b097e140cfc2",
           "activatedAt": "2026-07-18T17:48:07.087Z",
           "candidateId": null,
           "risk": "high",
@@ -889,7 +900,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/role/system/v1.0.0.prompt.md",
-          "sha256": "c3b9bc825542dca6a7cb7306f0d13882c6b9cba8ac385af36b0c5b7de0aee974",
+          "sha256": "68d8ecf661d457620a2ffea6ff8cc27a9c2df069c203f18a1aaaffea2327ed20",
           "activatedAt": "2026-07-18T18:04:03.788Z",
           "candidateId": null,
           "risk": "high",
@@ -954,7 +965,7 @@
         "system": {
           "version": "1.0.0",
           "path": "prompts/agents/security-reviewer/system/v1.0.0.prompt.md",
-          "sha256": "730e78d279e97696a07c60724f5a94fda4bace4e855238a3f643485b1cbfaf8f",
+          "sha256": "ff69a41fa9d7c5394ada0538d21a38d50fb6acfc2fe749683e74186e679399b3",
           "activatedAt": "2026-07-18T18:04:03.789Z",
           "candidateId": null,
           "risk": "high",

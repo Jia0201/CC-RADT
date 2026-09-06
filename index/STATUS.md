@@ -10,9 +10,10 @@ status: active
 
 ## 当前状态
 
-- 版本：1.0.0
-- 阶段：CC-RADT v1.0.0 GitHub 开源候选包已生成并通过验收
-- 当前批次：项目品牌、中英文 README、公开使用说明和安装包链路已完成
+- 版本：1.1.0
+- 阶段：CC-RADT v1.1.0 本地正式包已生成
+- 当前批次：只读研发观察台、运行链路改进和安装包链路已完成
+- 初始化策略：已切换为用户主动手动初始化；启动、恢复和普通请求不再自动询问、执行或写入初始化画像
 
 ## 当前锁
 
@@ -84,7 +85,7 @@ status: active
 - 根目录 `releases/` 旧链路：已取消，主工程不再通过 `releases/` 保存发布产物
 - 运行期维护规则：已新增 `security/runtime-maintenance-policy.md`，Doc / Memory / Role / Security-Reviewer 的并行维护职责已纳入 playbook、CLAUDE、Agent 索引和知识图谱
 - 并行监督：`shared/supervision/` 已加入 Role 触发式监督行，任务关闭前必须检查 Doc、Memory、Role、Security-Reviewer 的维护结论
-- `.claude/settings.json`：已登记 Role 初始化复核与运行期并行监督，保持 12 Agent、默认多 Agent、项目初始化检查和安全规则入口
+- `.claude/settings.json`：已登记 Role 初始化复核与运行期并行监督，保持 12 Agent、默认多 Agent、手动初始化模式和安全规则入口
 - MCP 安装包配置：当前 `.mcp.json` 打包后包含 10 个默认 MCP server，并由自检校验
 - 路径与内部措辞扫描：当前源工程无本机绝对路径内容残留，当前安装包无本机绝对路径和内部链路措辞命中
 - 需求前同事提交同步：`UserPromptSubmit` 已接入 `git-activity-watch`，每次需求进入时以 Git 为辅助增量刷新 `project/change-log.md` 和 `project/context.md`；最多读取 20 条提交元数据和 200 个文件名，不读取 diff、提交正文、历史代码或敏感文件内容，Git 不可用时静默跳过
@@ -95,6 +96,13 @@ status: active
 - 四层记忆：L1 会话恢复、L2 共享记忆、L3 Agent 独立记忆、L4 知识库已由 Memory Agent、文件入口与 PreCompact / PostCompact Hook 串联
 - Lead 接管：已启用 10 秒心跳状态板；工具失败、权限拒绝、停滞、跑偏、安全、锁或 Owner 冲突会生成接管事件，最多允许一次定向重试
 - 初始化验收：无 Git 项目真实 `--write` 回归通过，已写入技术栈、依赖、UI、API、命令、验证、规则、图谱和记忆候选，且不扫描 AI-Teams 本体、不修改业务文件
+- 本轮开发记录包含 Java/Maven 消费端根目录自检、手动初始化、Agent / MCP 识别与业务文件零修改验证；正式发布验收单独记录
+- 初始化扫描清洁度：初始化脚本与 Rule 刷新器均排除 `target/`、`build/`、`dist/`、`out/` 等构建产物，敏感规则不再误判正常鉴权源码
+- CC Switch 实机链路：Claude Code `2.1.140` 已识别 12 个项目 Agent；Lead 自主选择 `WF-06`，并行调用 `dev-backend-systems` 与 `qa` 后正常汇总，未使用 `general-purpose`
+- Lead 提示词：system prompt 已按候选、评测、审批、激活和编译流程升级到 `1.0.1`，每次 Agent 派发前强制使用任务提示词渲染器
+- Lead 启动入口：已移除会抢占用户真实需求的 `initialPrompt`，保留 `settings.json` 默认 `agent: lead`
+- 心跳准确性：Lead 等待不再创建子 Agent 状态；30 秒静默仅进入 `idle-review`；Agent 完成后清理接管标记
+- 敏感 Hook：已使用精确敏感文件名/目录匹配，并新增正常鉴权源码放行回归
 - Claude 入口：源工程仅保留根 `CLAUDE.md`；安装布局不创建第二份同名入口，通过 `.claude/settings.json`、`.claude/agents/`、`.claude/rules/` 和 `index/ENTRY.md` 接入工程大脑
 - 当前开源候选包：`$HOME/project/AI/CC-RADT-v1.0/formal`
 - 本轮安装包回归：948 个文件、23 个运行指令、12 个 Agent、10 个 MCP、36 个活动提示词；除 checksum 自身外 947 个文件的 SHA-256 校验通过

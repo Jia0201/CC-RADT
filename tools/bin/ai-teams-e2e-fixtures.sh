@@ -75,7 +75,7 @@ if [[ "$CASE" == "all" || "$CASE" == "08" ]]; then
   if [[ "$status" -eq 2 ]] && grep -Fq "阻止读取敏感文件内容" <<<"$output"; then
     record "E2E-08" "PASS" "零字节敏感文件哨兵被 PreToolUse 门禁阻止"
   else
-    record "E2E-08" "FAIL" "期望退出码 2，实际 $status；输出：${output//$'\n'/ }"
+    record "E2E-08" "FAIL" "期望退出码 2，实际 ${status}；输出：${output//$'\n'/ }"
   fi
 fi
 
@@ -102,7 +102,7 @@ if [[ "$CASE" == "all" || "$CASE" == "09" ]]; then
      { [[ "$status_a" -eq 3 ]] && [[ "$status_b" -eq 0 ]]; }; then
     record "E2E-09" "PASS" "同一资源并发加锁只有一个成功，另一个以冲突码 3 退出"
   else
-    record "E2E-09" "FAIL" "并发退出码为 A=$status_a、B=$status_b"
+    record "E2E-09" "FAIL" "并发退出码为 A=${status_a}、B=${status_b}"
   fi
 fi
 

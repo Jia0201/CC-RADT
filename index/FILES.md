@@ -56,6 +56,9 @@ status: active
 - `README.md`
 - `README.en.md`
 - `CHANGELOG.md`
+- `USAGE.md`：安装、初始化、任务示例、观察台和故障排查。
+- `UPGRADE.md`：v1.0.0 到 v1.1.0 的区别、配置迁移和回滚。
+- `RELEASE_NOTES.md`：当前正式版本的用户发布说明。
 - `CONTRIBUTING.md`
 - `DEVELOPMENT.md`
 - `DEVELOPMENT.en.md`
@@ -460,6 +463,7 @@ status: active
 - 已采纳 ADR：`project/adr/accepted/`
 - 工作流选择器 ADR：`project/adr/accepted/ADR-0010-workflow-selector.md`
 - 提示词自进化 ADR：`project/adr/accepted/ADR-0011-prompt-evolution-system.md`
+- 手动项目初始化 ADR：`project/adr/accepted/ADR-0013-manual-project-initialization.md`
 - 已拒绝 ADR：`project/adr/rejected/`
 - 文档路径与关系图：`index/NAVIGATION.md`
 

@@ -9,5 +9,5 @@ description: AI-Teams 全局规则路由入口
 - 涉及目标项目时从 `rule/project/index.md` 进入；只有精确找文件时才读取 `rule/project/files.md` 或 `rule/catalog/files.md`。
 - 涉及安全、共享状态、记忆或工具时，分别从 `rule/security/index.md`、`rule/shared/index.md`、`rule/memory/index.md`、`rule/tools/index.md` 进入。
 - 规则路由只负责定位；安全、项目、Agent、知识、记忆和共享状态的正文仍以其本体目录为准。
-- 未初始化目标项目时不得猜测目录、UI、接口或语法规则，必须先执行项目初始化。
+- 项目初始化只在用户明确要求时执行；未初始化时不得自动询问或执行初始化，只读取当前任务必需的项目文件并标记未验证事实。
 - 新增、移动或删除文件后由 Doc/Role 刷新 `rule/` 索引和标准 Markdown 链接。

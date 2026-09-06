@@ -173,15 +173,21 @@ function isSensitivePath(value) {
     base.endsWith(".pfx") ||
     base === "id_rsa" ||
     base === "id_ed25519" ||
-    base.startsWith("secrets.") ||
-    base.startsWith("credentials.") ||
+    base === ".token" ||
+    base.startsWith(".token.") ||
+    ["token.json", "token.yaml", "token.yml"].includes(base) ||
+    base === ".secret" ||
+    base.startsWith(".secret.") ||
+    ["secret.json", "secret.yaml", "secret.yml", "secrets.json", "secrets.yaml", "secrets.yml"].includes(base) ||
+    base === ".credentials" ||
+    base.startsWith(".credentials.") ||
+    ["credentials.json", "credentials.yaml", "credentials.yml"].includes(base) ||
     (base.startsWith("service-account") && base.endsWith(".json"))
   ) {
     return true;
   }
-  return lower.includes("token") ||
-    lower.includes("secret") ||
-    lower.includes("credential") ||
+  return lower.includes("/secrets/") ||
+    lower.includes("/.secrets/") ||
     lower.includes("/.ssh/") ||
     lower.includes("/.gnupg/");
 }
@@ -195,6 +201,13 @@ function ensureRuntimeDirs() {
   ]) {
     fs.mkdirSync(path.join(root, dir), { recursive: true });
   }
+}
+
+function projectKnowledgeInitialized() {
+  const contextFile = path.join(root, "project", "context.md");
+  if (!fs.existsSync(contextFile)) return false;
+  const context = fs.readFileSync(contextFile, "utf8");
+  return context.includes("AI-TEAMS:init-context:BEGIN") || /初始化状态：已初始化/u.test(context);
 }
 
 function stamp(date = new Date()) {
@@ -380,7 +393,8 @@ Default behavior:
 
 Before project work:
 - Resolve AI_TEAMS_ROOT: \`.claude/ai-teams\` if present, otherwise current AI-Teams root.
-- If target project is not initialized, ask for target project path and initialization permission.
+- Project initialization is manual and user-initiated only. If the project is not initialized, do not ask to initialize, do not run initialization, and do not write an initialization profile unless the user explicitly requests initialization.
+- Before manual initialization, read only the project files needed for the current request and label unverified facts; never guess project paths, UI rules, API contracts, or technical constraints.
 - Read AI_TEAMS_ROOT/index/ENTRY.md, AI_TEAMS_ROOT/agents/index.md, AI_TEAMS_ROOT/playbook.md, AI_TEAMS_ROOT/security/index.md, AI_TEAMS_ROOT/shared/index.md, and AI_TEAMS_ROOT/project/index.md as needed.
 - Resolve the active system prompt and task prompt from AI_TEAMS_ROOT/prompts/registry.json. Before using the Agent tool, render the named Agent task prompt with AI_TEAMS_ROOT/tools/bin/ai-teams-prompt-render.mjs.
 - Every named Agent dispatch must carry an \`<ai_teams_task_prompt>\` user/task prompt contract with prompt version, task id, objective, project context, allowed scope, forbidden scope, output contract, and acceptance fields.
@@ -412,6 +426,7 @@ async function sessionStartGuard() {
 
 Before non-trivial work:
 - Read the imported AI-Teams rules from CLAUDE.md and resolve the target project from project/context.md.
+- Project initialization is manual. Never prompt for it, execute it, or write initialization state unless the user explicitly requests initialization.
 - Read project/change-log.md after the per-prompt Git sync; use integrated commit file categories to refresh project facts, and never treat pending upstream commits as already applied.
 - Use named AI-Teams Agents rather than the default general-purpose agent.
 - Resolve active prompt versions from prompts/registry.json. Render every named Agent user/task prompt through tools/bin/ai-teams-prompt-render.mjs before dispatch; the PreToolUse Agent hook rejects missing prompt contracts.
@@ -623,6 +638,7 @@ async function externalChangeCheck() {
 }
 
 async function gitActivityWatch() {
+  if (!projectKnowledgeInitialized()) return;
   const projectRoot = resolveTargetProjectRoot();
   const inside = runGit(["rev-parse", "--is-inside-work-tree"], projectRoot);
   if (inside.status !== 0 || inside.stdout.trim() !== "true") return;

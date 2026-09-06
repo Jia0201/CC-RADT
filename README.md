@@ -3,15 +3,23 @@
 **Claude Code Research and Development Teams**  
 **中文名：基于 Claude Code 的全流程研发团队**
 
-[简体中文](README.md) | [English](README.en.md) | [GitHub 仓库](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams)
+[简体中文](README.md) | [English](README.en.md) | [GitHub 仓库](https://github.com/Jia0201/CC-RADT)
 
-> **开发分支说明**：当前 `dev` 分支保存 CC-RADT 主开发工程，用于维护 Agent、规则、Hooks、Skills、MCP、提示词和安装包构建链路。普通用户请使用 [`main`](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/main) 或 [Releases](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/releases) 中的安装版。参与二次开发前请先阅读 [`DEVELOPMENT.md`](DEVELOPMENT.md)。
+> **开发分支说明**：当前 `dev` 分支保存 CC-RADT 主开发工程，用于维护 Agent、规则、Hooks、Skills、MCP、提示词和安装包构建链路。普通用户请使用 [`main`](https://github.com/Jia0201/CC-RADT/tree/main) 或 [Releases](https://github.com/Jia0201/CC-RADT/releases) 中的安装版。参与二次开发前请先阅读 [`DEVELOPMENT.md`](DEVELOPMENT.md)。
 
 CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把需求分析、任务规划、前后端开发、测试、安全审查、项目文档、工程记忆和角色治理组织成一个可以放进真实项目、持续更新并可追溯的研发团队。
 
 它不是一组静态提示词，也不替代你的业务项目。CC-RADT 负责维护团队、规则、上下文与协作状态；你的项目代码仍保留在原来的目录中。
 
-> 当前版本：`v1.0.0`。Claude Code 是当前优先运行环境；Codex 和 OpenCode 适配保留在后续路线中。
+> 当前版本：`v1.1.0`。Claude Code 是当前优先运行环境；Codex 和 OpenCode 适配保留在后续路线中。
+
+## v1.1.0 更新
+
+新增本机只读研发观察台，支持多会话筛选、任务与日志阅读和文件版本留存。项目初始化改为用户主动操作；Lead system prompt 升至 `1.0.1`，修复固定首轮提示、心跳误接管、敏感文件误拦截和安装态自检问题。
+
+[发布说明与 v1.0.0 对比](RELEASE_NOTES.md) · [详细使用说明](USAGE.md) · [v1.0.0 升级指南](UPGRADE.md) · [下载 v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
+
+升级时保留现有项目画像与记忆，并合并更新 Hook 和权限规则。完整步骤见升级指南。
 
 ## 为什么使用 CC-RADT
 
@@ -79,6 +87,8 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-team
 
 ### 4. 初始化项目画像
 
+初始化是用户主动操作，不会在 Claude Code 启动、恢复会话或收到普通需求时自动询问或执行。需要建立持久项目画像时再运行：
+
 ```bash
 bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
 ```
@@ -89,7 +99,7 @@ Windows：
 pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
-初始化会扫描当前项目，写入 CC-RADT 自己管理的 `project/`、`rule/project/`、索引和记忆候选区。它会识别技术栈、目录、接口、UI 风格、命令、验证方式、项目规则和风险线索；不会把 Git 历史当作项目事实的唯一来源，也不会读取敏感文件内容或修改业务代码。
+手动初始化会扫描当前项目，写入 CC-RADT 自己管理的 `project/`、`rule/project/`、索引和记忆候选区。它会识别技术栈、目录、接口、UI 风格、命令、验证方式、项目规则和风险线索；不会把 Git 历史当作项目事实的唯一来源，也不会读取敏感文件内容或修改业务代码。
 
 ### 5. 直接提出需求
 
@@ -100,6 +110,12 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-team
 ```
 
 Lead 会选择工作流、调用对应 Agent、检查交接并汇总结果。只有在你明确要求“单 Agent”“不要多 Agent”或“只回答”时，才会跳过默认团队协作。
+
+## 本机可视化观察台
+
+Harness 内置只读观察台。加载本次 Hook 配置后的 CC 会话会自动检测服务，并在首次进入时提示本机地址；同项目的多个 CC 会话共享服务，但活动与页面筛选分别隔离。网页查看任务、活动日志、审查证据与角色定义，执行和审批仍完全在 CC CLI。
+
+手动启动 / 查看地址：`node tools/observer/cli.mjs start`、`node tools/observer/cli.mjs status`。安装态改用 `.claude/ai-teams/tools/observer/cli.mjs`。无需 npm 安装；历史存储在项目外，不进入正式包。配置、禁用及当前范围见 [观察台说明](tools/observer/README.md)。
 
 ## 工作原理
 
@@ -256,7 +272,7 @@ bash .claude/ai-teams/tools/bin/ai-teams-mcp-list.sh
 以下命令仅适用于源码仓库维护者，生成的运行包不会再包含打包脚本：
 
 ```bash
-git clone https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git
+git clone https://github.com/Jia0201/CC-RADT.git
 cd Claude-Code-Research-and-Development-Teams
 ```
 
@@ -279,7 +295,7 @@ bash tools/bin/ai-teams-check.sh
 
 ## 当前状态与路线
 
-`v1.0.0` 已具备主工程、12 Agent、12 套工作流、四层记忆、项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、升级、回滚和正式安装包验证链路。
+`v1.1.0` 已具备主工程、12 Agent、12 套工作流、四层记忆、项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、升级、回滚、正式安装包验证链路和只读研发观察台。
 
 后续计划包括真实项目长期回归、GitHub 开源工程治理、精简版，以及 Codex / OpenCode 适配。当前状态详见 [`index/STATUS.md`](index/STATUS.md)，用户可感知变化见 [`CHANGELOG.md`](CHANGELOG.md)。
 
@@ -293,4 +309,4 @@ CC-RADT 的 Claude Code 接入遵循官方文档：
 - [Settings](https://code.claude.com/docs/en/settings)
 - [Permissions](https://code.claude.com/docs/en/permissions)
 
-内置第三方 Skills 的来源、许可证和未纳入公开仓库的内容见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。项目自身的开源许可证、贡献指南、行为准则和发布说明将在 GitHub 发布流程的下一阶段确定。
+内置第三方 Skills 的来源、许可证和未纳入公开仓库的内容见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。贡献流程见 [`CONTRIBUTING.md`](CONTRIBUTING.md)，版本变化见 [发布说明](RELEASE_NOTES.md)。项目级 LICENSE 尚未选定，本次版本不改变许可状态。

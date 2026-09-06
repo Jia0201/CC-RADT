@@ -21,7 +21,7 @@
 - Claude Code，用于验证项目级 subagent、rules、settings、Hooks、Skills 和 MCP 的实际加载行为。
 
 ```bash
-git clone https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git
+git clone https://github.com/Jia0201/CC-RADT.git
 cd Claude-Code-Research-and-Development-Teams
 git switch dev
 bash tools/bin/ai-teams-check.sh
@@ -137,7 +137,7 @@ node tools/bin/ai-teams-memory-audit.mjs --json
 
 ```bash
 bash tools/bin/ai-teams-package.sh formal \
-  --version 1.0.0 \
+  --version 1.1.0 \
   --install-layout claude-subdir \
   --output "$HOME/CC-RADT-dist/formal" \
   --verify

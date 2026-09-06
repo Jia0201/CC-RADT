@@ -165,9 +165,9 @@ PY
     while IFS=$'\t' read -r server_id command_line; do
       [[ -n "$server_id" ]] || continue
       if timeout 20s bash -lc "$command_line" >/tmp/ai-teams-mcp-probe-out.$$ 2>&1; then
-        echo "- $server_id：--help 探测通过" >> "$report"
+        echo "- ${server_id}：--help 探测通过" >> "$report"
       else
-        echo "- $server_id：--help 探测失败或超时" >> "$report"
+        echo "- ${server_id}：--help 探测失败或超时" >> "$report"
         sed -n '1,20p' /tmp/ai-teams-mcp-probe-out.$$ >> "$report"
         status=1
       fi

@@ -25,6 +25,8 @@ ADR 记录影响 AI-Teams 长期工程结构的关键决策原因。普通任务
 | [ADR-0009-rule-routing](./accepted/ADR-0009-rule-routing.md) | 规则路由与按需读取 | 2026-06-14 | `rule/`, `.claude/rules/`, Agent 入口、初始化、打包和图谱 |
 | [ADR-0010-workflow-selector](./accepted/ADR-0010-workflow-selector.md) | 工作流选择器 | 2026-06-27 | `playbook.md`, `agents/`, `shared/`, `memory/`, `kb/graph.md`, `project/graph.md` |
 | [ADR-0011-prompt-evolution-system](./accepted/ADR-0011-prompt-evolution-system.md) | 提示词版本化与失败驱动进化 | 2026-07-19 | `prompts/`, `.claude/agents/`, `shared/prompt-evolution/`, `security/`, `hooks/`, `tools/` |
+| [ADR-0013-manual-project-initialization](./accepted/ADR-0013-manual-project-initialization.md) | 项目初始化改为用户主动操作 | 2026-09-06 | `.claude/settings.json`, `hooks/`, `security/project-policy.md`, `playbook.md`, `tools/` |
+| [ADR-0014-readonly-observer](./accepted/ADR-0014-readonly-observer.md) | 内置只读观察台与多会话接入 | 2026-09-06 | `tools/observer/`, `hooks/`, `.claude/settings.json` |
 
 ## Rejected
 

@@ -54,12 +54,12 @@ ai_teams_is_sensitive_path() {
   lower="$(printf "%s" "$path" | tr "[:upper:]" "[:lower:]")"
   base="$(basename "$lower")"
   case "$base" in
-    .env|.env.*|*.pem|*.key|*.p12|*.pfx|id_rsa|id_ed25519|secrets.*|credentials.*|service-account*.json)
+    .env|.env.*|*.pem|*.key|*.p12|*.pfx|id_rsa|id_ed25519|.token|.token.*|token.json|token.yaml|token.yml|.secret|.secret.*|secret.json|secret.yaml|secret.yml|.credentials|.credentials.*|credentials.json|credentials.yaml|credentials.yml|service-account*.json)
       return 0
       ;;
   esac
   case "$lower" in
-    *token*|*secret*|*credential*|*/.ssh/*|*/.gnupg/*)
+    */secrets/*|*/.secrets/*|*/.ssh/*|*/.gnupg/*)
       return 0
       ;;
   esac
@@ -81,6 +81,14 @@ ai_teams_safe_find() {
     -path "$target/.claude/manifest.json" -prune -o \
     -path "*/.git" -prune -o \
     -path "*/node_modules" -prune -o \
+    -path "*/target" -prune -o \
+    -path "*/build" -prune -o \
+    -path "*/dist" -prune -o \
+    -path "*/out" -prune -o \
+    -path "*/.next" -prune -o \
+    -path "*/.nuxt" -prune -o \
+    -path "*/.venv" -prune -o \
+    -path "*/venv" -prune -o \
     -path "*/.cache" -prune -o \
     -path "*/tmp" -prune -o \
     -path "*/.codegraph" -prune -o \

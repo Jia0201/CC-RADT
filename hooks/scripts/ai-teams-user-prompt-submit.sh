@@ -26,7 +26,8 @@ Default behavior:
 
 Before project work:
 - Resolve AI_TEAMS_ROOT: .claude/ai-teams if present, otherwise current AI-Teams root.
-- If target project is not initialized, ask for target project path and initialization permission.
+- Project initialization is manual and user-initiated only. If the project is not initialized, do not ask to initialize, do not run initialization, and do not write an initialization profile unless the user explicitly requests initialization.
+- Before manual initialization, read only the project files needed for the current request and label unverified facts; never guess project paths, UI rules, API contracts, or technical constraints.
 - Read AI_TEAMS_ROOT/index/ENTRY.md, AI_TEAMS_ROOT/agents/index.md, AI_TEAMS_ROOT/playbook.md, AI_TEAMS_ROOT/security/index.md, AI_TEAMS_ROOT/shared/index.md, and AI_TEAMS_ROOT/project/index.md as needed.
 
 Parallel supervisors for non-trivial project work:

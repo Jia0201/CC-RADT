@@ -4,13 +4,21 @@
 
 **中文名：基于 Claude Code 的全流程研发团队**
 
-[简体中文](README.md) | [English](README.en.md) | [完整安装指南](INSTALL.md) | [GitHub 仓库](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams)
+[简体中文](README.md) | [English](README.en.md) | [完整安装指南](INSTALL.md) | [GitHub 仓库](https://github.com/Jia0201/CC-RADT)
 
 CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把需求分析、任务规划、前后端开发、测试、安全审查、项目文档、工程记忆和角色治理组织成一个可以放进真实项目、持续更新并可追溯的研发团队。
 
 它不是一组静态提示词，也不替代你的业务项目。CC-RADT 负责维护团队、规则、上下文与协作状态；你的项目代码仍保留在原来的目录中。
 
-> 当前版本：`v1.0.0`。Claude Code 是当前优先运行环境；Codex 和 OpenCode 适配保留在后续路线中。
+> 当前版本：`v1.1.0`。Claude Code 是当前优先运行环境；Codex 和 OpenCode 适配保留在后续路线中。
+
+## v1.1.0 更新
+
+新增本机只读研发观察台，支持多会话筛选、任务与日志阅读和文件版本留存。项目初始化改为用户主动操作；Lead system prompt 升至 `1.0.1`，修复固定首轮提示、心跳误接管、敏感文件误拦截和安装态自检问题。
+
+[发布说明与 v1.0.0 对比](../../../RELEASE_NOTES.md) · [详细使用说明](../../../USAGE.md) · [v1.0.0 升级指南](../../../UPGRADE.md) · [下载 v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
+
+升级时保留现有项目画像与记忆，并合并更新 Hook 和权限规则。完整步骤见升级指南。
 
 ## 什么是研发 Harness
 
@@ -31,7 +39,7 @@ CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把�
 
 - **默认多 Agent**：Lead 根据任务选择具名 Agent 和工作流，不使用通用 Agent 冒充团队成员。
 - **覆盖研发全流程**：PD、Plan-PM、四个开发 Agent、QA、Memory、Doc、Role 和 Security-Reviewer 分工协作。
-- **项目越做越熟**：初始化和后续任务都会维护 `.claude/ai-teams/project/`，持续记录架构、接口、UI、命令、风险和验证方式。
+- **项目越做越熟**：用户手动初始化后，后续任务会维护 `.claude/ai-teams/project/`，持续记录架构、接口、UI、命令、风险和验证方式。
 - **可恢复的工程记忆**：共享记忆、Agent 独立记忆、项目上下文和稳定知识分层保存。
 - **按需加载规则**：通过 `.claude/ai-teams/rule/` 路由当前任务需要的内容，避免把整套工程一次性塞进上下文。
 - **安全与可追溯**：敏感文件、删除、文件所有权、锁、状态事务、重试回流和 ADR 都有明确边界。
@@ -50,10 +58,10 @@ CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把�
 
 ### 2. 下载安装内容
 
-从 [GitHub Releases](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/releases) 下载最新安装包，或在项目外的临时目录克隆 `main`：
+从 [GitHub Releases](https://github.com/Jia0201/CC-RADT/releases) 下载最新安装包，或在项目外的临时目录克隆 `main`：
 
 ```bash
-git clone --depth 1 --branch main https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams.git cc-radt
+git clone --depth 1 --branch main https://github.com/Jia0201/CC-RADT.git cc-radt
 ```
 
 不要把 `cc-radt/` 整个嵌套到业务项目中；需要将它包含的 `.claude/`、`.mcp.json`、README 和安装说明合并到目标项目根目录。
@@ -122,6 +130,8 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-team
 
 ### 5. 初始化项目画像
 
+初始化是用户主动操作，不会在 Claude Code 启动、恢复会话或收到普通需求时自动询问或执行。需要建立持久项目画像时再运行：
+
 ```bash
 bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
 ```
@@ -132,7 +142,7 @@ Windows：
 pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write
 ```
 
-初始化会扫描当前项目，写入 CC-RADT 自己管理的 `.claude/ai-teams/project/`、`.claude/ai-teams/rule/project/`、索引和记忆候选区。它会识别技术栈、目录、接口、UI 风格、命令、验证方式、项目规则和风险线索；不会把 Git 历史当作项目事实的唯一来源，也不会读取敏感文件内容或修改业务代码。
+手动初始化会扫描当前项目，写入 CC-RADT 自己管理的 `.claude/ai-teams/project/`、`.claude/ai-teams/rule/project/`、索引和记忆候选区。它会识别技术栈、目录、接口、UI 风格、命令、验证方式、项目规则和风险线索；不会把 Git 历史当作项目事实的唯一来源，也不会读取敏感文件内容或修改业务代码。
 
 ### 6. 确认团队并提出需求
 
@@ -143,6 +153,12 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-team
 ```
 
 Lead 会选择工作流、调用对应 Agent、检查交接并汇总结果。只有在你明确要求“单 Agent”“不要多 Agent”或“只回答”时，才会跳过默认团队协作。
+
+## 内置只读观察台
+
+CC 加载安装后的 Hook 配置时，会自动检测本项目观察服务，在每个会话首次进入时提示本机地址。同项目多个会话共享服务，但分别记录会话和 Agent 活动；不同页面可独立筛选。网页只查看任务、日志、已有审查记录和角色定义，不执行任务或审批。
+
+从业务项目根目录运行 `node .claude/ai-teams/tools/observer/cli.mjs status` 可再次获取地址，`start` / `stop` 只管理观察服务。历史数据保存在用户私有状态目录，不写业务项目。完整范围及禁用方法见 [观察台说明](.claude/ai-teams/tools/observer/README.md)。
 
 ## 工作原理
 
@@ -296,9 +312,9 @@ bash .claude/ai-teams/tools/bin/ai-teams-mcp-list.sh
 
 ## 当前状态与路线
 
-`v1.0.0` 已具备 12 Agent、12 套工作流、四层记忆、项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、升级、回滚和运行自检链路。
+`v1.1.0` 已具备 12 Agent、12 套工作流、四层记忆、项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、升级、回滚、运行自检链路和只读研发观察台。
 
-后续计划包括真实项目长期回归、精简部署形态，以及 Codex / OpenCode 适配。当前状态详见 [`.claude/ai-teams/index/STATUS.md`](.claude/ai-teams/index/STATUS.md)，用户可感知变化见 [Changelog](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/main/CHANGELOG.md)。需要扩展 Harness 本体时，请切换到 [`dev` 分支](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/tree/dev) 并阅读[二次开发指南](https://github.com/Jia0201/Claude-Code-Research-and-Development-Teams/blob/dev/DEVELOPMENT.md)。
+后续计划包括真实项目长期回归、精简部署形态，以及 Codex / OpenCode 适配。当前状态详见 [`.claude/ai-teams/index/STATUS.md`](.claude/ai-teams/index/STATUS.md)，用户可感知变化见 [Changelog](https://github.com/Jia0201/CC-RADT/blob/main/CHANGELOG.md)。需要扩展 Harness 本体时，请切换到 [`dev` 分支](https://github.com/Jia0201/CC-RADT/tree/dev) 并阅读[二次开发指南](https://github.com/Jia0201/CC-RADT/blob/dev/DEVELOPMENT.md)。
 
 ## 设计依据与致谢
 
