@@ -2,7 +2,7 @@
 
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { relative, resolve } from "node:path";
+import { relative, resolve, sep } from "node:path";
 
 const args = process.argv.slice(2);
 const option = (name) => {
@@ -110,7 +110,10 @@ lines.push("## 验证与安装包", "");
 lines.push(`- VERSION / MANIFEST：${manifestVersion === version ? "一致" : "不一致"}`);
 lines.push(`- Changelog 版本条目：${changelog.includes(`## [${version}]`) ? "存在" : "缺失"}`);
 if (packageRoot) {
-  lines.push(`- 安装包文件数量：${existsSync(packageRoot) ? listFiles(packageRoot) : "目录不存在"}`);
+  // Count this report when it is about to become a new file in the package.
+  // Re-generating an existing report or writing outside the package adds nothing.
+  const pendingReport = output && !existsSync(resolve(output)) && resolve(output).startsWith(packageRoot + sep) ? 1 : 0;
+  lines.push(`- 安装包文件数量：${existsSync(packageRoot) ? listFiles(packageRoot) + pendingReport : "目录不存在"}`);
   lines.push(`- manifest：${packageDisplayPath(packageManifest) || "缺失"}`);
   lines.push(`- checksum：${packageDisplayPath(checksum) || "待生成或缺失"}`);
 }
