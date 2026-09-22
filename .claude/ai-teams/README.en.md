@@ -10,33 +10,35 @@ CC-RADT is a multi-agent software development harness for Claude Code. It organi
 
 It is not a static prompt collection and it does not replace your application repository. CC-RADT manages the team, rules, context, and collaboration state while your project code remains where it is.
 
-> Current version: `v1.1.0`. Claude Code is the primary runtime. Codex and OpenCode adapters remain on the roadmap.
+> Current version: [`v1.2.0`](https://github.com/Jia0201/CC-RADT/releases/tag/v1.2.0), released on 2026-09-22. Claude Code is the primary runtime. Codex and OpenCode adapters remain on the roadmap.
 
-## What's New in v1.1.0
+## What's New in v1.2.0
 
-A local read-only observer adds per-session filtering, task and log reading, and retained file versions. Project initialization is now explicit. Lead system prompt `1.0.1`, rendered task contracts, heartbeat handling, sensitive-path matching, and installation validation improve everyday reliability.
+Observer V2 adds current-project CC public conversations, tool inputs and outputs, Agent collaboration, deduplicated Token usage, and file-change, Skills, MCP, and workflow views. Details use safe Markdown rendering in a compact black/white/grey interface, without hidden thinking, task execution, or approval. This version also adds upgrade manifests and external-upgrade safety boundaries, and corrects exclusions for E2E copies and source-document link checks.
 
-[Release notes and v1.0.0 comparison](../../RELEASE_NOTES.md) · [Detailed user guide (Chinese)](../../USAGE.md) · [Upgrade guide (Chinese)](../../UPGRADE.md) · [Download v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
+[1.2.0 release notes and history](../../RELEASE_NOTES.md) · [Detailed user guide (Chinese)](../../USAGE.md) · [Upgrade safety and history (Chinese)](../../UPGRADE.md) · [Historical public v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
 
-Preserve existing project knowledge and memory during upgrades. Merge the new managed hooks and permission rules using the upgrade guide.
+Never overwrite a long-lived Harness installation by directory. Preserve project knowledge, memory, tasks, and private configuration. The internal upgrade script is retired; the independent updater remains experimental, and neither its source nor binaries ship with the Harness. See the upgrade guide for boundaries.
 
-> **Version branches:** [`main`](https://github.com/Jia0201/CC-RADT/tree/main) contains v1.1.0 and subsequent documentation improvements; [`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0) preserves the original release. Use [Releases](https://github.com/Jia0201/CC-RADT/releases) for frozen versioned downloads.
+> **Version branches:** `dev` holds development source and `main` shows the current public runtime. Pin [`v1.2.0`](https://github.com/Jia0201/CC-RADT/tree/v1.2.0), historical [`v1.1.0`](https://github.com/Jia0201/CC-RADT/tree/v1.1.0), or [`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0) when reproducibility matters; published tags and assets remain immutable.
 
 ## Engineering Observer
 
-The built-in read-only observer brings session activity, task files, logs, review evidence, and role definitions into a local browser view. Each project shares one service across Claude Code sessions; each browser tab keeps its own session filter.
+The built-in read-only observer brings session activity, native public conversations, tool operations, logs, review evidence, and capabilities into a local browser view. Each project shares one service across Claude Code sessions; each browser tab keeps its own session filter. The screenshots below come from the isolated v1.2.0 V2 browser fixture and contain no real project records.
 
 ![Observer overview with two sessions and an activity timeline](assets/readme/observer/observer-multi-session.png)
 
-*Actual v1.1.0 UI captured from isolated test fixtures. The sessions, tasks, and failures shown here are sample data, not real project activity.*
+*Actual v1.2.0 V2 UI. Sessions, tasks, and failures are isolated test data.*
 
 | View | What you can inspect |
 |---|---|
-| Overview and sessions | Separate sessions, Agent activity, tool failures, and a timeline |
-| Tasks | Existing task files and their recorded evidence |
+| Overview and sessions | Per-session Agent instances, recent activity, deduplicated Tokens, and collaboration |
+| Tasks | User tasks, public conversations, child Agent dispatches, and tool inputs and outputs |
+| File changes | CC change snippets and separate current Git worktree diffs, without automatic attribution |
 | Logs | Text records from allowed project log sources |
-| Evidence and reviews | Existing review records and retained file versions |
-| Team and configuration | Role definitions on disk |
+| Evidence and reviews | Permission requests, plan confirmations, questions, and existing evidence; unknown outcomes are not approvals |
+| Team and configuration | Project-level roles and capabilities |
+| Skills, MCP, and workflow rules | Actual Skill files, redacted service configuration, and declared workflows |
 
 <details>
 <summary>Task evidence and review screenshots</summary>
@@ -52,9 +54,33 @@ The review view reads an existing decision. Approval and rework remain in Claude
 </details>
 
 <details>
+<summary>File changes and safe Markdown</summary>
+
+![Before-and-after code changes](assets/readme/observer/observer-code-changes.png)
+
+![Safe Markdown in an Agent definition](assets/readme/observer/observer-markdown.png)
+
+Recorded edits stay separate from the current Git worktree diff. Document details support headings, lists, tables, and code blocks; HTML is sanitized and remote images are not loaded automatically.
+
+</details>
+
+<details>
+<summary>Skills, MCP, and workflow catalogs</summary>
+
+![Installed Skills and their content](assets/readme/observer/observer-skills.png)
+
+![MCP services and redacted boundaries](assets/readme/observer/observer-mcp.png)
+
+![The twelve declared workflow rules](assets/readme/observer/observer-workflows.png)
+
+</details>
+
+<details>
 <summary>Mobile layout</summary>
 
 <img src="assets/readme/observer/observer-mobile.png" alt="Observer mobile layout" width="390">
+
+<img src="assets/readme/observer/observer-markdown-mobile.png" alt="Safe Markdown on mobile" width="390">
 
 </details>
 
@@ -68,7 +94,7 @@ node .claude/ai-teams/tools/observer/cli.mjs status
 node .claude/ai-teams/tools/observer/cli.mjs stop
 ```
 
-`start` starts or reuses the service; `status` retrieves the full access link; `stop` stops only the observer. In the development source checkout, use `tools/observer/cli.mjs`.
+`start` starts or reuses the service; `status` retrieves the full access link; `stop` stops only the observer.
 
 The observer listens on `127.0.0.1`, uses a random access credential, and stores bounded history outside the project. Set `AI_TEAMS_OBSERVER=0` before starting Claude Code to disable automatic startup and recording. See the [observer guide](tools/observer/README.md) for retention, configuration, and limitations. The web UI does not execute commands, approve work, or change configuration.
 
@@ -110,13 +136,7 @@ The goal is not to add more prompt text. It is to turn model capability into a r
 
 ### 2. Download the installation content
 
-Download the latest package from [GitHub Releases](https://github.com/Jia0201/CC-RADT/releases), or clone `main` into a temporary directory outside the target project:
-
-```bash
-git clone --depth 1 --branch main https://github.com/Jia0201/CC-RADT.git cc-radt
-```
-
-Do not nest the entire `cc-radt/` directory inside the application. Merge its `.claude/`, `.mcp.json`, READMEs, and installation guide into the target project root.
+Download `CC-RADT-v1.2.0.zip` and its SHA-256 file from the [v1.2.0 Release](https://github.com/Jia0201/CC-RADT/releases/tag/v1.2.0), then verify it outside the project using the [user guide](../../USAGE.md). For a new installation, merge `.claude/` and `.mcp.json`; reference documents need not replace your project's own READMEs.
 
 The installed layout is:
 
@@ -154,7 +174,7 @@ If the target has no Claude Code configuration, copy the installation content in
 
 | Installation content | Action |
 |---|---|
-| `.claude/ai-teams/` | Copy the complete directory under the target project's `.claude/` |
+| `.claude/ai-teams/` | Copy only for a new installation; never overwrite an existing Harness directory, and read the upgrade guide first |
 | `.claude/agents/` | Merge the 12 named agent files; back up name conflicts first |
 | `.claude/rules/` | Merge the CC-RADT rule adapters; back up name conflicts first |
 | `.claude/manifest.json` | Copy under the target project's `.claude/` |
@@ -356,7 +376,7 @@ Start from [`.claude/ai-teams/index/ENTRY.md`](index/ENTRY.md) for the full map.
 
 ## Status and Roadmap
 
-`v1.1.0` includes 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, runtime self-checks, and the read-only engineering observer.
+`v1.2.0` retains 12 agents, 12 workflows, four-layer memory, manual initialization, prompt governance, security policies, hooks, MCP, Skills, rollback, and runtime checks, while extending Observer V2 and upgrade manifests. It does not provide internal self-upgrade or a stable cross-platform updater.
 
 The roadmap includes long-running real-project regression, a simplified deployment profile, and Codex / OpenCode adapters. See [`.claude/ai-teams/index/STATUS.md`](index/STATUS.md) for current status and the public [Changelog](https://github.com/Jia0201/CC-RADT/blob/main/CHANGELOG.md) for user-visible changes. To extend the harness itself, switch to the [`dev` branch](https://github.com/Jia0201/CC-RADT/tree/dev) and read the [development guide](https://github.com/Jia0201/CC-RADT/blob/dev/DEVELOPMENT.en.md).
 

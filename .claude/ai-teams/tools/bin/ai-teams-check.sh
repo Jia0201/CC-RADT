@@ -1187,9 +1187,13 @@ if command -v rg >/dev/null 2>&1; then
   fi
 
   for subdir in commands workflows skills; do
+    # The observer reads project-native CC skills without migrating Harness skills back to that layout.
+    observer_native_exclusions=(--glob '!logs/**' --glob '!memory/conversations/**')
+    if [[ "$subdir" == "skills" ]]; then
+      observer_native_exclusions+=(--glob '!tools/observer/catalog.mjs' --glob '!tools/observer/native.test.mjs')
+    fi
     if rg -n "\\.claude/$subdir" \
-      --glob '!logs/**' \
-      --glob '!memory/conversations/**' \
+      "${observer_native_exclusions[@]}" \
       . >/tmp/ai-teams-old-claude-refs.$$ 2>/dev/null; then
       echo "存在旧 .claude/$subdir 引用："
       cat /tmp/ai-teams-old-claude-refs.$$
@@ -1366,6 +1370,8 @@ function walk(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (skipped.has(entry.name)) continue;
     const file = path.join(dir, entry.name);
+    const relative = path.relative(root, file).split(path.sep).join('/');
+    if (['updater/artifacts', 'updater/bin', 'updater/dist'].includes(relative)) continue;
     if (entry.isDirectory()) walk(file);
     else if (entry.name.endsWith('.md')) check(file);
   }

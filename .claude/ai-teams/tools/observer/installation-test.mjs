@@ -9,7 +9,7 @@ import { pathToFileURL } from 'node:url';
 const project = fs.realpathSync(process.argv[2]);
 const root = path.join(project, '.claude', 'ai-teams');
 const settings = JSON.parse(fs.readFileSync(path.join(project, '.claude', 'settings.json'), 'utf8'));
-const requiredEvents = ['SessionStart', 'SessionEnd', 'UserPromptSubmit', 'PreToolUse', 'PostToolUse', 'PostToolUseFailure', 'PermissionDenied', 'SubagentStart', 'SubagentStop', 'TaskCompleted', 'StopFailure', 'Stop'];
+const requiredEvents = ['SessionStart', 'SessionEnd', 'UserPromptSubmit', 'PreToolUse', 'PostToolUse', 'PostToolUseFailure', 'PermissionRequest', 'Notification', 'PermissionDenied', 'SubagentStart', 'SubagentStop', 'TaskCompleted', 'StopFailure', 'Stop'];
 for (const event of requiredEvents) {
   const hooks = settings.hooks[event].flatMap(group => group.hooks).filter(item => item.args?.[0]?.endsWith('/observer-hook.mjs'));
   assert.equal(hooks.length, 1, event + ' must have exactly one observer hook');
@@ -48,7 +48,8 @@ try {
   }
   assert.equal(state.sessions.length, 2);
   assert.equal(state.project.root, project);
-  for (const asset of ['/', '/app.js', '/style.css']) assert.equal((await fetch(url + asset)).status, 200);
+  for (const asset of ['/', '/app.js', '/style.css', '/markdown.js', '/vendor/marked.js', '/vendor/purify.js']) assert.equal((await fetch(url + asset)).status, 200);
+  for (const license of ['marked.LICENSE','dompurify.LICENSE','dompurify.LICENSE-MPL']) assert.ok(fs.existsSync(path.join(root,'tools/observer/web/vendor',license)), 'Offline renderer licenses must ship');
   console.log(JSON.stringify({ passed: true, packageRoot: project, verifiedHooks: requiredEvents.length, installedSessions: 2, dataOutsidePackage: !ctx.dataDir.startsWith(project + path.sep) }));
 } finally {
   service = service || await runtime.probe(ctx);

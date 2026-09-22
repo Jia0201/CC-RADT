@@ -5,7 +5,7 @@
   "autoMemoryEnabled": false,
   "includeGitInstructions": false,
   "ai_teams": {
-    "version": "1.1.0",
+    "version": "1.2.0",
     "hooks_enabled": true,
     "brain_root": ".claude/ai-teams",
     "default_agent_mode": "multi-agent",
@@ -44,6 +44,30 @@
   },
   "disableAllHooks": false,
   "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command", "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/ai-teams/hooks/scripts/observer-hook.mjs"],
+            "timeout": 2
+          }
+        ]
+      }
+    ],
     "SessionEnd": [
       {
         "matcher": "",

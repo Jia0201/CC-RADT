@@ -53,7 +53,7 @@ status: active
 - `README.md`
 - `README.en.md`
 - `USAGE.md`：安装、初始化、任务示例、观察台和故障排查。
-- `UPGRADE.md`：v1.0.0 到 v1.1.0 的区别、配置迁移和回滚。
+- `UPGRADE.md`：当前版本的升级边界与历史迁移说明，要求保留项目资料，不在运行中覆盖 Harness。
 - `RELEASE_NOTES.md`：当前安装包本的用户发布说明。
 - `CLAUDE.md`
 - `VERSION`

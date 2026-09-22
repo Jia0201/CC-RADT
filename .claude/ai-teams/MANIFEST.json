@@ -4,7 +4,7 @@
   "full_name": "Claude Code Research and Development Teams",
   "display_name_zh": "基于 Claude Code 的全流程研发团队",
   "runtime_namespace": "ai-teams",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "stage": "formal-runtime",
   "edition": "formal",
   "description": "面向 Claude Code 的全流程多 Agent 软件研发团队 Harness，预留 Codex 和 OpenCode 适配能力。",

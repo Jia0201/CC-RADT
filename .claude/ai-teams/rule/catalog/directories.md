@@ -338,6 +338,7 @@ status: active
 | `tools/memory` | 运行包目录 |
 | `tools/observer` | 运行包目录 |
 | `tools/observer/web` | 运行包目录 |
+| `tools/observer/web/vendor` | 运行包目录 |
 | `tools/rollback` | 运行包目录 |
 | `tools/rollback/snapshots` | 运行包目录 |
 | `tools/skills` | 运行包目录 |

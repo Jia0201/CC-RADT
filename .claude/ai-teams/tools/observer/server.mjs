@@ -29,17 +29,18 @@ worker.on('message', message => {
   if (message.type === 'evidence') pending.get(message.requestId)?.(message.evidence);
 });
 worker.on('error', () => { state = { ...state, scanError: '采集线程异常，保留上次有效记录；CC 不受影响' }; });
-function readEvidence(id) {
+function readEvidence(id, type = 'evidence') {
   return new Promise(resolve => {
     const requestId = randomUUID();
     const timer = setTimeout(() => { pending.delete(requestId); resolve(undefined); }, 5000);
     pending.set(requestId, evidence => { clearTimeout(timer); pending.delete(requestId); resolve(evidence); });
-    try { worker.postMessage({ type: 'evidence', id, requestId }); }
+    try { worker.postMessage({ type, id, requestId }); }
     catch { clearTimeout(timer); pending.delete(requestId); resolve(undefined); }
   });
 }
 const token = randomBytes(32).toString('hex');
-const staticFiles = new Map([['/', ['index.html', 'text/html']], ['/app.js', ['app.js', 'text/javascript']], ['/style.css', ['style.css', 'text/css']]]);
+const staticFiles = new Map([['/', ['index.html', 'text/html']], ['/app.js', ['app.js', 'text/javascript']], ['/style.css', ['style.css', 'text/css']],
+  ['/markdown.js', ['markdown.js', 'text/javascript']], ['/vendor/marked.js', ['vendor/marked.js', 'text/javascript']], ['/vendor/purify.js', ['vendor/purify.js', 'text/javascript']]]);
 let port;
 let stopping = false;
 const server = http.createServer(async (req, res) => {
@@ -67,8 +68,14 @@ const server = http.createServer(async (req, res) => {
     return reply(200, { ...state, selectedSession,
       events: state.events.filter(e => !selectedSession || e.sessionId === selectedSession),
       agents: state.agents.filter(e => !selectedSession || e.sessionId === selectedSession),
+      native: { ...state.native, sessions: (state.native?.sessions || []).filter(s => !selectedSession || s.id === selectedSession) },
       scanError: state.scannedAt && Date.now() - Date.parse(state.scannedAt) > 10000 ? '采集超过 10 秒未刷新，以下为最后已知数据' : state.scanError,
     });
+  }
+  const detailRoute = url.pathname.match(/^\/api\/(session|catalog|worktree)\/([a-zA-Z0-9_:-]{1,220})$/);
+  if (detailRoute) {
+    const item = await readEvidence(detailRoute[2], detailRoute[1]);
+    return item === undefined ? reply(503, { error: '本地记录读取繁忙，请稍后重试' }) : item ? reply(200, item) : reply(404, { error: '当前覆盖范围内没有此记录' });
   }
   if (url.pathname.startsWith('/api/evidence/')) {
     const id = url.pathname.slice('/api/evidence/'.length);

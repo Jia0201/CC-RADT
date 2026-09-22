@@ -14,7 +14,7 @@ status: active
 | No. | 指令能力 | 文件 |
 |---:|---|---|
 | 1 | 项目初始化 | tools/commands/ai/init-project.md |
-| 2 | 已在项目中运行升级指令 | tools/commands/ai/upgrade-existing.md |
+| 2 | 外部升级器操作说明（工程内不执行） | tools/commands/ai/upgrade-existing.md |
 | 3 | 多余日志清除指令 | tools/commands/ai/logs-clean.md |
 | 4 | 自学习指令 | tools/commands/ai/self-learn.md |
 | 5 | MCP 查询指令 | tools/commands/ai/mcp-list.md |
@@ -43,7 +43,7 @@ status: active
 |---|---|---|
 | 项目初始化 | tools/bin/ai-teams-init-project.sh | 可生成扫描报告并合并更新项目文档、索引和记忆 |
 | CodeGraph 状态检测 | tools/bin/ai-teams-codegraph-status.sh | 可检测 CLI、`.codegraph/` 和写入索引 |
-| 已在项目中运行升级指令 | tools/bin/ai-teams-upgrade.sh | 支持 dry-run、快照、变更清单和受控 apply |
+| 外部升级器操作说明 | tools/bin/ai-teams-upgrade.sh | 退役入口，仅中文说明、零写入；不支持 dry-run 或 apply |
 | 回滚指令 | tools/bin/ai-teams-rollback.sh | 支持快照列表、回滚计划和显式确认 apply |
 | 多余日志清除指令 | tools/bin/ai-teams-logs-clean.sh | 支持计划、归档和普通日志清理 |
 | MCP 查询指令 | tools/bin/ai-teams-mcp-list.sh | 可查询共享 MCP、Agent MCP 和 CodeGraph 状态 |

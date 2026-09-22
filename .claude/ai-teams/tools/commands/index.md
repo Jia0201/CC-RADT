@@ -14,7 +14,7 @@ status: active
 | No. | 指令能力 | 指令说明 |
 |---:|---|---|
 | 1 | 项目初始化 | tools/commands/ai/init-project.md |
-| 2 | 已在项目中运行升级指令 | tools/commands/ai/upgrade-existing.md |
+| 2 | 外部升级器操作说明（工程内不执行） | tools/commands/ai/upgrade-existing.md |
 | 3 | 多余日志清除指令 | tools/commands/ai/logs-clean.md |
 | 4 | 自学习指令 | tools/commands/ai/self-learn.md |
 | 5 | MCP 查询指令 | tools/commands/ai/mcp-list.md |
