@@ -176,6 +176,7 @@ output="$payload_root"
 copy_formal() {
   rsync -a \
     --exclude "CLAUDE.md" \
+    --exclude ".git" \
     --exclude ".git/" \
     --exclude ".github/" \
     --exclude ".gitmessage" \
