@@ -17,6 +17,7 @@ status: active
 | [file-ownership](./file-ownership.md) | 文件 Owner 和跨 Owner 写入边界 |
 | [sensitive-files](./sensitive-files.md) | 敏感文件识别与处理 |
 | [delete-policy](./delete-policy.md) | 删除分级、确认、快照、回滚 |
+| [upgrade-policy](./upgrade-policy.md) | 外部升级、指纹信任、数据保护与事务恢复边界 |
 | [task-policy](./task-policy.md) | 任务单与执行方案规则 |
 | [project-policy](./project-policy.md) | 目标项目初始化、运行期项目画像和项目管理更新规则 |
 | [runtime-maintenance-policy](./runtime-maintenance-policy.md) | Doc / Memory / Role 在运行期维护索引、图谱、记忆、项目文档和 Agent 指引的规则 |

@@ -39,7 +39,24 @@ copy_brain() {
   local destination="$1"
   local agent_source=""
   mkdir -p "$destination"
-  cp -R "$AI_TEAMS_ROOT"/. "$destination"/
+  node - "$AI_TEAMS_ROOT" "$destination" <<'NODE_COPY'
+const fs = require('node:fs');
+const path = require('node:path');
+const [source, destination] = process.argv.slice(2);
+const excluded = new Set(['.git', '.codegraph', '.cache', 'node_modules', 'updater', 'lab', '.ssh', '.gnupg', 'secrets', '.secrets']);
+const privateName = /^(?:\.env(?:\..*)?|settings\.local\.json|\.?credentials?(?:\..*)?|\.?secrets?(?:\..*)?|\.?token(?:\..*)?|id_rsa|id_ed25519|service-account.*\.json)$/i;
+fs.cpSync(source, destination, {
+  recursive: true,
+  filter(file) {
+    const relative = path.relative(source, file);
+    if (!relative) return true;
+    const parts = relative.split(path.sep);
+    if (parts.some(part => excluded.has(part) || privateName.test(part))) return false;
+    if (/\.(?:pem|key|p12|pfx|jks|keystore)$/i.test(file)) return false;
+    return !fs.lstatSync(file).isSymbolicLink();
+  },
+});
+NODE_COPY
   if [[ -d "$AI_TEAMS_ROOT/.claude/agents" ]]; then
     agent_source="$AI_TEAMS_ROOT/.claude/agents"
   elif [[ "$(basename "$(dirname "$AI_TEAMS_ROOT")")" == ".claude" && -d "$(dirname "$AI_TEAMS_ROOT")/agents" ]]; then

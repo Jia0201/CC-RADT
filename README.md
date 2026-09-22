@@ -11,35 +11,41 @@ CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把�
 
 它不是一组静态提示词，也不替代你的业务项目。CC-RADT 负责维护团队、规则、上下文与协作状态；你的项目代码仍保留在原来的目录中。
 
-> 当前版本：`v1.1.0`。Claude Code 是当前优先运行环境；Codex 和 OpenCode 适配保留在后续路线中。
+> 当前版本：[`v1.2.0`](https://github.com/Jia0201/CC-RADT/releases/tag/v1.2.0)，发布于 2026-09-22。Claude Code 是当前优先运行环境；Codex 和 OpenCode 适配保留在后续路线中。
 
-## v1.1.0 更新
+## v1.2.0 更新
 
-新增本机只读研发观察台，支持多会话筛选、任务与日志阅读和文件版本留存。项目初始化改为用户主动操作；Lead system prompt 升至 `1.0.1`，修复固定首轮提示、心跳误接管、敏感文件误拦截和安装态自检问题。
+观察台 V2 接入当前项目 CC 原生公开对话、工具输入输出、Agent 协作和去重 Token 用量，新增文件变更、Skills、MCP 与软链路视图；详情支持安全 Markdown 排版，界面采用紧凑黑白灰布局。保持只读，不采集隐藏思考，不执行或批准任务。新增升级清单与外部升级安全边界，并修复隔离 E2E 夹具复制和源码链接检查的排除范围。
 
-[发布说明与 v1.0.0 对比](RELEASE_NOTES.md) · [详细使用说明](USAGE.md) · [v1.0.0 升级指南](UPGRADE.md) · [下载 v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
+[1.2.0 发布说明与历史版本](RELEASE_NOTES.md) · [详细使用说明](USAGE.md) · [升级安全边界与历史指南](UPGRADE.md) · [历史公开版 v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
 
-升级时保留现有项目画像与记忆，并合并更新 Hook 和权限规则。完整步骤见升级指南。
+不得用新包按目录覆盖长期项目。旧内部升级脚本已停用；独立升级器仍处实验阶段，源码与二进制均不随 Harness 分发。保留项目画像、记忆、任务记录与私有配置，完整边界见升级指南。
 
-> **版本分支**：[`main`](https://github.com/Jia0201/CC-RADT/tree/main) 展示 v1.1.0 及后续文档改进；[`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0) 保留旧版。需要固定版本的安装包时，从 [Releases](https://github.com/Jia0201/CC-RADT/releases) 下载。
+> **版本分支**：`dev` 保存开发源码，`main` 展示当前公开运行版。固定版本可使用 [`v1.2.0`](https://github.com/Jia0201/CC-RADT/tree/v1.2.0)、历史 [`v1.1.0`](https://github.com/Jia0201/CC-RADT/tree/v1.1.0) 或 [`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0)；已发布标签和附件保持不可变。
 
 <a id="内置只读观察台"></a>
 
 ## 研发观测台（Observer）
 
-内置只读观测台，把多会话活动、任务文件、项目日志、已有审查证据和角色定义放在同一个本机网页中。一个项目的多个 Claude Code 会话共享服务，每个浏览器标签页可以独立筛选会话。
+内置只读观测台，把多会话 Agent 状态、CC 原生对话、工具操作、文件修改、决策记录与项目能力目录放在同一个本机网页中。一个项目的多个 Claude Code 会话共享服务，每个浏览器标签页可以独立筛选会话。以下截图来自 v1.2.0 V2 的隔离浏览器回归样例，采用紧凑的黑白灰界面，不包含真实项目记录。
 
 ![研发观测台：双会话与活动时间线](assets/readme/observer/observer-multi-session.png)
 
-*以上为 v1.1.0 实际界面截图，使用隔离测试样例；会话、任务和失败事件均为示例数据，不代表真实项目运行记录。*
+*v1.2.0 V2 实际界面截图；会话、任务和失败事件均为隔离测试数据。*
 
 | 页面 | 可以查看的内容 |
 |---|---|
-| 概览与会话 | 独立会话、Agent 活动、工具失败和活动时间线 |
-| 任务记录 | 已写入文件的任务内容与证据 |
-| 活动日志 | 允许范围内的项目日志文本 |
-| 证据与审查 | 已有审查记录及文件留存版本 |
-| 团队与配置 | 磁盘上的角色定义 |
+| 概览与会话 | 每会话 Agent 实例、最近动作、已报告 Token、Skills / MCP 调用与实际协作 |
+| 任务记录 | 每条用户任务的公开对话、子 Agent 派发与工具输入输出 |
+| 文件变更 | CC 修改前后片段、单独展示的当前 Git 工作区 diff |
+| 活动日志 | 原有 Hook 时间线和允许范围内的项目日志 |
+| 证据与审查 | 权限请求、计划确认、人类提问、任务修改和已有审查依据 |
+| 团队与配置 | 项目级 Agent 职责与能力卡片，不受会话筛选影响 |
+| Skills | 实际安装的 SKILL.md、所属 Agent、用途和正文 |
+| MCP | 项目服务配置、传输方式与安全边界，凭据隐藏 |
+| 软链路规则 | playbook 声明的 12 套工作流组合与检查关口 |
+
+现有详情中的 Markdown 统一排版，HTML 转义并消毒，不自动加载图片或执行代码；JSON 与修改差异保留原样。原生会话仅读取当前项目公开内容，不复制原始会话文件；缺失记录与权限审批结果保持未知，Git 工作区差异不自动归因到某次会话。
 
 <details>
 <summary>展开查看：任务证据与审查页面</summary>
@@ -55,9 +61,35 @@ CC-RADT 是一套面向 Claude Code 的多 Agent 软件研发 Harness。它把�
 </details>
 
 <details>
+<summary>展开查看：文件变更与安全 Markdown</summary>
+
+![文件变更：对照修改前后片段](assets/readme/observer/observer-code-changes.png)
+
+文件变更页将 CC 会话记录的修改片段与当前 Git 工作区差异分开显示，避免把共享工作区变更错误归因给单一会话。
+
+![安全 Markdown：角色定义与文档详情](assets/readme/observer/observer-markdown.png)
+
+Agent、Skill、工作流、日志与证据详情支持标题、列表、表格和代码块；HTML 会被清理，远程图片不会自动加载。
+
+</details>
+
+<details>
+<summary>展开查看：Skills、MCP 与工作流目录</summary>
+
+![Skills：实际安装技能与正文](assets/readme/observer/observer-skills.png)
+
+![MCP：服务配置与脱敏边界](assets/readme/observer/observer-mcp.png)
+
+![软链路规则：12 套研发工作流](assets/readme/observer/observer-workflows.png)
+
+</details>
+
+<details>
 <summary>展开查看：移动端布局</summary>
 
 <img src="assets/readme/observer/observer-mobile.png" alt="研发观测台移动端布局" width="390">
+
+<img src="assets/readme/observer/observer-markdown-mobile.png" alt="安全 Markdown 移动端布局" width="390">
 
 </details>
 
@@ -98,7 +130,7 @@ node .claude/ai-teams/tools/observer/cli.mjs stop
 
 ### 2. 把安装包合并到项目根目录
 
-下载生成好的 CC-RADT 安装包，将其中内容合并到目标项目根目录。推荐形态如下：
+从 [v1.2.0 Release](https://github.com/Jia0201/CC-RADT/releases/tag/v1.2.0) 下载 `CC-RADT-v1.2.0.zip` 和对应 SHA-256 文件，先在项目外按 [使用指南](USAGE.md) 校验，再在新项目或隔离副本中安装。已有 Harness 的长期项目必须先读 [升级指南](UPGRADE.md)，不得整目录覆盖。推荐形态如下：
 
 ```text
 target-project/
@@ -343,7 +375,7 @@ bash tools/bin/ai-teams-check.sh
 
 ## 当前状态与路线
 
-`v1.1.0` 已具备主工程、12 Agent、12 套工作流、四层记忆、项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、升级、回滚、正式安装包验证链路和只读研发观察台。
+`v1.2.0` 保留 12 Agent、12 套工作流、四层记忆、手动项目初始化、提示词治理、安全规则、Hooks、MCP、Skills、回滚和安装自检，扩展只读观察台 V2 与升级清单。旧内部升级入口已停用，实验独立升级器不随包交付，也不代表全平台稳定升级能力。
 
 后续计划包括真实项目长期回归、GitHub 开源工程治理、精简版，以及 Codex / OpenCode 适配。当前状态详见 [`index/STATUS.md`](index/STATUS.md)，用户可感知变化见 [`CHANGELOG.md`](CHANGELOG.md)。
 

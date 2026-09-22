@@ -51,6 +51,8 @@ AI-Teams 使用 Claude Code 官方生命周期 Hook，将安全拦截、Lead 运
 - 脚本：`hooks/scripts/observer-hook.mjs`；模块：[Observer](../tools/observer/README.md)。
 - `SessionStart` 启动或复用本地服务，并按会话和服务实例去重提示；同项目多会话共享服务，各自记录活动。
 - `SessionEnd`、`UserPromptSubmit`、工具与 Agent 生命周期等事件只写观察器外置元信息，不写业务任务状态，不复制完整命令或聊天正文。
+- `PermissionRequest` / `PermissionDenied` 额外留存限长脱敏的决策输入；`Notification: permission_prompt` 只记录通知类型。它们不返回 allow / deny 决定；缺少调用 ID 的请求不猜测审批结果。
+- V2 的对话、工具和 Token 从当前项目原生 JSONL 在 Worker 内只读解析，不通过 Hook 复制聊天正文；可用 `AI_TEAMS_OBSERVER_TRANSCRIPTS=0` 关闭。
 - 不复用旧心跳文件中的单 Agent 名称作为跨会话实例标识，不改变现有心跳和安全 Hook 的决策。
 - 任何启动或采集失败均放行，`AI_TEAMS_OBSERVER=0` 可禁用。服务启停与配置从终端完成，网页只有读接口。
 

@@ -11,33 +11,39 @@ CC-RADT is a multi-agent software development harness for Claude Code. It organi
 
 It is not a static prompt collection and it does not replace your application repository. CC-RADT manages the team, rules, context, and collaboration state while your project code remains where it is.
 
-> Current version: `v1.1.0`. Claude Code is the primary runtime. Codex and OpenCode adapters remain on the roadmap.
+> Current version: [`v1.2.0`](https://github.com/Jia0201/CC-RADT/releases/tag/v1.2.0), released on 2026-09-22. Claude Code is the primary runtime. Codex and OpenCode adapters remain on the roadmap.
 
-## What's New in v1.1.0
+## What's New in v1.2.0
 
-A local read-only observer adds per-session filtering, task and log reading, and retained file versions. Project initialization is now explicit. Lead system prompt `1.0.1`, rendered task contracts, heartbeat handling, sensitive-path matching, and installation validation improve everyday reliability.
+Observer V2 adds current-project CC public conversations, tool inputs and outputs, Agent collaboration, and deduplicated Token usage, with file-change, Skills, MCP, and workflow views. Details use safe Markdown rendering in a compact black/white/grey interface. It remains read-only: no hidden thinking, task execution, or approval. This version also adds upgrade manifests and external-upgrade safety boundaries, and corrects exclusions for isolated E2E copies and source-document link checks.
 
-[Release notes and v1.0.0 comparison](RELEASE_NOTES.md) · [Detailed user guide (Chinese)](USAGE.md) · [Upgrade guide (Chinese)](UPGRADE.md) · [Download v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
+[1.2.0 release notes and history](RELEASE_NOTES.md) · [Detailed user guide (Chinese)](USAGE.md) · [Upgrade safety and history (Chinese)](UPGRADE.md) · [Historical public v1.1.0](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0)
 
-Preserve existing project knowledge and memory during upgrades. Merge the new managed hooks and permission rules using the upgrade guide.
+Never overwrite a long-lived project's Harness directory with the new package. The internal upgrade script is retired; the independent updater remains experimental, and neither its source nor binaries ship with the Harness. Preserve project knowledge, memory, tasks, and private configuration; see the upgrade guide for safety boundaries.
 
-> **Version branches:** [`main`](https://github.com/Jia0201/CC-RADT/tree/main) contains v1.1.0 and subsequent documentation improvements; [`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0) preserves the original release. Use [Releases](https://github.com/Jia0201/CC-RADT/releases) for frozen versioned downloads.
+> **Version branches:** `dev` holds development source and `main` shows the current public runtime. Pin [`v1.2.0`](https://github.com/Jia0201/CC-RADT/tree/v1.2.0), historical [`v1.1.0`](https://github.com/Jia0201/CC-RADT/tree/v1.1.0), or [`v1.0.0`](https://github.com/Jia0201/CC-RADT/tree/v1.0.0) when reproducibility matters; published tags and assets remain immutable.
 
 ## Engineering Observer
 
-The built-in read-only observer brings session activity, task files, logs, review evidence, and role definitions into a local browser view. Each project shares one service across Claude Code sessions; each browser tab keeps its own session filter.
+The read-only observer brings per-session Agents, native CC conversations, tool operations, code changes, decisions, and project capabilities into one local view. Each project shares a service across CC sessions; each browser tab keeps its own filter. The screenshots below come from the isolated v1.2.0 V2 browser fixture and contain no real project records.
 
 ![Observer overview with two sessions and an activity timeline](assets/readme/observer/observer-multi-session.png)
 
-*Actual v1.1.0 UI captured from isolated test fixtures. The sessions, tasks, and failures shown here are sample data, not real project activity.*
+*Actual v1.2.0 V2 UI. Sessions, tasks, and failures are isolated test data.*
 
 | View | What you can inspect |
 |---|---|
-| Overview and sessions | Separate sessions, Agent activity, tool failures, and a timeline |
-| Tasks | Existing task files and their recorded evidence |
-| Logs | Text records from allowed project log sources |
-| Evidence and reviews | Existing review records and retained file versions |
-| Team and configuration | Role definitions on disk |
+| Overview and sessions | Per-session Agent instances, recent actions, reported Tokens, Skill/MCP use and collaboration |
+| Tasks | Each user instruction, public conversation, child Agent dispatches, tool inputs and outputs |
+| File changes | CC before/after snippets, separate from the current shared Git worktree diff |
+| Logs | Existing Hook timeline and allowed project logs |
+| Evidence and reviews | Permission requests, questions, plan confirmations, task changes and recorded evidence |
+| Team and configuration | Project-level Agent responsibility and capability cards |
+| Skills | Actual SKILL.md files, owners, purpose and content |
+| MCP | Configured services, transport and security boundaries; credentials hidden |
+| Workflow rules | Declared playbook workflows and review gates |
+
+Existing detail views render Markdown with HTML escaping and sanitization, without loading images or executing code; JSON and diffs remain raw. Only current-project public conversation content is read, and raw session files are not copied. Missing records and approval outcomes remain unknown; worktree diffs are not automatically attributed to a session.
 
 <details>
 <summary>Task evidence and review screenshots</summary>
@@ -53,9 +59,35 @@ The review view reads an existing decision. Approval and rework remain in Claude
 </details>
 
 <details>
+<summary>File changes and safe Markdown</summary>
+
+![Before-and-after code changes](assets/readme/observer/observer-code-changes.png)
+
+The changes view keeps CC-recorded edits separate from the current shared Git worktree diff, avoiding false per-session attribution.
+
+![Safe Markdown in an Agent definition](assets/readme/observer/observer-markdown.png)
+
+Agent, Skill, workflow, log, and evidence details support headings, lists, tables, and code blocks. HTML is sanitized and remote images are not loaded automatically.
+
+</details>
+
+<details>
+<summary>Skills, MCP, and workflow catalogs</summary>
+
+![Installed Skills and their content](assets/readme/observer/observer-skills.png)
+
+![MCP services and redacted boundaries](assets/readme/observer/observer-mcp.png)
+
+![The twelve declared workflow rules](assets/readme/observer/observer-workflows.png)
+
+</details>
+
+<details>
 <summary>Mobile layout</summary>
 
 <img src="assets/readme/observer/observer-mobile.png" alt="Observer mobile layout" width="390">
+
+<img src="assets/readme/observer/observer-markdown-mobile.png" alt="Safe Markdown on mobile" width="390">
 
 </details>
 
@@ -96,7 +128,7 @@ The observer listens on `127.0.0.1`, uses a random access credential, and stores
 
 ### 2. Merge the package into your project root
 
-Download a generated CC-RADT package and merge its contents into the target project:
+Download `CC-RADT-v1.2.0.zip` and its SHA-256 file from the [v1.2.0 Release](https://github.com/Jia0201/CC-RADT/releases/tag/v1.2.0). Verify it outside the project using the [user guide](USAGE.md), then install into a new project or isolated copy. Read the [upgrade guide](UPGRADE.md) before changing a long-lived Harness installation, and never overwrite it by directory:
 
 ```text
 target-project/
@@ -337,7 +369,7 @@ See [`DEVELOPMENT.en.md`](DEVELOPMENT.en.md) for source setup, directory ownersh
 
 ## Status and Roadmap
 
-`v1.1.0` includes the main harness, 12 agents, 12 workflows, four-layer memory, project initialization, prompt governance, security policies, hooks, MCP, Skills, upgrade, rollback, verified package generation, and the read-only engineering observer.
+`v1.2.0` retains 12 agents, 12 workflows, four-layer memory, manual project initialization, prompt governance, security policies, hooks, MCP, Skills, rollback, and installation checks, while extending Observer V2 and upgrade manifests. The internal upgrade entry point is retired; the experimental independent updater is not bundled or claimed as a stable cross-platform upgrade solution.
 
 The roadmap includes long-running real-project regression, GitHub project governance, a simplified package, and Codex / OpenCode adapters. See [`index/STATUS.md`](index/STATUS.md) for engineering status and [`CHANGELOG.md`](CHANGELOG.md) for user-visible changes.
 

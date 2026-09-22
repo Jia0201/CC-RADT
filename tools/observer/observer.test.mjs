@@ -165,3 +165,18 @@ test('source versions, redaction, traversal and bounded retention', () => {
   c.scan(); assert.equal(c.events.find(e => e.sessionId === 'same-name').target, '[敏感路径]');
   console.log('Isolated test evidence retained:', fixture);
 });
+
+test('evidence cache retains security checks and notices same-size file replacements', () => {
+  const file = 'logs/task/cache-check.md';
+  write(file, 'first record');
+  const absolute = path.join(root, file), stamp = fs.statSync(absolute);
+  const first = safeRead(ctx.root, file);
+  assert.deepEqual(safeRead(ctx.root, file, RETENTION.fileBytes, first), first);
+  write(file, 'other record');
+  fs.utimesSync(absolute, stamp.atime, stamp.mtime);
+  const next = safeRead(ctx.root, file, RETENTION.fileBytes, first);
+  assert.equal(next.content, 'other record');
+  assert.notEqual(next.fingerprint, first.fingerprint);
+  assert.throws(() => safeRead(ctx.root, '../outside.md', RETENTION.fileBytes, first));
+  assert.throws(() => safeRead(ctx.root, 'logs/task/.env', RETENTION.fileBytes, first));
+});

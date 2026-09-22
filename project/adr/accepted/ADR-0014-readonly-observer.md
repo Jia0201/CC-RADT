@@ -46,3 +46,15 @@ decision_by: lead
 - [版本治理](../../../security/version-control-policy.md)
 - [敏感文件规则](../../../security/sensitive-files.md)
 - [Claude Code 官方 Hook 契约](https://code.claude.com/docs/en/hooks)
+
+## 7. 2026-09-08：原生会话观察扩展
+
+根据用户新增需求，将初版的“只看链路”扩展为对话、任务、Agent 状态、修改片段、人工决策记录和能力目录。网页继续严格只读，执行与审批完全留在 CC CLI。
+
+- CC 主会话与 subagents JSONL 只在当前项目范围内解析，检查 cwd 与 sessionId；隐藏思考、系统注入和本地命令回显不显示。解析结果只驻留内存，不复制原始会话文件，不删除 CC 历史。
+- 模型消息 ID 去重后汇总原生日志提供的输入、输出、缓存读写 Token；缺失值为未知，不虚构费用或实时在线状态。
+- 子 Agent 通过 CC 返回的 agentId 关联父调用与用户任务；未提供身份不按时间猜测。协作视图只展示实际派发与消息关系。
+- Edit / Write 修改片段和相对 HEAD 的当前 Git 差异分开展示；后者可能包含其他人和会话的修改，不推断归属。
+- PermissionRequest 额外记录限长脱敏输入，Notification 捕捉 permission_prompt。没有 tool_use_id 的请求保留结果未知，不返回权限决定。
+- Agent、Skills、MCP 与软链路读取磁盘定义。目录不代表已加载或连通，MCP 不主动连接，配置中的凭据不展示。
+- 新增明确的读取上限、原生会话关闭开关和本地协议版本；升级后可通过 CLI 单独重启观察器，不终止 CC。

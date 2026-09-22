@@ -16,7 +16,7 @@ AI-Teams 的指令体系归入 `tools/`：指令说明在 `tools/commands/ai/`�
 | 1 | 一键打包指令（正式版） | `tools/commands/ai/package-formal.md` |
 | 2 | 一键打包指令（精简版） | `tools/commands/ai/package-simplify.md` |
 | 3 | 项目初始化 | `tools/commands/ai/init-project.md` |
-| 4 | 已在项目中运行升级指令 | `tools/commands/ai/upgrade-existing.md` |
+| 4 | 外部升级器操作说明（工程内不执行） | `tools/commands/ai/upgrade-existing.md` |
 | 5 | 多余日志清除指令 | `tools/commands/ai/logs-clean.md` |
 | 6 | 自学习指令 | `tools/commands/ai/self-learn.md` |
 | 7 | MCP 查询指令 | `tools/commands/ai/mcp-list.md` |

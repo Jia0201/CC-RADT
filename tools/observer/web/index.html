@@ -5,34 +5,41 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>CC-RADT · 研发观察台</title>
   <link rel="stylesheet" href="/style.css">
+  <script src="/vendor/marked.js" defer></script>
+  <script src="/vendor/purify.js" defer></script>
+  <script src="/markdown.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
   <div class="app">
     <aside class="navigation">
-      <a class="brand" href="/" aria-label="CC-RADT 观察台首页"><span class="brand-mark">R<span>↗</span></span><span>CC-RADT<small>HARNESS OBSERVER</small></span></a>
+      <a class="brand" href="/" aria-label="CC-RADT 观察台首页"><span class="brand-mark" aria-hidden="true">R</span><span>CC-RADT<small>本地观察台</small></span></a>
       <div class="nav-caption">工作空间</div>
-      <div class="project-label"><span class="project-icon">◈</span><span id="project-name">本地项目</span><span class="local-tag">LOCAL</span></div>
+      <div class="project-label"><span class="project-icon" aria-hidden="true">⌑</span><span id="project-name">本地项目</span><span class="local-tag">本地</span></div>
       <nav aria-label="主导航">
-        <button data-page="overview" class="nav-item active"><span class="nav-symbol">◫</span>概览与会话<span class="nav-number">01</span></button>
-        <button data-page="tasks" class="nav-item"><span class="nav-symbol">▤</span>任务记录<span class="nav-number">02</span></button>
-        <button data-page="logs" class="nav-item"><span class="nav-symbol">≋</span>活动日志<span class="nav-number">03</span></button>
-        <button data-page="reviews" class="nav-item"><span class="nav-symbol">◇</span>证据与审查<span class="nav-number">04</span></button>
-        <button data-page="config" class="nav-item"><span class="nav-symbol">⊞</span>团队与配置<span class="nav-number">05</span></button>
+        <button data-page="overview" class="nav-item active"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M9 9h12"/></svg></span>概览与会话</button>
+        <button data-page="tasks" class="nav-item"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>任务记录</button>
+        <button data-page="changes" class="nav-item"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h6M11 10v6M8 18h6"/></svg></span>文件变更</button>
+        <button data-page="logs" class="nav-item"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h16"/><circle cx="8" cy="5" r="2" fill="var(--nav)"/><circle cx="15" cy="12" r="2" fill="var(--nav)"/><circle cx="10" cy="19" r="2" fill="var(--nav)"/></svg></span>活动日志</button>
+        <button data-page="reviews" class="nav-item"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6zM8 12l3 3 5-6"/></svg></span>证据与审查</button>
+        <button data-page="config" class="nav-item"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M17 14a5 5 0 0 1 4 5v1"/></svg></span>团队与配置</button>
+        <button data-page="skills" class="nav-item"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg></span>Skills</button>
+        <button data-page="mcp" class="nav-item"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01M16 7h2M16 17h2"/></svg></span>MCP</button>
+        <button data-page="workflows" class="nav-item"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="15" y="15" width="6" height="6" rx="1.5"/><path d="M9 6h7a2 2 0 0 1 2 2v7M3 18h8M8 15l3 3-3 3"/></svg></span>软链路规则</button>
       </nav>
-      <div class="nav-bottom"><div class="readonly-seal"><span>↳</span> 观察，不干预</div><p>任务执行与操作<br>始终留在 CC CLI。</p><span class="edition">READ-ONLY / V1</span></div>
+      <div class="nav-bottom"><div class="readonly-seal">只读观察</div><p>任务执行与审批留在 CC CLI。</p></div>
     </aside>
     <main>
-      <header class="topbar"><div><div class="eyebrow">ENGINEERING OBSERVABILITY <span>/</span> 本机工作空间</div><h1 id="page-title">概览与会话</h1></div><div class="top-status"><span class="status-dot" id="connection-dot"></span><span id="connection" role="status" aria-live="polite">连接观察服务</span><span class="divider"></span><span class="readonly-tag">只读模式</span></div></header>
+      <header class="topbar"><h1 id="page-title">概览与会话</h1><div class="top-status"><span class="status-dot" id="connection-dot"></span><span id="connection" role="status" aria-live="polite">连接观察服务</span><span class="divider"></span><span class="readonly-tag">只读模式</span></div></header>
       <div class="intro"><p id="page-description">让执行过程有迹可循。按会话查看活动，再沿证据回溯。</p><span id="last-scan">等待首次采集</span></div>
-      <div class="summary-strip"><div><span class="summary-label">已登记会话</span><strong id="session-count">—</strong></div><div><span class="summary-label">当前筛选事件</span><strong id="event-count">—</strong></div><div><span class="summary-label">可读证据源</span><strong id="source-count">—</strong></div><div class="summary-note"><span class="small-dot"></span>只采集元信息 · 不读取聊天正文</div></div>
+      <div class="summary-strip"><div><span class="summary-label" id="metric-one">已登记会话</span><strong id="session-count">—</strong></div><div><span class="summary-label" id="metric-two">Agent 实例</span><strong id="event-count">—</strong></div><div><span class="summary-label" id="metric-three">用户任务</span><strong id="source-count">—</strong></div><div class="summary-note"><span class="small-dot"></span>本机只读 · 对话脱敏 · 隐藏思考不采集</div></div>
       <section id="locked" class="locked" hidden><span class="empty-icon">⌁</span><h2>使用 CC 给出的链接进入</h2><p>打开启动提示中的完整地址，才能读取本项目数据。<br>也可从终端运行观察器的 status 命令获取地址。</p></section>
       <div id="workspace" class="workspace">
         <aside class="session-panel"><div class="panel-heading"><h2>会话窗口</h2><span id="session-total" class="count">0</span></div><button id="all-sessions" class="all-sessions selected">全部会话 <span>↗</span></button><div id="sessions"></div><div class="session-footnote">多个 CC 窗口共享观察服务。<br>每个页面独立筛选，不影响其他窗口。</div></aside>
         <section class="work-panel"><div class="work-heading"><div><h2 id="section-title">活动时间线</h2><span id="scope-label">全部会话 · 项目共享证据单独列出</span></div><button id="refresh" class="icon-button" title="重新读取观察数据" aria-label="刷新观察数据">↻</button></div><div class="filters"><label class="search"><span>⌕</span><input id="search" placeholder="搜索工具、会话或证据来源" aria-label="搜索记录"></label><label class="error-filter"><input id="errors-only" type="checkbox">仅失败记录</label><button id="export" class="subtle-button">导出当前视图 ↓</button></div><div id="record-list" class="record-list"></div><div id="coverage" class="coverage"></div></section>
-        <aside class="inspector" aria-label="记录详情"><div class="panel-heading"><h2>证据详情</h2><span class="muted">↗</span></div><div id="inspector"><div class="inspector-empty"><div class="wire-icon">⤷</div><h3>从一条记录开始</h3><p>选择活动或文件，查看元信息、来源与已留存的内容。</p><div class="hint-line">原始活动 / 文件观测 / 历史版本</div></div></div></aside>
+        <aside class="inspector" aria-label="记录详情"><div class="panel-heading"><h2 id="detail-title">记录详情</h2><button id="close-detail" class="icon-button" aria-label="关闭详情">×</button></div><div id="inspector"></div></aside>
       </div>
-      <footer><span><span class="small-dot"></span> CC 负责执行 · Observer 负责呈现</span><span>LOCAL FIRST / NO CONTROL CHANNEL</span></footer>
+      <footer><span>CC 负责执行 · Observer 负责呈现</span><span>仅本机访问</span></footer>
     </main>
   </div>
 </body>

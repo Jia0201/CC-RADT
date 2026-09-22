@@ -4,8 +4,9 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { cleanObject, cleanText } from './local-data.mjs';
 
-export const VERSION = 1;
+export const VERSION = 2;
 export const MODULE_ROOT = path.dirname(fileURLToPath(import.meta.url));
 export const HARNESS_ROOT = path.resolve(MODULE_ROOT, '../..');
 export const hash = value => createHash('sha256').update(String(value)).digest('hex');
@@ -42,7 +43,7 @@ export function context(options = {}) {
   while (!fs.existsSync(ancestor)) ancestor = path.dirname(ancestor);
   const resolvedData = path.resolve(fs.realpathSync(ancestor), path.relative(ancestor, dataDir));
   if (inside(root, resolvedData) || inside(project, resolvedData)) throw new Error('观察器数据目录必须位于项目和 Harness 之外');
-  return { root, project, projectId, dataDir: resolvedData, name: label(path.basename(project)) };
+  return { root, project, projectId, dataDir: resolvedData, name: label(path.basename(project)), claudeDir: path.resolve(process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude')) };
 }
 
 export function initStorage(ctx) {
@@ -59,7 +60,7 @@ export function recordHook(ctx, data) {
   if (!data || typeof data.session_id !== 'string' || !data.session_id || data.session_id.length > 200) return null;
   const sessionId = label(data.session_id, 200);
   const event = label(data.hook_event_name, 60);
-  const supported = ['SessionStart', 'SessionEnd', 'UserPromptSubmit', 'PreToolUse', 'PostToolUse', 'PostToolUseFailure', 'PermissionDenied', 'SubagentStart', 'SubagentStop', 'TaskCompleted', 'Stop', 'StopFailure', 'Notification'];
+  const supported = ['SessionStart', 'SessionEnd', 'UserPromptSubmit', 'PreToolUse', 'PostToolUse', 'PostToolUseFailure', 'PermissionRequest', 'PermissionDenied', 'SubagentStart', 'SubagentStop', 'TaskCompleted', 'Stop', 'StopFailure', 'Notification'];
   if (!supported.includes(event)) return null;
   initStorage(ctx);
   let target = data.tool_input?.file_path || data.tool_input?.path;
@@ -74,7 +75,17 @@ export function recordHook(ctx, data) {
     taskId: label(data.task_id || data.tool_input?.task_id, 120) || null,
     tool: label(data.tool_name, 100), toolUseId: label(data.tool_use_id, 120) || null,
     source: label(data.source, 30), reason: label(data.reason, 60), target,
+    notificationType: label(data.notification_type, 80),
   };
+  const projectsRoot = path.join(ctx.claudeDir || path.join(os.homedir(), '.claude'), 'projects');
+  if (typeof data.transcript_path === 'string' && path.isAbsolute(data.transcript_path) && inside(projectsRoot, data.transcript_path)
+    && path.basename(data.transcript_path) === `${sessionId}.jsonl`) record.transcriptPath = data.transcript_path;
+  // Only decision events persist bounded, sanitized input; normal hooks remain metadata-only.
+  if (['PermissionRequest', 'PermissionDenied'].includes(event)) {
+    record.reviewInput = target === '[敏感路径]' || target === '[项目外路径]' ? { file_path: target, content: '[受保护输入已隐藏]' } : cleanObject(data.tool_input || {});
+    const serialized = JSON.stringify(record.reviewInput);
+    if (serialized.length > 60000) record.reviewInput = { truncated: true, summary: cleanText(serialized, 60000) };
+  }
   // One atomic file per event: independent sessions never read/overwrite a shared state file.
   for (const name of ['agentId', 'agentType', 'taskId', 'tool', 'toolUseId', 'source', 'reason', 'target']) if (typeof record[name] === 'string') record[name] = redact(record[name]);
   atomicJSON(path.join(ctx.dataDir, 'events', `${Date.now()}-${record.id}.json`), record);
@@ -87,13 +98,13 @@ export function accessURL(service, sessionId = '') {
   return `http://127.0.0.1:${service.port}/#${fragment}`;
 }
 
-export async function probe(ctx) {
+export async function probe(ctx, { anyVersion = false } = {}) {
   const service = readJSON(path.join(ctx.dataDir, 'service.json'));
   if (!service || service.projectId !== ctx.projectId || !Number.isInteger(service.port) || service.port < 1 || service.port > 65535 || typeof service.token !== 'string') return null;
   try {
     const response = await fetch(`http://127.0.0.1:${service.port}/api/health`, { headers: { Authorization: `Bearer ${service.token}` }, signal: AbortSignal.timeout(300), redirect: 'error' });
     const health = await response.json();
-    return response.ok && health.instanceId === service.instanceId && health.projectId === ctx.projectId && health.pid === service.pid && health.version === VERSION ? service : null;
+    return response.ok && health.instanceId === service.instanceId && health.projectId === ctx.projectId && health.pid === service.pid && health.version === service.version && (anyVersion || health.version === VERSION) ? service : null;
   } catch { return null; }
 }
 
@@ -101,6 +112,9 @@ export async function ensureService(ctx) {
   initStorage(ctx);
   const running = await probe(ctx);
   if (running) return running;
+  const previous = await probe(ctx, { anyVersion: true });
+  if (previous?.version === VERSION) return previous;
+  if (previous) throw new Error('观察服务版本已变化；请从 CC CLI 停止旧观察服务后重新 start，CC 会话不受影响');
   const lockFile = path.join(ctx.dataDir, 'startup.lock');
   const nonce = randomUUID();
   const deadline = Date.now() + 4200;

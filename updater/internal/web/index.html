@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>CC-RADT 独立升级器</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">CC-RADT <span>独立升级器</span></div>
+    <span id="connection" class="badge" role="status">正在连接本机服务</span>
+  </header>
+  <div class="layout">
+    <aside>
+      <nav aria-label="升级步骤" class="steps">
+        <a href="#project-section" class="step active" id="step-project"><span>1</span>选择路径</a>
+        <a href="#preview-section" class="step" id="step-preview"><span>2</span>核对预览</a>
+        <a href="#status-section" class="step" id="step-status"><span>3</span>执行与恢复</a>
+      </nav>
+      <p class="aside-note"><strong>独立运行 · 本地包</strong>不启动 Claude Code<br>不执行包内脚本<br>不联网下载资源</p>
+    </aside>
+    <main>
+      <noscript><p class="notice warn">请启用 JavaScript 以连接本机升级服务，也可使用独立 CLI。</p></noscript>
+      <div id="error-banner" class="notice warn" role="alert" hidden><strong>请求未完成</strong><pre id="error-detail"></pre></div>
+      <section id="project-section" aria-labelledby="project-heading">
+        <p class="eyebrow">本地已解压正式包</p>
+        <h1 id="project-heading">选择项目与升级包</h1>
+        <form id="plan-form" autocomplete="off">
+          <fieldset id="path-fields" disabled>
+            <div class="form-row"><label for="project">目标项目目录</label><input id="project" name="project" required spellcheck="false" placeholder="/path/to/project"></div>
+            <div class="path-pair">
+              <div class="form-row"><label for="baseline">旧基线包目录</label><input id="baseline" name="baseline" required spellcheck="false" placeholder="/path/to/baseline"></div>
+              <div class="form-row"><label for="package">目标包目录</label><input id="package" name="package" required spellcheck="false" placeholder="/path/to/package"></div>
+            </div>
+            <details class="manifest-options"><summary>外置兼容清单（可选）</summary>
+              <div class="form-row"><label for="baselineManifest">旧基线清单路径</label><input id="baselineManifest" name="baselineManifest" spellcheck="false"></div>
+              <div class="form-row"><label for="packageManifest">目标包清单路径</label><input id="packageManifest" name="packageManifest" spellcheck="false"></div>
+            </details>
+            <div class="footer"><span class="muted">扫描生成预览，不执行升级。</span><button type="submit" id="plan-button" class="primary">扫描并预览</button></div>
+          </fieldset>
+        </form>
+      </section>
+
+      <section id="preview-section" aria-labelledby="preview-heading" hidden>
+        <p class="eyebrow">升级预览</p>
+        <h2 id="preview-heading">核对变化与包来源</h2>
+        <p id="plan-project" class="path muted"></p>
+        <div class="versions"><div><small>当前版本</small><strong id="from-version"></strong></div><span aria-hidden="true">→</span><div><small>目标版本</small><strong id="to-version" class="green"></strong></div></div>
+        <div class="metrics"><div class="metric"><strong id="preserved-count">0</strong><span>保留文件</span></div><div class="metric"><strong id="action-count">0</strong><span>计划动作</span></div><div class="metric"><strong id="conflict-count">0</strong><span>阻断冲突</span></div></div>
+        <p id="plan-readiness" class="notice" role="status"></p>
+        <div id="migration-section" hidden><h3>迁移路线</h3><p id="migration-path" class="path"></p></div>
+        <div id="warnings-section" class="notice warn" hidden><h3>注意事项</h3><ul id="warnings"></ul></div>
+        <div id="conflicts-section" hidden><h3>冲突明细</h3><div class="table-wrap"><table><thead><tr><th scope="col">路径</th><th scope="col">原因</th></tr></thead><tbody id="conflicts"></tbody></table></div></div>
+        <details id="actions-section"><summary>逐项变更</summary><div class="table-wrap"><table><thead><tr><th scope="col">路径</th><th scope="col">动作</th><th scope="col">原因</th></tr></thead><tbody id="actions"></tbody></table></div></details>
+        <div class="fingerprints">
+          <h3>包内容指纹</h3>
+          <dl><dt>旧基线 SHA-256</dt><dd id="baseline-digest"></dd><dt>目标包 SHA-256</dt><dd id="target-digest"></dd></dl>
+          <p class="muted">指纹只标识内容，不证明发布者身份。请核对所选包的可信来源。</p>
+          <label class="checkline"><input id="trust-source" type="checkbox" autocomplete="off" disabled><span>我已核对以上两组指纹，并信任所选旧基线包和目标包的来源。</span></label>
+        </div>
+        <label class="checkline"><input id="stopped-writers" type="checkbox" autocomplete="off" disabled><span>我已退出目标项目的 Claude Code、子 Agent、观察器、Hook 和其他写入任务，并保持停止直到操作结束。</span></label>
+        <div class="footer"><span id="apply-hint" class="muted">完成两项确认后才可执行。</span><button id="apply-button" type="button" class="primary" disabled>开始升级</button></div>
+        <details><summary>完整计划 JSON</summary><pre id="plan-json"></pre></details>
+      </section>
+
+      <section id="status-section" aria-labelledby="status-heading">
+        <div class="section-header"><h2 id="status-heading">后台状态</h2><button id="refresh-button" type="button" disabled>刷新状态</button></div>
+        <p id="state-label" role="status">等待连接</p>
+        <progress id="progress" aria-label="后台实际执行进度" hidden></progress>
+        <p id="progress-detail" class="muted"></p>
+        <dl class="status-meta"><dt>事务</dt><dd id="transaction-value">尚无事务</dd></dl>
+        <p id="lifecycle-note" class="notice">关闭或刷新网页不会停止已经提交的操作。操作结束前请保持升级器进程运行。</p>
+        <p id="failed-note" class="notice warn" role="status" hidden>升级在切换前失败，原安装未改动。已生成的备份材料继续保留，处理错误后可重新扫描；无需对没有事务记录的材料目录执行恢复。需要恢复的事务会明确显示“需要恢复事务”。</p>
+        <div id="snapshot-error" class="notice warn" role="alert" hidden><strong>后台报告</strong><pre id="snapshot-error-detail"></pre></div>
+        <details><summary>完整状态 JSON</summary><pre id="status-json">尚未读取</pre></details>
+      </section>
+
+      <section id="recovery-section" aria-labelledby="recovery-heading">
+        <h2 id="recovery-heading">恢复未完成事务</h2>
+        <form id="recover-form" autocomplete="off">
+          <fieldset id="recovery-fields" disabled>
+            <div class="form-row"><label for="transaction">事务绝对路径</label><input id="transaction" name="transaction" required spellcheck="false"></div>
+            <label class="checkline"><input id="recover-stopped" type="checkbox" autocomplete="off" required><span>我已停止该事务对应项目的所有写入任务，确认执行事务恢复。</span></label>
+            <div class="footer"><span class="muted">恢复遇到内容变化时由内核决定是否停止，不强制覆盖。</span><button id="recover-button" type="submit" disabled>恢复事务</button></div>
+          </fieldset>
+        </form>
+      </section>
+      <footer class="bottom">CC-RADT Updater · 本机独立服务</footer>
+    </main>
+  </div>
+</body>
+</html>

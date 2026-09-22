@@ -1,5 +1,8 @@
 # 版本与发布工具
 
+- [夹具复制边界回归](fixture-copy.test.mjs)：验证私有配置、凭据、软链接和独立升级器构建材料不会被 Harness 测试夹具复制。
+- [升级清单生成器](ai-teams-upgrade-manifest.mjs)、[fixture 测试](ai-teams-upgrade-manifest.test.mjs)、[外部升级契约](../../updater/CONTRACT.md)：只封装可校验 metadata，旧包使用包外 sidecar，不签名或自动授权 apply。
+
 ## 已发布版本
 
 - [v1.1.0 发布映射与验证](publications/v1.1.0.md)：源提交、运行提交、版本标签、Release 与归档校验。

@@ -205,6 +205,8 @@ copy_formal() {
     --exclude "tmp/" \
     --exclude ".codegraph/" \
     --exclude "lab/" \
+    --exclude "/updater/" \
+    --exclude "/upgrade-manifest.json" \
     --exclude "templates/package/" \
     --exclude "templates/version-control/" \
     --exclude "tools/release/" \
@@ -2353,7 +2355,7 @@ Skills 已复制到工程内 skills/agents/<agent>/<skill>/，发布时不依赖
 |---|---|
 | 项目初始化 | `bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write` |
 | 项目初始化 Windows | `pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-teams-init-project.ps1 -Target (Get-Location) -Write` |
-| 已安装项目升级 | `bash tools/bin/ai-teams-upgrade.sh --package <升级包路径> --dry-run` |
+| 已安装项目升级 | `tools/commands/ai/upgrade-existing.md`（外部升级说明，工程内不执行） |
 | 日志清理计划 | `bash tools/bin/ai-teams-logs-clean.sh --before YYYY-MM-DD --plan` |
 | MCP 查询 | `bash tools/bin/ai-teams-mcp-list.sh` |
 | MCP 受控安装 | `bash tools/bin/ai-teams-mcp-install.sh --name <名称> --agent <Agent> --source <来源> --command <命令> --plan` |
@@ -2403,7 +2405,7 @@ status: active
 | No. | 指令能力 | 指令说明 |
 |---:|---|---|
 | 1 | 项目初始化 | tools/commands/ai/init-project.md |
-| 2 | 已在项目中运行升级指令 | tools/commands/ai/upgrade-existing.md |
+| 2 | 外部升级器操作说明（工程内不执行） | tools/commands/ai/upgrade-existing.md |
 | 3 | 多余日志清除指令 | tools/commands/ai/logs-clean.md |
 | 4 | 自学习指令 | tools/commands/ai/self-learn.md |
 | 5 | MCP 查询指令 | tools/commands/ai/mcp-list.md |
@@ -2452,7 +2454,7 @@ status: active
 | No. | 指令能力 | 文件 |
 |---:|---|---|
 | 1 | 项目初始化 | tools/commands/ai/init-project.md |
-| 2 | 已在项目中运行升级指令 | tools/commands/ai/upgrade-existing.md |
+| 2 | 外部升级器操作说明（工程内不执行） | tools/commands/ai/upgrade-existing.md |
 | 3 | 多余日志清除指令 | tools/commands/ai/logs-clean.md |
 | 4 | 自学习指令 | tools/commands/ai/self-learn.md |
 | 5 | MCP 查询指令 | tools/commands/ai/mcp-list.md |
@@ -2481,7 +2483,7 @@ status: active
 |---|---|---|
 | 项目初始化 | tools/bin/ai-teams-init-project.sh | 可生成扫描报告并合并更新项目文档、索引和记忆 |
 | CodeGraph 状态检测 | tools/bin/ai-teams-codegraph-status.sh | 可检测 CLI、`.codegraph/` 和写入索引 |
-| 已在项目中运行升级指令 | tools/bin/ai-teams-upgrade.sh | 支持 dry-run、快照、变更清单和受控 apply |
+| 外部升级器操作说明 | tools/bin/ai-teams-upgrade.sh | 退役入口，仅中文说明、零写入；不支持 dry-run 或 apply |
 | 回滚指令 | tools/bin/ai-teams-rollback.sh | 支持快照列表、回滚计划和显式确认 apply |
 | 多余日志清除指令 | tools/bin/ai-teams-logs-clean.sh | 支持计划、归档和普通日志清理 |
 | MCP 查询指令 | tools/bin/ai-teams-mcp-list.sh | 可查询共享 MCP、Agent MCP 和 CodeGraph 状态 |
@@ -2928,11 +2930,12 @@ import sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
-for name in ["README.md", "README.en.md", "INSTALL.md"]:
+for name in ["README.md", "README.en.md", "INSTALL.md", "USAGE.md"]:
     path = root / name
     text = path.read_text(encoding="utf-8")
     for document in ["USAGE.md", "UPGRADE.md", "RELEASE_NOTES.md"]:
         text = text.replace(f"](../../../{document})", f"]({document})")
+    text = text.replace("](tools/observer/README.md)", "](.claude/ai-teams/tools/observer/README.md)")
     path.write_text(text, encoding="utf-8")
 PY
 fi
@@ -3002,6 +3005,7 @@ if [[ "$edition" == "formal" ]]; then
     "tools/commands/ai/package-simplify.md"
     "tools/package"
     "tools/release"
+    "updater"
     "templates/version-control"
     "security/version-control-policy.md"
     "DEVELOPMENT.md"
@@ -3122,6 +3126,7 @@ cat > "$package_manifest" <<EOF
     "memory/conversations/sessions/*",
     "shared/prompt-evolution runtime events, candidates, reviews and history",
     "lab/",
+    "updater/ (independent source and binaries)",
     ".git/",
     ".codegraph/",
     "node_modules/",
@@ -3156,6 +3161,14 @@ refresh_formal_runtime_catalogs
 sanitize_formal_user_text
 assert_formal_portable_paths
 
+# Reserve only distribution metadata so both existing file-count writers see it.
+# A placeholder is never a valid manifest; the generator below must replace it.
+upgrade_manifest=""
+if [[ "$edition" == "formal" && "$install_layout" == "claude-subdir" ]]; then
+  upgrade_manifest="$artifact_root/upgrade-manifest.json"
+  (set -o noclobber; : > "$upgrade_manifest")
+fi
+
 release_record="$artifact_root/RELEASE_RECORD.md"
 if [[ "$edition" == "formal" && -f tools/release/ai-teams-version-report.mjs ]]; then
   release_record_args=(--version "$version" --package-dir "$artifact_root" --output "$release_record")
@@ -3180,6 +3193,10 @@ data = json.loads(manifest.read_text(encoding="utf-8"))
 data["file_count"] = int(sys.argv[2])
 manifest.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 PY
+fi
+if [[ -n "$upgrade_manifest" ]]; then
+  rm "$upgrade_manifest"
+  node tools/release/ai-teams-upgrade-manifest.mjs --package "$artifact_root" --version "$version"
 fi
 ai_teams_checksum_tree "$artifact_root" "$checksum"
 

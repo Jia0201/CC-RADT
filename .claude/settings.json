@@ -5,7 +5,7 @@
   "autoMemoryEnabled": false,
   "includeGitInstructions": false,
   "ai_teams": {
-    "version": "1.1.0",
+    "version": "1.2.0",
     "stage": "main-engineering",
     "hooks_enabled": true,
     "content_language": "zh-CN-first",
@@ -485,6 +485,18 @@
   },
   "disableAllHooks": false,
   "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": "node", "args": ["${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"], "timeout": 2 }]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [{ "type": "command", "command": "node", "args": ["${CLAUDE_PROJECT_DIR}/hooks/scripts/observer-hook.mjs"], "timeout": 2 }]
+      }
+    ],
     "SessionEnd": [
       {
         "matcher": "",

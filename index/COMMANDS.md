@@ -13,7 +13,7 @@ status: active
 | 1 | 一键打包指令（正式版） | `tools/commands/ai/package-formal.md` |
 | 2 | 一键打包指令（精简版） | `tools/commands/ai/package-simplify.md` |
 | 3 | 项目初始化 | `tools/commands/ai/init-project.md` |
-| 4 | 已在项目中运行升级指令 | `tools/commands/ai/upgrade-existing.md` |
+| 4 | 外部升级器操作说明（工程内不执行） | `tools/commands/ai/upgrade-existing.md` |
 | 5 | 多余日志清除指令 | `tools/commands/ai/logs-clean.md` |
 | 6 | 自学习指令 | `tools/commands/ai/self-learn.md` |
 | 7 | MCP 查询指令 | `tools/commands/ai/mcp-list.md` |
@@ -46,7 +46,7 @@ status: active
 | CodeGraph 状态检测 | `tools/bin/ai-teams-codegraph-status.sh` | 可检测 CLI、`.codegraph/` 和写入索引 |
 | 一键打包指令（正式版） | `tools/bin/ai-teams-package.sh formal --install-layout claude-subdir --output <输出目录> --verify` | 已启用，生成 `.claude/ai-teams` 低侵入安装包 |
 | 一键打包指令（精简版） | `tools/bin/ai-teams-package.sh simplify` | 后续继续收敛 |
-| 已在项目中运行升级指令 | `tools/bin/ai-teams-upgrade.sh` | 支持 dry-run、快照、变更清单和受控 apply |
+| 外部升级器操作说明 | `tools/bin/ai-teams-upgrade.sh` | 退役入口，仅中文说明、零写入；不支持 dry-run 或 apply |
 | 回滚指令 | `tools/bin/ai-teams-rollback.sh` | 支持快照列表、回滚计划和显式确认 apply |
 | 多余日志清除指令 | `tools/bin/ai-teams-logs-clean.sh` | 支持计划、归档和普通日志清理 |
 | MCP 查询指令 | `tools/bin/ai-teams-mcp-list.sh` | 可查询共享 MCP、Agent MCP 和 CodeGraph 状态 |

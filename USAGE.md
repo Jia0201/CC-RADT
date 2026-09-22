@@ -1,4 +1,4 @@
-# CC-RADT v1.1.0 使用指南
+# CC-RADT v1.2.0 使用指南
 
 本指南面向将 CC-RADT 安装到业务项目的使用者。运行路径统一为 `.claude/ai-teams/`，以下命令均从业务项目根目录执行。
 
@@ -9,20 +9,17 @@
 - Windows 需要 PowerShell 7 和 Git Bash 或 WSL；原生 Hooks 与观察台使用 Node.js。
 - MCP 按需配置，访问外部服务需要相应授权；安装包不提供密钥。
 
-从 [v1.1.0 Release](https://github.com/Jia0201/CC-RADT/releases/tag/v1.1.0) 下载 `CC-RADT-v1.1.0.zip` 和同名 `.zip.sha256`。解压到业务项目外，先校验归档，再将 `.claude/` 和 `.mcp.json` 按现有配置合并到项目。README、变更日志等是参考文档，可保留在解压目录，不必覆盖业务项目同名文档。
+从 [v1.2.0 Release](https://github.com/Jia0201/CC-RADT/releases/tag/v1.2.0) 下载 `CC-RADT-v1.2.0.zip` 与 `CC-RADT-v1.2.0.zip.sha256`。在业务项目外先校验 ZIP，再解压并校验包内 `checksums.txt`。首次安装将 `.claude/` 和 `.mcp.json` 按现有配置合并到项目；已有长期 Harness 项目不得整目录覆盖，先读 [升级安全边界](UPGRADE.md)。README、变更日志等可保留在包目录，不覆盖业务项目同名文档。
 
-macOS / Linux 归档校验：
+macOS / Linux 目录校验（先进入本地包根目录）：
 
 ```bash
-shasum -a 256 -c CC-RADT-v1.1.0.zip.sha256
-unzip CC-RADT-v1.1.0.zip
-cd CC-RADT-v1.1.0
 shasum -a 256 -c checksums.txt
 ```
 
-Windows 可用 `Get-FileHash .\CC-RADT-v1.1.0.zip -Algorithm SHA256`，与 `.zip.sha256` 中的值比较。逐文件 `checksums.txt` 应在未使用、未合并配置的解压目录验证；初始化或执行任务后文件会合法变化。
+macOS / Linux 可运行 `shasum -a 256 -c CC-RADT-v1.2.0.zip.sha256`；Windows 可用 `Get-FileHash .\CC-RADT-v1.2.0.zip -Algorithm SHA256` 与校验文件中的值比较。逐文件 `checksums.txt` 应在未使用、未合并配置的包目录验证；初始化或执行任务后文件会合法变化。
 
-配置合并细节见安装包的 `INSTALL.md`；从 v1.0.0 升级请先读 [升级指南](UPGRADE.md)。业务项目的 `CLAUDE.md`、`.claude/settings.local.json`、现有 MCP 和 Agent 定义应保留并解决同名冲突。
+配置合并细节见安装包的 `INSTALL.md`；从旧版升级请先读 [升级指南](UPGRADE.md)。旧内部升级脚本已停用，实验独立升级器不随 Harness 分发。业务项目的 `CLAUDE.md`、`.claude/settings.local.json`、现有 MCP 和 Agent 定义应保留并解决同名冲突。
 
 ## 2. 自检与首次启动
 
@@ -40,7 +37,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .claude/ai-teams/tools/bin/ai-team
 
 ## 3. 手动初始化项目画像
 
-v1.1.0 不会在启动、恢复或普通请求时主动询问或运行初始化。没有初始化也可以提出任务；只有你需要持久化项目画像时再执行：
+v1.2.0 延续手动初始化：不会在启动、恢复或普通请求时主动询问或运行初始化。没有初始化也可以提出任务；只有你需要持久化项目画像时再执行：
 
 ```bash
 bash .claude/ai-teams/tools/bin/ai-teams-init-project.sh --target "$PWD" --write
@@ -119,7 +116,7 @@ PowerShell 使用 `$env:AI_TEAMS_OBSERVER = "0"`。恢复启用时在后续进�
 
 默认最多保留 7 天、5000 条 Hook 活动和 300 份文件快照，先到上限者触发淘汰；单文件最多读取 96 KiB。采集约每 2 秒执行，页面约每 2.5 秒刷新，超过 10 秒未更新会标为陈旧。脱敏有覆盖限制，导出与历史记录应按项目数据管理。
 
-观察台不执行命令、不审批、不写配置，不采集聊天原文、完整 shell 命令或模型思考。缺失记录显示未提供；磁盘角色定义不代表某次会话实际加载的配置；留存版本不是 Git diff。跨项目聚合、SSE 和费用统计尚未实现。
+观察台不执行命令、不审批、不写配置。V2 可从当前项目 CC 本地会话中读取脱敏公开对话、工具输入输出、修改片段与已报告 Token，不采集隐藏思考，不复制原始会话文件。缺失记录显示未提供；磁盘角色定义不代表实际加载状态，当前 Git diff 与会话修改片段分开展示，不能自动归因。目录新增 Skills、MCP 与软链路，完整边界和关闭原生对话读取的开关见 [观察台说明](tools/observer/README.md)。跨项目聚合、SSE 和费用统计尚未实现。
 
 ## 6. 日常检查与维护
 
@@ -142,7 +139,7 @@ node .claude/ai-teams/tools/bin/ai-teams-prompt-status.mjs
 | 没有观察台地址 | 运行 `status` / `start`；检查 Node.js、禁用变量以及新 SessionStart Hook 是否加载 |
 | 新标签页打不开 | 重新取得完整入口链接；旧标签页的访问凭据不会自动传给新标签页 |
 | 正常 Token 类源码被拦截 | 检查旧版 `permissions.deny` 的宽泛 token 规则，保留业务自己的规则并替换旧 CC-RADT 规则 |
-| 初始化后自检报污染 | 核对自检脚本已更新到 v1.1.0、`project/.initialized` 和画像状态；日常运行不要设置 `AI_TEAMS_DISTRIBUTION_CHECK=1` |
+| 初始化后自检报污染 | 核对自检脚本已更新到 v1.2.0、`project/.initialized` 和画像状态；日常运行不要设置 `AI_TEAMS_DISTRIBUTION_CHECK=1` |
 | MCP 无法启动 | 查看登记信息与依赖、授权、环境变量；只启用实际需要的服务 |
 
 观察台的协议和浏览器行为有自动化覆盖；Windows 实机和 Claude Code 交互式聊天中的展示位置仍需在实际客户端确认。Codex / OpenCode 适配尚未交付。
